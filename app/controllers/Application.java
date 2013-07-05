@@ -27,7 +27,7 @@ public class Application extends Controller {
 	{
 		DynamicForm fullInfos = Form.form().bindFromRequest();
 		String identifiant = fullInfos.get("login");
-		if(Professeur.find.ref(identifiant)==null){
+		if(Professeur.find.where().eq("username",identifiant).findList().isEmpty()){
 			session().clear();
 			return badRequest(login.render("F"));
 		}else{

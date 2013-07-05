@@ -37,3 +37,6 @@ exit
 run
 clean
 exit
+run
+clean
+exit
