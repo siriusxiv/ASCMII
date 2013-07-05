@@ -38,8 +38,8 @@ Seq[Any]()}
 }
                 /*
                     -- GENERATED --
-                    DATE: Thu Jul 04 14:13:32 CEST 2013
-                    SOURCE: E:/ASCMII/app/views/seancesListe.scala.html
+                    DATE: Fri Jul 05 09:09:01 CEST 2013
+                    SOURCE: E:/git/ASCMII/app/views/seancesListe.scala.html
                     HASH: da39a3ee5e6b4b0d3255bfef95601890afd80709
                     MATRIX: 
                     LINES: 

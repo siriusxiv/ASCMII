@@ -64,8 +64,8 @@ Seq[Any](format.raw/*1.24*/("""
 }
                 /*
                     -- GENERATED --
-                    DATE: Thu Jul 04 14:18:55 CEST 2013
-                    SOURCE: E:/ASCMII/app/views/login.scala.html
+                    DATE: Fri Jul 05 09:09:01 CEST 2013
+                    SOURCE: E:/git/ASCMII/app/views/login.scala.html
                     HASH: c7ea73fedcbaeea3727ebf54765a96d67656420c
                     MATRIX: 723->1|822->23|972->138|986->144|1039->176|1121->223|1135->229|1188->261|1290->328|1304->334|1361->369|1441->414|1471->435|1510->436|1609->504
                     LINES: 26->1|29->1|33->5|33->5|33->5|34->6|34->6|34->6|35->7|35->7|35->7|39->11|39->11|39->11|41->13

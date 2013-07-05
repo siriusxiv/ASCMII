@@ -7,7 +7,7 @@
 		revision="1.0-SNAPSHOT"
 		conf="runtime"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom"
-		date="20130704210610"/>
+		date="20130705090020"/>
 	<dependencies>
 		<module organisation="play" name="play-java-ebean_2.10">
 			<revision name="2.1.1" status="release" pubdate="20130402201213" resolver="local" artresolver="local" downloaded="false" searched="false" default="false" conf="default(compile), compile" position="53">

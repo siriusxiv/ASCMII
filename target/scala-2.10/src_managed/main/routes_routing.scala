@@ -1,6 +1,6 @@
-// @SOURCE:E:/ASCMII/conf/routes
+// @SOURCE:E:/git/ASCMII/conf/routes
 // @HASH:c8335a091e8ec455be8d06b9ae41b69eae3ff8e6
-// @DATE:Thu Jul 04 21:16:04 CEST 2013
+// @DATE:Fri Jul 05 09:08:59 CEST 2013
 
 
 import play.core._
