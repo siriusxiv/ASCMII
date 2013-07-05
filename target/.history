@@ -20,3 +20,7 @@ run
 exit
 run
 clean
+run
+exit
+run
+clean

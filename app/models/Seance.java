@@ -8,7 +8,6 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
-//import java.sql.Timestamp;
 
 
 @Entity
@@ -28,15 +27,20 @@ public class Seance extends Model {
 	
 	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
 
-	public static List<Seance> page(){
-		return find.orderBy("date").findList();
+	public static List<Seance> page(HashMap<String,String> session){
+		Professeur prof = Professeur.find.ref(session.get("username"));
+		return find
+				.where()
+					.eq("professeur",prof)
+				.orderBy("date")
+				.findList();
 	}
 	
 	public static void addSeance(Seance se){
 		se.save();
 	}
 	
-	public static void removeItem(Long id){
+	public static void removeSeance(Long id){
 		Seance se = Seance.find.ref(id);
 		if(se != null){
 			se.delete();

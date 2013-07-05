@@ -1,4 +1,4 @@
-@(listSeance: List[Seance])
+@(listSeance: List[Seance], log: String)
 @main("ASCMII - Les séances programmées"){
 
 <!DOCTYPE html>
@@ -21,6 +21,7 @@ function addSeance(){
  </head>
 	<h1>ASCMII</h1>
 	<h2>Liste des séances</h2>
+	@log
 	<table>
 		<tbody>
 			<tr>
@@ -36,10 +37,14 @@ function addSeance(){
 				<td>@seance.intitule</td>
 				<td>
 						<button type="submit">Gérer</button>
-						<button type="submit">Editer</button>
+						<form action="@routes.Application.displayEditSeance(seance.id)" method="POST" style="display:inline">
+							<button type="submit">Editer</button>
+						</form>
 						<button type="submit">Vote et résultat</button>
 						<button type="submit">Dupliquer</button>
-						<button type="submit">Supprimer</button>
+						<form action="@routes.Application.removeSeance(seance.id)" method="POST" style="display:inline">
+							<button type="submit">Supprimer</button>
+						</form>
 				</td>
 			</tr>
 		}
@@ -54,16 +59,23 @@ function addSeance(){
 		<h2>Création d'une nouvelle séance :</h2>
 		<table>
 			<tbody>
-				Matière :<input type="text" size="20" name="matiere" value="">
-				<br>
-				Intitulé de séance :<input type="text" size="20" name="intitule" value="">
-				<br>
-				Date et heure :<input type="datetime" name="date">
-				Il faut entrer la date de la forme : 'YYYY/MM/JJ HH:MM:SS'
-				<br>
-				<button type="submit">Valider</button>
+			<tr>
+				<td>Matière :</td>
+				<td><input type="text" size="20" name="matiere" value=""></td>
+			</tr>
+			<tr>
+				<td>Intitulé de séance :</td>
+				<td><input type="text" size="20" name="intitule" value=""></td>
+			</tr>
+			<tr>
+				<td>Date et heure :</td>
+				<td><input type="datetime" name="date"></td>
+			</tr>
 			</tbody>
 		</table>
+		Il faut entrer la date de la forme : YYYY/MM/JJ HH:MM:SS
+		<br>
+		<button type="submit">Valider</button>
 	</div>
 	</form>
 </html>
