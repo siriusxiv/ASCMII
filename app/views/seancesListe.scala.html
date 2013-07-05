@@ -21,7 +21,11 @@ function addSeance(){
  </head>
 	<h1>ASCMII</h1>
 	<h2>Liste des séances</h2>
-	@log
+	<p>@log</p>
+	
+	@if(listSeance.isEmpty()){
+	<p> Aucune séance n'est pour l'instant définie. Cliquez sur le bouton ci-dessous pour en créer une.</p>
+	}else{
 	<table>
 		<tbody>
 			<tr>
@@ -50,7 +54,7 @@ function addSeance(){
 		}
 		</tbody>
 	</table>
-	
+	}
 	<p>
 		<button onClick="addSeance()">Ajouter une nouvelle séance</button>
 	</p>

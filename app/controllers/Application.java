@@ -25,13 +25,14 @@ public class Application extends Controller {
     
 	public static Result profAuthenticate()
 	{
-		Form<Prof> profForm = Form.form(Prof.class).bindFromRequest();
-		if(profForm.hasErrors()){
+		DynamicForm fullInfos = Form.form().bindFromRequest();
+		String identifiant = fullInfos.get("login");
+		if(Professeur.find.ref(identifiant)==null){
 			session().clear();
 			return badRequest(login.render("F"));
 		}else{
 			session().clear();
-			session("username",profForm.get().login);
+			session("username",identifiant);
 			return profSeancesListe("");
 		}
 	}
@@ -62,7 +63,7 @@ public class Application extends Controller {
 				e.printStackTrace();
 			}
 			Seance.addSeance(newSeance);
-			return redirect(routes.Application.profSeancesListe("Séance éditée."));
+			return redirect(routes.Application.profSeancesListe("Séance ajoutée avec succès."));
 		}
 		return redirect(routes.Application.profSeancesListe("Cette matière n'existe pas."));
 	}
