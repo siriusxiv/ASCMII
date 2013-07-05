@@ -18,7 +18,7 @@ public class Application extends Controller {
     
     @Security.Authenticated(Secured.class)
     public static Result profSeancesListe() {
-    	return ok(seancesListe.render());
+    	return ok(seancesListe.render(Seance.page()));
     }
     
 	public static Result profAuthenticate()
@@ -29,9 +29,20 @@ public class Application extends Controller {
 			return badRequest(login.render("F"));
 		}else{
 			session().clear();
-			session("userName",profForm.get().login);
-			return redirect(routes.Application.profSeancesListe());
+			session("username",profForm.get().login);
+			return profSeancesListe();
 		}
+	}
+	
+	
+	public static Result addSeance(){
+		Form<Seance> seanceForm = Form.form(Seance.class).bindFromRequest();
+		if(!seanceForm.hasErrors()){
+			Seance se = seanceForm.get();
+			se.professeur=Professeur.find.ref(session("username"));
+			Seance.addSeance(se);
+		}
+		return profSeancesListe();
 	}
 	
 }

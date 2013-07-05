@@ -1,10 +1,14 @@
 package models;
 import java.util.*;
+
 import javax.persistence.*;
+
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
+
+//import java.sql.Timestamp;
 
 
 @Entity
@@ -13,17 +17,22 @@ public class Seance extends Model {
 	public Long id;
 	
 	@Required
-	public String nom;
+	public Date date;
 	@Required
-	public Long ouverte;
+	public String matiere;
+	@Required
+	public String intitule;
 	
 	@ManyToOne
 	public Professeur professeur;
 	
 	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
 
+	public static List<Seance> page(){
+		return find.orderBy("date").findList();
+	}
 	
-	public static void addItem(Seance se){
+	public static void addSeance(Seance se){
 		se.save();
 	}
 	

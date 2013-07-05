@@ -15,3 +15,5 @@ GET		/prof/login					controllers.Application.profLogin()
 POST	/prof/login					controllers.Application.profAuthenticate()
 
 GET 	/prof/seances				controllers.Application.profSeancesListe()
+
+POST	/prof/seances				controllers.Application.addSeance()

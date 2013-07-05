@@ -26,8 +26,9 @@ create table reponse (
 
 create table seance (
   id                        bigint auto_increment not null,
-  nom                       varchar(255),
-  ouverte                   bigint,
+  date                      datetime,
+  matiere                   varchar(255),
+  intitule                  varchar(255),
   professeur_username       varchar(255),
   constraint pk_seance primary key (id))
 ;

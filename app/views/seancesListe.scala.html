@@ -1,0 +1,70 @@
+@(listSeance: List[Seance])
+@main("ASCMII - Les séances programmées"){
+
+<!DOCTYPE html>
+
+<script>
+function addSeance(){
+	if(document.getElementById("new_seance").style.display == "none"){
+		document.getElementById("new_seance").style.display = "block";
+	} else {
+		document.getElementById("new_seance").style.display = "none";
+	}
+}
+
+</script>
+
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+ </head>
+	<h1>ASCMII</h1>
+	<h2>Liste des séances</h2>
+	<table>
+		<tbody>
+			<tr>
+				<th>Date</th>
+				<th>Matiere</th>
+				<th>Intitulé</th>
+				<th>Action</th>
+			</tr>
+		@for(seance <- listSeance){
+			<tr>
+				<td>@seance.date</td>
+				<td>@seance.matiere</td>
+				<td>@seance.intitule</td>
+				<td>
+						<button type="submit">Gérer</button>
+						<button type="submit">Editer</button>
+						<button type="submit">Vote et résultat</button>
+						<button type="submit">Dupliquer</button>
+						<button type="submit">Supprimer</button>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+	
+	<p>
+		<button onClick="addSeance()">Ajouter une nouvelle séance</button>
+	</p>
+	<form action="/prof/seances" method="POST">
+	<div id="new_seance" style="display:none">
+		<h2>Création d'une nouvelle séance :</h2>
+		<table>
+			<tbody>
+				Matière :<input type="text" size="20" name="matiere" value="">
+				<br>
+				Intitulé de séance :<input type="text" size="20" name="intitule" value="">
+				<br>
+				Date et heure :<input type="datetime" name="date">
+				Il faut entrer la date de la forme : 'YYYY/MM/JJ HH:MM:SS'
+				<br>
+				<button type="submit">Valider</button>
+			</tbody>
+		</table>
+	</div>
+	</form>
+</html>
+}
