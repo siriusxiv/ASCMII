@@ -32,7 +32,7 @@ function addSeance(){
 			</tr>
 		@for(seance <- listSeance){
 			<tr>
-				<td>@seance.date</td>
+				<td>@seance.date.format("dd/MM/yyyy à H") h</td>
 				<td>@seance.matiere</td>
 				<td>@seance.intitule</td>
 				<td>
@@ -68,12 +68,84 @@ function addSeance(){
 				<td><input type="text" size="20" name="intitule" value=""></td>
 			</tr>
 			<tr>
+				<table>
+			<tr>
 				<td>Date et heure :</td>
-				<td><input type="datetime" name="date"></td>
+				<td><select name="day">
+					<option value="01">1</option>
+					<option value="02">2</option>
+					<option value="03">3</option>
+					<option value="04">4</option>
+					<option value="05">5</option>
+					<option value="06">6</option>
+					<option value="07">7</option>
+					<option value="08">8</option>
+					<option value="09">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+					<option value="22">22</option>
+					<option value="23">23</option>
+					<option value="24">24</option>
+					<option value="25">25</option>
+					<option value="26">26</option>
+					<option value="27">27</option>
+					<option value="28">28</option>
+					<option value="29">29</option>
+					<option value="30">30</option>
+					<option value="31">31</option>
+				</td>
+				<td><select name="month">
+						<option value="01">Janvier</option>
+						<option value="02">Février</option>
+						<option value="03">Mars</option>
+						<option value="04">Avril</option>
+						<option value="05">Mai</option>
+						<option value="06">Juin</option>
+						<option value="07">Juillet</option>
+						<option value="08">Août</option>
+						<option value="09">Septembre</option>
+						<option value="10">Octobre</option>
+						<option value="11">Novembre</option>
+						<option value="12">Décembre</option>
+				</td>
+				<td><select name="year">
+						<option value="2013">2013</option>
+						<option value="2014">2014</option>
+						<option value="2015">2015</option>
+						<option value="2016">2016</option>
+						<option value="2017">2017</option>
+						<option value="2018">2018</option>
+						<option value="2019">2019</option>
+				</td>
+				<td>à</td>
+				<td><select name="hour">
+						<option value="08">8h</option>
+						<option value="09">9h</option>
+						<option value="10">10h</option>
+						<option value="11">11h</option>
+						<option value="12">12h</option>
+						<option value="13">13h</option>
+						<option value="14">14h</option>
+						<option value="15">15h</option>
+						<option value="16">16h</option>
+						<option value="17">17h</option>
+						<option value="18">18h</option>
+				</td>
+			</tr>
+			</table>
 			</tr>
 			</tbody>
 		</table>
-		Il faut entrer la date de la forme : YYYY/MM/JJ HH:MM:SS
 		<br>
 		<button type="submit">Valider</button>
 	</div>

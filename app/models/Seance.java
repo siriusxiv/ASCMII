@@ -46,5 +46,4 @@ public class Seance extends Model {
 			se.delete();
 		}
 	}
-	
 }

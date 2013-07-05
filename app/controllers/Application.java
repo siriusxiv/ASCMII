@@ -5,6 +5,8 @@ import play.mvc.*;
 import views.html.*;
 import models.*;
 import play.data.*;
+import java.text.*;
+import java.util.*;
 
 public class Application extends Controller {
   
@@ -37,14 +39,32 @@ public class Application extends Controller {
 	
 	//Gestion des séances
 	public static Result addSeance(){
+		DynamicForm fullInfos = Form.form().bindFromRequest();
+		String day = fullInfos.get("day");
+		String month = fullInfos.get("month");
+		String year = fullInfos.get("year");
+		String hour = fullInfos.get("hour");
+		
 		Form<Seance> seanceForm = Form.form(Seance.class).bindFromRequest();
-		if(!seanceForm.hasErrors()){
-			Seance se = seanceForm.get();
-			se.professeur=Professeur.find.ref(session("username"));
-			Seance.addSeance(se);
-			return profSeancesListe("Séance ajoutée.");
+		if(fullInfos.get("matiere")!=""){
+			Seance newSeance = new Seance();
+			if(fullInfos.get("intitule")==""){
+				newSeance.intitule="Intitulé";
+			}else{
+				newSeance.intitule=fullInfos.get("intitule");
+			}
+			newSeance.matiere=fullInfos.get("matiere");
+			newSeance.professeur=Professeur.find.ref(session("username"));
+			try{
+			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			newSeance.date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
+			} catch(ParseException e){
+				e.printStackTrace();
+			}
+			Seance.addSeance(newSeance);
+			return redirect(routes.Application.profSeancesListe("Séance éditée."));
 		}
-		return profSeancesListe("Erreur, veuillez vérifier ce que vous avez écrit.");
+		return redirect(routes.Application.profSeancesListe("Cette matière n'existe pas."));
 	}
 	public static Result removeSeance(Long id){
 		Seance.removeSeance(id);
@@ -54,16 +74,35 @@ public class Application extends Controller {
 		return ok(editSeance.render(Seance.find.ref(id)));
 	}
 	public static Result editSeance(Long id){
+		DynamicForm fullInfos = Form.form().bindFromRequest();
+		String day = fullInfos.get("day");
+		String month = fullInfos.get("month");
+		String year = fullInfos.get("year");
+		String hour = fullInfos.get("hour");
+		
 		Form<Seance> seanceForm = Form.form(Seance.class).bindFromRequest();
-		if(!seanceForm.hasErrors()){
+		if(fullInfos.get("matiere")!=""){
 			removeSeance(id);
-			Seance newSeance = seanceForm.get();
+			
+			Seance newSeance = new Seance();
 			newSeance.id=id;
+			if(fullInfos.get("intitule")==""){
+				newSeance.intitule="Intitulé";
+			}else{
+				newSeance.intitule=fullInfos.get("intitule");
+			}
+			newSeance.matiere=fullInfos.get("matiere");
 			newSeance.professeur=Professeur.find.ref(session("username"));
+			try{
+			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			newSeance.date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
+			} catch(ParseException e){
+				e.printStackTrace();
+			}
 			Seance.addSeance(newSeance);
 			return redirect(routes.Application.profSeancesListe("Séance éditée."));
 		}
-		return redirect(routes.Application.profSeancesListe("Erreur dans l'édition de la séance, vérifiez votre syntaxe."));
+		return redirect(routes.Application.profSeancesListe("Erreur dans l'édition de la séance, cette matière n'existe pas."));
 	}
 	
 }
