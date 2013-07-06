@@ -40,3 +40,11 @@ exit
 run
 clean
 exit
+clean
+exit
+run
+exit
+run
+clean
+run
+clean

@@ -1,0 +1,10 @@
+body{
+	background-color:#b0c4de;
+	text-align:center;
+	font-family:"Comic Sans MS",Times,serif;
+}
+
+p.avertissement{
+	color:red;
+	font-family:"Times New Roman",Times,serif;
+}

@@ -17,29 +17,29 @@ function addSeance(){
 <html>
  <head>
   <title>ASCMII</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
  </head>
 	<h1>ASCMII</h1>
 	<h2>Liste des séances</h2>
-	<p>@log</p>
+	<p class="avertissement">@log</p>
 	
 	@if(listSeance.isEmpty()){
 	<p> Aucune séance n'est pour l'instant définie. Cliquez sur le bouton ci-dessous pour en créer une.</p>
 	}else{
-	<table>
+	<table class="liste">
 		<tbody>
 			<tr>
-				<th>Date</th>
-				<th>Matiere</th>
-				<th>Intitulé</th>
-				<th>Action</th>
+				<th class="liste">Date</th>
+				<th class="liste">Matiere</th>
+				<th class="liste">Intitulé</th>
+				<th class="liste">Action</th>
 			</tr>
 		@for(seance <- listSeance){
 			<tr>
-				<td>@seance.date.format("dd/MM/yyyy à H") h</td>
-				<td>@seance.matiere</td>
-				<td>@seance.intitule</td>
-				<td>
+				<td class="liste">@seance.date.format("dd/MM/yyyy à H") h</td>
+				<td class="liste">@seance.matiere</td>
+				<td class="liste">@seance.intitule</td>
+				<td class="liste">
 						<button type="submit">Gérer</button>
 						<form action="@routes.Application.displayEditSeance(seance.id)" method="POST" style="display:inline">
 							<button type="submit">Editer</button>
@@ -55,6 +55,9 @@ function addSeance(){
 		</tbody>
 	</table>
 	}
+	
+	<p class="explications">L'intitulé que vous choisissez n'est visible que par vous, les élèves ne le véront pas.</p>
+	
 	<p>
 		<button onClick="addSeance()">Ajouter une nouvelle séance</button>
 	</p>
