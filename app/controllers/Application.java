@@ -134,5 +134,26 @@ public class Application extends Controller {
 		}
 		return redirect(routes.Application.profSeancesListe("Erreur dans l'édition de la séance, cette matière n'existe pas."));
 	}
-	
+	public static Result dupliquerSeance(Long id){ //il faudra l'éditer pour prendre en compte les séries, questions, etc.
+		Seance seanceADupliquer = Seance.find.ref(id);
+		Seance newSeance = new Seance();
+		newSeance.intitule=seanceADupliquer.intitule;
+		newSeance.matiere=seanceADupliquer.matiere;
+		newSeance.professeur=seanceADupliquer.professeur;
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		try{
+			newSeance.date=df.parse("2001/01/01 00:00:00");
+		} catch(ParseException e){
+			e.printStackTrace();
+		}
+		Seance.addSeance(newSeance);
+		//suite à écrire...
+		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance. La séance dupliquée se situe en première position dans la liste."));
+	}
+	public static Result gererSeance(Long id){
+		return ok(gerer.render(id));
+	}
+	public static Result voteSeance(Long id){
+		return ok(voteEtResultat.render(id));
+	}
 }

@@ -14,12 +14,19 @@ GET		/prof/login					controllers.Application.profLogin()
 
 POST	/prof/login					controllers.Application.profAuthenticate()
 
+#prof edition séances
 GET 	/prof/seances				controllers.Application.profSeancesListe(log: String ?="")
 
 POST	/prof/seances				controllers.Application.addSeance()
 
-POST	/prof/seances/:id			controllers.Application.removeSeance(id: Long)
+POST	/prof/seances/suppr/:id		controllers.Application.removeSeance(id: Long)
+
+POST	/prof/seances/dupl/:id		controllers.Application.dupliquerSeance(id: Long)
 
 POST	/prof/seances/edit/:id		controllers.Application.displayEditSeance(id: Long)
 
 POST	/prof/seances/edit/put/:id	controllers.Application.editSeance(id: Long)
+
+POST	/prof/gerer/:id				controllers.Application.gererSeance(id: Long)
+
+POST	/prof/vote/:id				controllers.Application.voteSeance(id: Long)

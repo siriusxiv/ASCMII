@@ -40,12 +40,18 @@ function addSeance(){
 				<td class="liste">@seance.matiere</td>
 				<td class="liste">@seance.intitule</td>
 				<td class="liste">
-						<button type="submit">Gérer</button>
+						<form action="@routes.Application.gererSeance(seance.id)" method="POST" style="display:inline">
+							<button type="submit">Gérer</button>
+						</form>
 						<form action="@routes.Application.displayEditSeance(seance.id)" method="POST" style="display:inline">
 							<button type="submit">Editer</button>
 						</form>
-						<button type="submit">Vote et résultat</button>
-						<button type="submit">Dupliquer</button>
+						<form action="@routes.Application.voteSeance(seance.id)" method="POST" style="display:inline">						
+							<button type="submit">Vote et résultat</button>
+						</form>
+						<form action="@routes.Application.dupliquerSeance(seance.id)" method="POST" style="display:inline">
+							<button type="submit">Dupliquer</button>
+						</form>
 						<form action="@routes.Application.removeSeance(seance.id)" method="POST" style="display:inline">
 							<button type="submit">Supprimer</button>
 						</form>
