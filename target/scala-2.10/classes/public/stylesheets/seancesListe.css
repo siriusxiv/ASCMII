@@ -1,0 +1,32 @@
+h1{
+	padding:1px 0px 0px 50px;
+}
+
+body{
+	background-color:#b0c4de;
+	text-align:left;
+	font-family:"Comic Sans MS",Times,serif;
+}
+
+table.liste{
+	border-collapse:collapse;
+	border:1px solid black;
+}
+
+th.liste{
+	text-align:center;
+}
+
+td.liste, th.liste{
+	padding:1px 3px 1px 3px; /*padding : haut droite bas gauche*/
+	border:1px solid black;
+}
+
+p.avertissement{
+	color:orange;
+	font-family:"Times New Roman",Times,serif;
+}
+
+p.explications{
+	font-size:80%;
+}
