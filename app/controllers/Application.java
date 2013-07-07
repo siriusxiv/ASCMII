@@ -180,8 +180,65 @@ public class Application extends Controller {
 		serie.seance = Seance.find.ref(id);
 		serie.ouverte = 0; //la série est fermée au départ (0=FAUX, 1=VRAI)
 		serie.questions = new ArrayList<Question>();
+		//on trouve la position max et on le met à la fin
+		List<Serie> serieTemp = Serie.find.orderBy("position desc").findList();
+		if(!serieTemp.isEmpty()){
+			serie.position = serieTemp.get(0).position+1;
+		}else{
+			serie.position=0L;
+		}
 		Serie.addSerie(serie);
 		return gererSeance(id);
+	}
+	public static Result delSerie(Long serie_id){
+		Long seance_id = Serie.find.ref(serie_id).seance.id;
+		Serie.removeSerie(serie_id);
+		return gererSeance(seance_id);
+	}
+	public static Result addQuestion(Long id){
+		return ok(nouvelleQuestion.render(id));
+	}
+	public static Result monterSerie(Long id){//cet id est l'id de la série à monter
+		Serie serieDuDessous = Serie.find.ref(id);
+		Seance seance = serieDuDessous.seance;
+		//D'abord, on trouve la série qui est au dessus
+		List<Serie> serieTemp = Serie.find.where()
+								.lt("position",serieDuDessous.position)
+								.eq("seance",seance)
+								.orderBy("position desc").findList();
+		if(serieTemp.isEmpty()){ //rien à faire
+			return gererSeance(seance.id);
+		}
+		Serie serieDuDessus = serieTemp.get(0);
+		//Après, on swappe leur position
+		Long positionTemp = serieDuDessus.position;
+		serieDuDessus.position=serieDuDessous.position;
+		serieDuDessous.position=positionTemp;
+		//on save dans la database
+		serieDuDessus.save();
+		serieDuDessous.save();
+		return gererSeance(seance.id);
+	}
+	public static Result descendreSerie(Long id){//cet id est l'id de la série à monter
+		Serie serieDuDessus = Serie.find.ref(id);
+		Seance seance = serieDuDessus.seance;
+		//D'abord, on trouve la série qui est en dessous
+		List<Serie> serieTemp = Serie.find.where()
+								.gt("position",serieDuDessus.position)
+								.eq("seance",seance)
+								.orderBy("position").findList();
+		if(serieTemp.isEmpty()){ //rien à faire
+			return gererSeance(seance.id);
+		}
+		Serie serieDuDessous = serieTemp.get(0);
+		//Après, on swappe leur position
+		Long positionTemp = serieDuDessus.position;
+		serieDuDessus.position=serieDuDessous.position;
+		serieDuDessous.position=positionTemp;
+		//on save dans la database
+		serieDuDessus.save();
+		serieDuDessous.save();
+		return gererSeance(seance.id);
 	}
 	
 	//Envoyer les mails
@@ -190,7 +247,7 @@ public class Application extends Controller {
 		mail.setSubject("[ASCMII] Test");
 		mail.addRecipient("Malik <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
 		mail.addFrom("ASCMII <ascmii.test@gmail.com>");
-		mail.sendHtml("<html>Ceci est un mail de<br>test.</html>" );
+		mail.sendHtml("<html>Ceci est un mail de<br>test.</html>");
 		return voteSeance(Long.parseLong(session("seance_id")));
 	}
 }

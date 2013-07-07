@@ -36,5 +36,13 @@ POST	/prof/vote/:id				controllers.Application.voteSeance(id: Long)
 #prof édition des questions
 POST	/prof/gerer/add/:id			controllers.Application.addSerie(id: Long)
 
+POST	/prof/gerer/del/:id			controllers.Application.delSerie(id: Long)
+
+POST	/prof/gerer/addquestion/:id	controllers.Application.addQuestion(id: Long)
+
+POST	/prof/gerer/up/:id			controllers.Application.monterSerie(id: Long)
+
+POST	/prof/gerer/down/:id		controllers.Application.descendreSerie(id: Long)
+
 #prof envoyer mail
 POST	/prof/sendmail/				controllers.Application.sendMail()

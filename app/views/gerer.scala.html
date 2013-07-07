@@ -18,7 +18,7 @@ function addSerie(){
 <html>
  <head>
   <title>ASCMII</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
  </head>
 	<h1>ASCMII</h1>
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
@@ -30,21 +30,40 @@ function addSerie(){
 	@if(listSerie.isEmpty()){
 	<p> Aucune série de question n'est pour l'instant définie. Cliquez sur le bouton ci-dessous pour en créer une.</p>
 	}else{
-		<table class="liste">
-			<tr>
-			<th class="liste">Séries :</th>
-			<th class="liste">Actions :</th>
-			</tr>
+		<table>
 		@for(serie <- listSerie){
 			<tr>
-				<td class="liste">@serie.nom</td>
-				<td class="liste">
-					<button type="submit">Descendre</button>
-					<button type="submit">Monter</button>
-					<button type="submit">Ajouter une question à la série</button>
+				<td class="suppr">
+					<form action="/prof/gerer/del/@serie.id" method="POST" style="display:inline">
+						<button type="submit">X</button>
+					</form>
+				</td>
+				<td>@serie.nom</td>
+				<td>
+					@if(listSerie.length!=1){
+						<form action="/prof/gerer/down/@serie.id" method="POST" style="display:inline">
+							<button type="submit">Descendre</button>
+						</form>
+						<form action="/prof/gerer/up/@serie.id" method="POST" style="display:inline">
+							<button type="submit">Monter</button>
+						</form>
+					}
+					<form action="/prof/gerer/addquestion/@serie.id" method="POST" style="display:inline">
+						<button type="submit">Ajouter une question à la série</button>
+					</form>
 					<button type="submit">Exporter</button>
 				</td>
 			</tr>
+				@for(question <- serie.questions){
+					<tr>
+						<td>@question.titre</td>
+						<td>
+							<button type="submit">Editer</button>
+							<button type="submit">Descendre</button>
+							<button type="submit">Monter</button>
+						</td>
+					</tr>
+				}
 		}
 		</table>
 	}

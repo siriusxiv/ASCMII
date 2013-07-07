@@ -37,6 +37,7 @@ create table serie (
   id                        bigint auto_increment not null,
   nom                       varchar(255),
   ouverte                   integer,
+  position                  bigint,
   seance_id                 bigint,
   constraint pk_serie primary key (id))
 ;

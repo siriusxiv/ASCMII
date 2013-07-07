@@ -47,6 +47,8 @@ public class Serie extends Model {
 	public String nom;
 	@Required
 	public int ouverte;
+	@Required
+	public Long position;
 	
 	@ManyToOne
 	public Seance seance;
@@ -61,7 +63,7 @@ public class Serie extends Model {
 		return find
 				.where()
 					.eq("seance",seance)
-				.orderBy("id")
+				.orderBy("position")
 				.findList();
 	}
 	
@@ -69,7 +71,7 @@ public class Serie extends Model {
 		se.save();
 	}
 	
-	public static void removeItem(Long id){
+	public static void removeSerie(Long id){
 		Serie se = Serie.find.ref(id);
 		if(se != null){
 			se.delete();
