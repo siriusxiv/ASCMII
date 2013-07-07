@@ -44,7 +44,7 @@ create table serie (
 
 create table type_question (
   id                        bigint auto_increment not null,
-  type                      varchar(255),
+  type_q                    varchar(255),
   constraint pk_type_question primary key (id))
 ;
 

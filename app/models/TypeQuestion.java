@@ -41,7 +41,7 @@ public class TypeQuestion extends Model{
 	public Long id;
 	
 	@Required
-	public String type;
+	public String typeQ;
 	
 	public static Finder<Long,TypeQuestion> find = new Finder<Long,TypeQuestion>(Long.class,TypeQuestion.class);
 	

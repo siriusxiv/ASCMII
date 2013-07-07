@@ -3,7 +3,7 @@
 
 # --- !Ups
 
-INSERT INTO type_question(type) VALUES
+INSERT INTO type_question(type_q) VALUES
 ('Question avec un seul choix de réponse possible'),
 ('Question avec plusieurs choix de réponse possible'),
 ('Question à réponse libre de type "texte"'),

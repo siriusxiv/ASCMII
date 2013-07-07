@@ -195,9 +195,6 @@ public class Application extends Controller {
 		Serie.removeSerie(serie_id);
 		return gererSeance(seance_id);
 	}
-	public static Result addQuestion(Long id){
-		return ok(nouvelleQuestion.render(id));
-	}
 	public static Result monterSerie(Long id){//cet id est l'id de la série à monter
 		Serie serieDuDessous = Serie.find.ref(id);
 		Seance seance = serieDuDessous.seance;
@@ -239,6 +236,17 @@ public class Application extends Controller {
 		serieDuDessus.save();
 		serieDuDessous.save();
 		return gererSeance(seance.id);
+	}
+	public static Result addQuestion(Long id){ //c'est l'id de la série à laquelle appartien la future question
+		return ok(nouvelleQuestion.render(id,TypeQuestion.find.all()));
+	}
+	public static Result addQuestion2(Long id){ //c'est l'id de la série à laquelle appartien la future question
+		DynamicForm info = Form.form().bindFromRequest();
+		if(info.get("id")==null){
+			return ok(nouvelleQuestion.render(id,TypeQuestion.find.all()));
+		}
+		Long n = Long.parseLong(info.get("id"));
+		return ok(nouvelleQuestion2.render(id,TypeQuestion.find.ref(n)));
 	}
 	
 	//Envoyer les mails
