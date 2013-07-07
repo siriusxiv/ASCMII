@@ -30,3 +30,12 @@ p.avertissement{
 p.explications{
 	font-size:80%;
 }
+
+form.logout{
+	padding:1px 0px 0px 400px;
+}
+
+/* pour la page gérer :*/
+h2.intituleDeLaSeance{
+	padding:1px 0px 0px 300px;
+}

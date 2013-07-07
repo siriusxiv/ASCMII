@@ -48,8 +48,8 @@ public class Question extends Model {
 
 	@ManyToOne
 	public TypeQuestion type;
-	@ManyToOne
-	public Serie serie;
+	//@ManyToOne
+	//public Serie serie;
 	
 	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
 

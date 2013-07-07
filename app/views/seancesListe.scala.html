@@ -20,6 +20,9 @@ function addSeance(){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
  </head>
 	<h1>ASCMII</h1>
+	<form action="@routes.Application.logOut()" method="POST" class="logout">
+		<button type="submit">Se déconnecter</button>
+	</form>
 	<h2>Liste des séances</h2>
 	<p class="avertissement">@log</p>
 	
@@ -62,7 +65,7 @@ function addSeance(){
 	</table>
 	}
 	
-	<p class="explications">L'intitulé que vous choisissez n'est visible que par vous, les élèves ne le véront pas.</p>
+	<p class="explications">L'intitulé que vous choisissez n'est visible que par vous, les élèves ne le verront pas.</p>
 	
 	<p>
 		<button onClick="addSeance()">Ajouter une nouvelle séance</button>

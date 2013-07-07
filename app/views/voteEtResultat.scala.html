@@ -1,3 +1,10 @@
 @(id: Long)
 Vote et Résultat
+
+<html>
 @id
+<form action="@routes.Application.sendMail()" method="POST">
+	<button type="submit">Envoyer le mail</button>
+</form>
+
+</html>

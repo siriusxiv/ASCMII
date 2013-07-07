@@ -34,8 +34,11 @@ import play.mvc.*;
 import views.html.*;
 import models.*;
 import play.data.*;
+
 import java.text.*;
 import java.util.*;
+
+import com.typesafe.plugin.*;
 
 public class Application extends Controller {
   
@@ -65,7 +68,10 @@ public class Application extends Controller {
 			return profSeancesListe("");
 		}
 	}
-	
+	public static Result logOut(){
+		session().clear();
+		return redirect(routes.Application.profLogin());
+	}
 	
 	//Gestion des séances
 	public static Result addSeance(){
@@ -151,9 +157,40 @@ public class Application extends Controller {
 		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance. La séance dupliquée se situe en première position dans la liste."));
 	}
 	public static Result gererSeance(Long id){
-		return ok(gerer.render(id));
+		session("seance_id",String.valueOf(id));
+		return ok(gerer.render(
+					Seance.find.ref(id),
+					Serie.page(id)
+					));
 	}
 	public static Result voteSeance(Long id){
+		session("seance_id",String.valueOf(id));
 		return ok(voteEtResultat.render(id));
+	}
+
+	//Gestion des séries
+	public static Result addSerie(Long id){
+		DynamicForm infos = Form.form().bindFromRequest();
+		String nom = infos.get("nom");
+		if(nom==""){
+			nom="Série sans nom";
+		}
+		Serie serie = new Serie();
+		serie.nom = nom;
+		serie.seance = Seance.find.ref(id);
+		serie.ouverte = 0; //la série est fermée au départ (0=FAUX, 1=VRAI)
+		serie.questions = new ArrayList<Question>();
+		Serie.addSerie(serie);
+		return gererSeance(id);
+	}
+	
+	//Envoyer les mails
+	public static Result sendMail(){
+		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
+		mail.setSubject("[ASCMII] Test");
+		mail.addRecipient("Malik <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
+		mail.addFrom("ASCMII <ascmii.test@gmail.com>");
+		mail.sendHtml("<html>Ceci est un mail de<br>test.</html>" );
+		return voteSeance(Long.parseLong(session("seance_id")));
 	}
 }

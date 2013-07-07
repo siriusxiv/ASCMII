@@ -14,6 +14,8 @@ GET		/prof/login					controllers.Application.profLogin()
 
 POST	/prof/login					controllers.Application.profAuthenticate()
 
+POST	/prof/logout				controllers.Application.logOut()
+
 #prof edition séances
 GET 	/prof/seances				controllers.Application.profSeancesListe(log: String ?="")
 
@@ -30,3 +32,9 @@ POST	/prof/seances/edit/put/:id	controllers.Application.editSeance(id: Long)
 POST	/prof/gerer/:id				controllers.Application.gererSeance(id: Long)
 
 POST	/prof/vote/:id				controllers.Application.voteSeance(id: Long)
+
+#prof édition des questions
+POST	/prof/gerer/add/:id			controllers.Application.addSerie(id: Long)
+
+#prof envoyer mail
+POST	/prof/sendmail/				controllers.Application.sendMail()

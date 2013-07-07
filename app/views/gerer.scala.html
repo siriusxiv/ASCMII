@@ -1,3 +1,67 @@
-@(id: Long)
-Gérer
-@id
+@(seance: Seance, listSerie: List[Serie])
+@main("ASCMII - Liste des questions"){
+
+<!DOCTYPE html>
+
+<script>
+function addSerie(){
+	if(document.getElementById("new_serie").style.display == "none"){
+		document.getElementById("new_serie").style.display = "block";
+	} else {
+		document.getElementById("new_serie").style.display = "none";
+	}
+}
+
+
+</script>
+
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+ </head>
+	<h1>ASCMII</h1>
+	<form action="@routes.Application.logOut()" method="POST" class="logout">
+		<button type="submit">Se déconnecter</button>
+	</form>
+	<h2 class="intituleDeLaSeance">@seance.intitule</h2>
+	<h2>Liste des questions pour la séance de @seance.matiere le @seance.date.format("dd/MM/yyyy à H") h</h2>
+	
+	@if(listSerie.isEmpty()){
+	<p> Aucune série de question n'est pour l'instant définie. Cliquez sur le bouton ci-dessous pour en créer une.</p>
+	}else{
+		<table class="liste">
+			<tr>
+			<th class="liste">Séries :</th>
+			<th class="liste">Actions :</th>
+			</tr>
+		@for(serie <- listSerie){
+			<tr>
+				<td class="liste">@serie.nom</td>
+				<td class="liste">
+					<button type="submit">Descendre</button>
+					<button type="submit">Monter</button>
+					<button type="submit">Ajouter une question à la série</button>
+					<button type="submit">Exporter</button>
+				</td>
+			</tr>
+		}
+		</table>
+	}
+	<p>
+		<form action="/prof/seances" method="GET" style="display:inline"><button type="submit">Retour</button></form>
+		<div style="padding:0px 0px 0px 250px;display:inline">
+		<button onClick="addSerie()">Ajouter une nouvelle série de question</button>
+		</div>
+	</p>
+	
+	<div id="new_serie" style="display:none">
+		<h2>Création d'une nouvelle séance :</h2>
+		<p>Entrez le nom de la nouvelle série :</p>
+		<form action="@routes.Application.addSerie(seance.id)" method="POST">
+		<input type="text" name="nom" size="40">
+		<button type="submit">Valider</button>
+		</form>
+	</div>
+</html>
+}

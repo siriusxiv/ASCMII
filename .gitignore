@@ -1,4 +1,17 @@
 #################
+## What I added (following Typical .gitignore file : http://www.playframework.com/documentation/2.1.x/Anatomy
+#################
+
+logs
+project/project
+project/target
+target
+tmp
+dist
+.cache
+
+
+#################
 ## Eclipse
 #################
 

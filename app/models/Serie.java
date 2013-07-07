@@ -29,7 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package models;
 import java.util.*;
+
 import javax.persistence.*;
+
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
@@ -44,15 +46,26 @@ public class Serie extends Model {
 	@Required
 	public String nom;
 	@Required
-	public Long ouverte;
+	public int ouverte;
 	
 	@ManyToOne
 	public Seance seance;
 	
+	@OneToMany(targetEntity = Question.class, cascade = CascadeType.ALL)
+	public List<Question> questions;
+	
 	public static Finder<Long,Serie> find = new Finder<Long,Serie>(Long.class, Serie.class);
 
+	public static List<Serie> page(Long id){
+		Seance seance = Seance.find.ref(id);
+		return find
+				.where()
+					.eq("seance",seance)
+				.orderBy("id")
+				.findList();
+	}
 	
-	public static void addItem(Serie se){
+	public static void addSerie(Serie se){
 		se.save();
 	}
 	
