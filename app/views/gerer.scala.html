@@ -57,7 +57,9 @@ function addSerie(){
 				@for(question <- serie.questions){
 					<tr>
 						<td></td>
-						<td><button type="submit" class="suppr">X</button> @question.titre</td>
+						<td><form action="/prof/gerer/delquestion/@question.id" method="POST" style="display:inline">
+								<button type="submit" class="suppr">X</button></form> @question.titre
+						</td>
 						<td>
 							<button type="submit">Editer</button>
 							<button type="submit">Descendre</button>

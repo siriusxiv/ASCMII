@@ -95,7 +95,7 @@ public class Serie extends Model {
 	}
 	
 	public static Long idNonUtilisee(){
-		List<Seance> serieTemp = Seance.find.orderBy("id desc").findList();
+		List<Serie> serieTemp = Serie.find.orderBy("id desc").findList();
 		if(!serieTemp.isEmpty()){
 			return serieTemp.get(0).id+1;
 		}else{

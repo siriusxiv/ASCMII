@@ -159,7 +159,7 @@ public class Application extends Controller {
 		List<Serie> series = Serie.find.where().eq("seance",seanceADupliquer).findList();
 		for(Serie s : series){
 				Serie newSerie = new Serie();
-				newSerie.position=Serie.positionMax()+1;
+				newSerie.position=s.position;
 				newSerie.nom=s.nom;
 				newSerie.questions=new ArrayList<Question>();
 				newSerie.seance=Seance.find.ref(newSeance.id);
@@ -174,9 +174,15 @@ public class Application extends Controller {
 					newQuestion.serie=Serie.find.ref(newSerie.id);
 					newQuestion.id=Question.idNonUtilisee();
 					newQuestion.save();
+					for(Reponse r : q.reponses){
+						Reponse newReponse = new Reponse();
+						newReponse.texte=r.texte;
+						newReponse.question=Question.find.ref(newQuestion.id);
+						newReponse.save();
+					}
 				}
 		}
-		//suite à écrire...
+		//suite à écrire... (notamment pour les nouvelles URL des élèves)
 		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance. La séance dupliquée se situe en première position dans la liste."));
 	}
 	public static Result gererSeance(Long id){
@@ -295,6 +301,11 @@ public class Application extends Controller {
 			r2.save();
 		}
 		return gererSeance(serie.seance.id);
+	}
+	public static Result delQuestion(Long id){
+		Long seance_id = Question.find.ref(id).serie.seance.id;
+		Question.removeQuestion(id);
+		return gererSeance(seance_id);
 	}
 	
 	//Envoyer les mails
