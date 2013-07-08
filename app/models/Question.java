@@ -29,7 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package models;
 import java.util.*;
+
 import javax.persistence.*;
+
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
@@ -45,23 +47,40 @@ public class Question extends Model {
 	public String titre;
 	@Required
 	public String texte;
-
-	@ManyToOne
-	public TypeQuestion type;
-	//@ManyToOne
-	//public Serie serie;
 	
-	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
+	@ManyToOne
+	public TypeQuestion typeQ;
+	
+	@ManyToOne
+	public Serie serie;
+	
+	@OneToMany(targetEntity = Reponse.class)
+	public List<Reponse> reponses;
+	
+	public static Finder<Long,Question> find = new Finder<Long,Question>(Long.class, Question.class);
 
 	
 	public static void addItem(Seance se){
 		se.save();
 	}
 	
-	public static void removeItem(Long id){
-		Seance se = Seance.find.ref(id);
-		if(se != null){
-			se.delete();
+	public static void removeQuestion(Long id){
+		Question q = Question.find.ref(id);
+		if(q != null){
+			List<Reponse> rs = Reponse.find.where().eq("question", q).findList();
+			for(Reponse r : rs){
+				Reponse.removeReponse(r.id);
+			}
+		}
+		q.delete();
+	}
+	
+	public static Long idNonUtilisee(){
+		List<Question> qTemp = Question.find.orderBy("id desc").findList();
+		if(!qTemp.isEmpty()){
+			return qTemp.get(0).id+1;
+		}else{
+			return 0L;
 		}
 	}
 }

@@ -42,6 +42,8 @@ POST	/prof/gerer/addquestion/:id	controllers.Application.addQuestion(id: Long)
 
 POST	/prof/gerer/addq2/:id		controllers.Application.addQuestion2(id: Long)
 
+POST	/prof/gerer/addq3/:serie_id/:typeQ_id	controllers.Application.addQuestion3(serie_id: Long, typeQ_id: Long)
+
 POST	/prof/gerer/up/:id			controllers.Application.monterSerie(id: Long)
 
 POST	/prof/gerer/down/:id		controllers.Application.descendreSerie(id: Long)

@@ -1,4 +1,4 @@
-@(id: Long,listeTypes: List[TypeQuestion])
+@(serie_id: Long,seance_id:Long,listeTypes: List[TypeQuestion])
 @main("ASCMII - Création d'une nouvelle question - Etape 1/2"){
 
 <!DOCTYPE html>
@@ -17,7 +17,7 @@
 		<button type="submit">Se déconnecter</button>
 	</form>
 	<h2>Quel type de question voulez-vous créer ?</h2>
-	<form action="/prof/gerer/addq2/@id" method="POST">
+	<form action="/prof/gerer/addq2/@serie_id" method="POST">
 	<div>
 	@for(questiontype <- listeTypes){
 		<input type="radio" name="id" value="@questiontype.id" style="padding:0px 0px 0px 50px"> @questiontype.typeQ<br>
@@ -26,6 +26,6 @@
 	</div>
 	<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Suivant</button></div>
 	</form>
-	<form action="/prof/gerer/@id" method="POST" style="display:inline"><button type="submit">Retour</button></form>
+	<form action="/prof/gerer/@seance_id" method="POST" style="display:inline"><button type="submit">Retour</button></form>
 </html>
 }

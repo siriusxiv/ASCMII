@@ -33,9 +33,9 @@ function addSerie(){
 		<table>
 		@for(serie <- listSerie){
 			<tr>
-				<td class="suppr">
+				<td>
 					<form action="/prof/gerer/del/@serie.id" method="POST" style="display:inline">
-						<button type="submit">X</button>
+						<button type="submit" class="suppr">X</button>
 					</form>
 				</td>
 				<td>@serie.nom</td>
@@ -56,13 +56,26 @@ function addSerie(){
 			</tr>
 				@for(question <- serie.questions){
 					<tr>
-						<td>@question.titre</td>
+						<td></td>
+						<td><button type="submit" class="suppr">X</button> @question.titre</td>
 						<td>
 							<button type="submit">Editer</button>
 							<button type="submit">Descendre</button>
 							<button type="submit">Monter</button>
 						</td>
 					</tr>
+					<tr>
+						<td></td>
+						<td style="padding:0px 0px 0px 40px">@question.typeQ.typeQ</td>
+						<td></td>
+					</tr>
+					@for(reponse <- question.reponses){
+						<tr>
+							<td></td>
+							<td style="padding:0px 0px 0px 40px">@reponse.texte</td>
+							<td></td>
+						</tr>
+					}
 				}
 		}
 		</table>

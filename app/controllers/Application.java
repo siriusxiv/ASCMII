@@ -75,21 +75,21 @@ public class Application extends Controller {
 	
 	//Gestion des séances
 	public static Result addSeance(){
-		DynamicForm fullInfos = Form.form().bindFromRequest();
-		String day = fullInfos.get("day");
-		String month = fullInfos.get("month");
-		String year = fullInfos.get("year");
-		String hour = fullInfos.get("hour");
+		DynamicForm info = Form.form().bindFromRequest();
+		String day = info.get("day");
+		String month = info.get("month");
+		String year = info.get("year");
+		String hour = info.get("hour");
 		
 		Form<Seance> seanceForm = Form.form(Seance.class).bindFromRequest();
-		if(fullInfos.get("matiere")!=""){
+		if(info.get("matiere")!=""){
 			Seance newSeance = new Seance();
-			if(fullInfos.get("intitule")==""){
+			if(info.get("intitule")==""){
 				newSeance.intitule="Intitulé";
 			}else{
-				newSeance.intitule=fullInfos.get("intitule");
+				newSeance.intitule=info.get("intitule");
 			}
-			newSeance.matiere=fullInfos.get("matiere");
+			newSeance.matiere=info.get("matiere");
 			newSeance.professeur=Professeur.find.ref(session("username"));
 			try{
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -97,6 +97,7 @@ public class Application extends Controller {
 			} catch(ParseException e){
 				e.printStackTrace();
 			}
+			newSeance.series = new ArrayList<Serie>();
 			Seance.addSeance(newSeance);
 			return redirect(routes.Application.profSeancesListe("Séance ajoutée avec succès."));
 		}
@@ -118,24 +119,22 @@ public class Application extends Controller {
 		
 		Form<Seance> seanceForm = Form.form(Seance.class).bindFromRequest();
 		if(fullInfos.get("matiere")!=""){
-			removeSeance(id);
-			
-			Seance newSeance = new Seance();
-			newSeance.id=id;
+			Seance seance = Seance.find.ref(id);
+			seance.id=id;
 			if(fullInfos.get("intitule")==""){
-				newSeance.intitule="Intitulé";
+				seance.intitule="Intitulé";
 			}else{
-				newSeance.intitule=fullInfos.get("intitule");
+				seance.intitule=fullInfos.get("intitule");
 			}
-			newSeance.matiere=fullInfos.get("matiere");
-			newSeance.professeur=Professeur.find.ref(session("username"));
+			seance.matiere=fullInfos.get("matiere");
+			seance.professeur=Professeur.find.ref(session("username"));
 			try{
 			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			newSeance.date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
+			seance.date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
 			} catch(ParseException e){
 				e.printStackTrace();
 			}
-			Seance.addSeance(newSeance);
+			seance.save();
 			return redirect(routes.Application.profSeancesListe("Séance éditée."));
 		}
 		return redirect(routes.Application.profSeancesListe("Erreur dans l'édition de la séance, cette matière n'existe pas."));
@@ -152,7 +151,31 @@ public class Application extends Controller {
 		} catch(ParseException e){
 			e.printStackTrace();
 		}
-		Seance.addSeance(newSeance);
+		newSeance.series = new ArrayList<Serie>();
+		//On choisit l'ID de la prochaine nouvelle Séance
+		newSeance.id=Seance.idNonUtilisee();
+		newSeance.save();
+		//On rajoute les séries :
+		List<Serie> series = Serie.find.where().eq("seance",seanceADupliquer).findList();
+		for(Serie s : series){
+				Serie newSerie = new Serie();
+				newSerie.position=Serie.positionMax()+1;
+				newSerie.nom=s.nom;
+				newSerie.questions=new ArrayList<Question>();
+				newSerie.seance=Seance.find.ref(newSeance.id);
+				newSerie.id=Serie.idNonUtilisee();
+				newSerie.save();
+				for(Question q : s.questions){
+					Question newQuestion = new Question();
+					newQuestion.reponses=new ArrayList<Reponse>();
+					newQuestion.texte=q.texte;
+					newQuestion.titre=q.titre;
+					newQuestion.typeQ=q.typeQ;
+					newQuestion.serie=Serie.find.ref(newSerie.id);
+					newQuestion.id=Question.idNonUtilisee();
+					newQuestion.save();
+				}
+		}
 		//suite à écrire...
 		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance. La séance dupliquée se situe en première position dans la liste."));
 	}
@@ -178,15 +201,9 @@ public class Application extends Controller {
 		Serie serie = new Serie();
 		serie.nom = nom;
 		serie.seance = Seance.find.ref(id);
-		serie.ouverte = 0; //la série est fermée au départ (0=FAUX, 1=VRAI)
 		serie.questions = new ArrayList<Question>();
 		//on trouve la position max et on le met à la fin
-		List<Serie> serieTemp = Serie.find.orderBy("position desc").findList();
-		if(!serieTemp.isEmpty()){
-			serie.position = serieTemp.get(0).position+1;
-		}else{
-			serie.position=0L;
-		}
+		serie.position=Serie.positionMax()+1;
 		Serie.addSerie(serie);
 		return gererSeance(id);
 	}
@@ -237,16 +254,47 @@ public class Application extends Controller {
 		serieDuDessous.save();
 		return gererSeance(seance.id);
 	}
-	public static Result addQuestion(Long id){ //c'est l'id de la série à laquelle appartien la future question
-		return ok(nouvelleQuestion.render(id,TypeQuestion.find.all()));
+	public static Result addQuestion(Long id){ //c'est l'id de la série à laquelle appartiendra la future question
+		return ok(nouvelleQuestion.render(id,Serie.find.ref(id).seance.id,TypeQuestion.find.all()));
 	}
-	public static Result addQuestion2(Long id){ //c'est l'id de la série à laquelle appartien la future question
+	public static Result addQuestion2(Long id){ //c'est l'id de la série à laquelle appartiendra la future question
 		DynamicForm info = Form.form().bindFromRequest();
 		if(info.get("id")==null){
-			return ok(nouvelleQuestion.render(id,TypeQuestion.find.all()));
+			return ok(nouvelleQuestion.render(id,Serie.find.ref(id).seance.id,TypeQuestion.find.all()));
 		}
 		Long n = Long.parseLong(info.get("id"));
-		return ok(nouvelleQuestion2.render(id,TypeQuestion.find.ref(n)));
+		return ok(nouvelleQuestion2.render(id,Serie.find.ref(id).seance.id,TypeQuestion.find.ref(n)));
+	}
+	public static Result addQuestion3(Long serie_id, Long typeQ_id){
+		Serie serie = Serie.find.ref(serie_id);
+		DynamicForm info = Form.form().bindFromRequest();
+		String titre = info.get("titre");
+		String texte = info.get("texte");
+		//On ajoute les réponses à la DB :
+		Reponse r1 = new Reponse();
+		Reponse r2 = new Reponse();
+		if(typeQ_id<=2){
+			String reponse1 = info.get("reponse1");
+			String reponse2 = info.get("reponse2");
+			r1.texte = reponse1;
+			r2.texte = reponse2;
+		}
+		//On ajoute la question à la DB :
+		Question question = new Question();
+		question.titre=titre;
+		question.texte=texte;
+		question.typeQ=TypeQuestion.find.ref(typeQ_id);
+		question.serie=serie;
+		question.reponses = new ArrayList<Reponse>();
+		question.id=Question.idNonUtilisee();
+		question.save();
+		if(typeQ_id<=2){
+			r1.question=Question.find.ref(question.id);
+			r2.question=Question.find.ref(question.id);
+			r1.save();
+			r2.save();
+		}
+		return gererSeance(serie.seance.id);
 	}
 	
 	//Envoyer les mails

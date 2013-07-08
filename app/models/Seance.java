@@ -54,6 +54,9 @@ public class Seance extends Model {
 	@ManyToOne
 	public Professeur professeur;
 	
+	@OneToMany(targetEntity = Serie.class)
+	public List<Serie> series;
+	
 	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
 
 	public static List<Seance> page(HashMap<String,String> session){
@@ -72,7 +75,20 @@ public class Seance extends Model {
 	public static void removeSeance(Long id){
 		Seance se = Seance.find.ref(id);
 		if(se != null){
+			List<Serie> ss = Serie.find.where().eq("seance",se).findList();
+			for(Serie s: ss){
+				Serie.removeSerie(s.id);
+			}
 			se.delete();
+		}
+	}
+	
+	public static Long idNonUtilisee(){
+		List<Seance> seanceTemp = Seance.find.orderBy("id desc").findList();
+		if(!seanceTemp.isEmpty()){
+			return seanceTemp.get(0).id+1;
+		}else{
+			return 0L;
 		}
 	}
 }

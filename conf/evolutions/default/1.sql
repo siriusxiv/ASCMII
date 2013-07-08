@@ -10,10 +10,10 @@ create table professeur (
 
 create table question (
   id                        bigint auto_increment not null,
-  serie_id                  bigint not null,
   titre                     varchar(255),
   texte                     varchar(255),
-  type_id                   bigint,
+  type_q_id                 bigint,
+  serie_id                  bigint,
   constraint pk_question primary key (id))
 ;
 
@@ -36,7 +36,8 @@ create table seance (
 create table serie (
   id                        bigint auto_increment not null,
   nom                       varchar(255),
-  ouverte                   integer,
+  date_ouverte              datetime,
+  date_fermeture            datetime,
   position                  bigint,
   seance_id                 bigint,
   constraint pk_serie primary key (id))
@@ -48,10 +49,10 @@ create table type_question (
   constraint pk_type_question primary key (id))
 ;
 
-alter table question add constraint fk_question_serie_1 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
-create index ix_question_serie_1 on question (serie_id);
-alter table question add constraint fk_question_type_2 foreign key (type_id) references type_question (id) on delete restrict on update restrict;
-create index ix_question_type_2 on question (type_id);
+alter table question add constraint fk_question_typeQ_1 foreign key (type_q_id) references type_question (id) on delete restrict on update restrict;
+create index ix_question_typeQ_1 on question (type_q_id);
+alter table question add constraint fk_question_serie_2 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
+create index ix_question_serie_2 on question (serie_id);
 alter table reponse add constraint fk_reponse_question_3 foreign key (question_id) references question (id) on delete restrict on update restrict;
 create index ix_reponse_question_3 on reponse (question_id);
 alter table seance add constraint fk_seance_professeur_4 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;

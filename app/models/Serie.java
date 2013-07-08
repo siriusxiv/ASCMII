@@ -45,15 +45,17 @@ public class Serie extends Model {
 	
 	@Required
 	public String nom;
-	@Required
-	public int ouverte;
+	
+	public Date date_ouverte;
+	public Date date_fermeture;
+	
 	@Required
 	public Long position;
 	
 	@ManyToOne
 	public Seance seance;
 	
-	@OneToMany(targetEntity = Question.class, cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = Question.class)
 	public List<Question> questions;
 	
 	public static Finder<Long,Serie> find = new Finder<Long,Serie>(Long.class, Serie.class);
@@ -74,7 +76,30 @@ public class Serie extends Model {
 	public static void removeSerie(Long id){
 		Serie se = Serie.find.ref(id);
 		if(se != null){
+			List<Question> qs = Question.find.where().eq("serie",se).findList();
+			for(Question q : qs){
+				Question.removeQuestion(q.id);
+			}
 			se.delete();
+		}
+	}
+	
+	
+	public static Long positionMax(){
+		List<Serie> serieTemp = Serie.find.orderBy("position desc").findList();
+		if(!serieTemp.isEmpty()){
+			return serieTemp.get(0).position;
+		}else{
+			return 0L;
+		}
+	}
+	
+	public static Long idNonUtilisee(){
+		List<Seance> serieTemp = Seance.find.orderBy("id desc").findList();
+		if(!serieTemp.isEmpty()){
+			return serieTemp.get(0).id+1;
+		}else{
+			return 0L;
 		}
 	}
 }

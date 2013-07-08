@@ -11,7 +11,8 @@ INSERT INTO type_question(type_q) VALUES
 ;
 
 INSERT INTO professeur(username) VALUES
-('mprofess');
+('mprofess'),
+('mboussej');
 
 INSERT INTO seance(date,matiere,intitule,professeur_username) VALUES
 ('2014/01/31 08:00:00','S1_SIBAD','Amphi 1','mprofess');

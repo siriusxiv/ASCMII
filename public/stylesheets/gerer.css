@@ -39,3 +39,7 @@ form.logout{
 h2.intituleDeLaSeance{
 	padding:1px 0px 0px 300px;
 }
+
+button.suppr{
+	color:red;
+}

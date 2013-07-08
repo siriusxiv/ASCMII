@@ -29,7 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package models;
 import java.util.*;
+
 import javax.persistence.*;
+
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
@@ -43,18 +45,18 @@ public class Reponse extends Model {
 	
 	@Required
 	public String texte;
-
+	
 	@ManyToOne
 	public Question question;
 	
 	public static Finder<Long,Reponse> find = new Finder<Long,Reponse>(Long.class, Reponse.class);
 
 	
-	public static void addItem(Reponse re){
+	public static void addReponse(Reponse re){
 		re.save();
 	}
 	
-	public static void removeItem(Long id){
+	public static void removeReponse(Long id){
 		Reponse re = Reponse.find.ref(id);
 		if(re != null){
 			re.delete();

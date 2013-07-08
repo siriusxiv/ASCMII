@@ -1,4 +1,4 @@
-@(id: Long,typeQ: TypeQuestion)
+@(serie_id:Long, seance_id: Long, typeQ: TypeQuestion)
 @main("ASCMII - Création d'une nouvelle question - Etape 2/2"){
 
 <!DOCTYPE html>
@@ -16,12 +16,19 @@
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
-	@typeQ.typeQ
-	@typeQ.id
-	<form>
-	<h2>Quel type de question voulez-vous créer ?</h2>
-	<form action="/prof/gerer/@id" method="POST" style="display:inline"><button type="submit">Retour</button></form>
-	<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
+	<form action="/prof/gerer/addq3/@serie_id/@typeQ.id" method="POST">
+		<p>Titre de la question : <input type="text" name="titre"></p>
+		<p>Entrez la question : </p>
+		<p><input type="text" name="texte"></p>
+		@if(typeQ.id<=2){
+			<p>Réponses :</p>
+			<p><input type="text" name="reponse1"></p>
+			<p><input type="text" name="reponse2"></p>
+			<button>Ajouter une autre réponse</button>
+		}
+		<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
 	</form>
+	
+	<form action="/prof/gerer/@seance_id" method="POST" style="display:inline"><button type="submit">Retour</button></form>
 </html>
 }
