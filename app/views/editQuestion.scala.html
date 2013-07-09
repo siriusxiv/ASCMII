@@ -12,15 +12,21 @@
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
-	<form action="/prof/gerer/editquestion/@question.id" method="POST">
+	<form action="/prof/gerer/editquestion2/@question.id" method="POST">
 		<p>Titre de la question : <input type="text" name="titre" value="@question.titre"></p>
 		<p>Entrez la question : </p>
 		<p><input type="text" name="texte" size="100px" value="@question.texte"></p>
 		@if(question.typeQ.id<=2){
 			<p>Réponses :</p>
+			<table>
 			@for(reponse <- question.reponses){
-				<p id="reponse@reponse.position"> @reponse.position. <input type="text" name="reponse@reponse.position" value="@reponse.texte"></p>
+			<tr id="reponse@reponse.position">
+				<td class="suppr"><a id="suppr@reponse.position" onClick="removeReponse(@reponse.position)">X</a></td>
+				<td id="numero@reponse.position"> @reponse.position.</td>
+				<td><input type="text" id="texte@reponse.position" name="reponse@reponse.position" value="@reponse.texte"></td>
+			</tr>
 			}
+			</table>
 		}
 		<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
 	</form>
@@ -36,10 +42,25 @@
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);
-		$('#reponse'+nombreDeReponses).after('<p id="'+reponseNumero+'"> '+(nombreDeReponses+1)+'. <input type="text" name="'+reponseNumero+'"></p>');
+		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+reponseNumero+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
+		var chaine2 = '<td id="numero'+reponseNumero+'"> '+(nombreDeReponses+1)+'.</td>';
+		var chaine3 = '<td><input type="text" id="texte'+reponseNumero+'" name="'+reponseNumero+'"></td></tr>';
+		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3);
 		nombreDeReponses++;
 	}
-	function removeReponse(){
+	function removeReponse(pos){
+		$('#reponse'+pos).remove();
+		pos++;
+		while(pos<=nombreDeReponses){ //On doit changer tous les attributs dans questions qui suivent celle qu'on supprime
+			$('#reponse'+pos).attr('id','reponse'+(pos-1));
+			$('#suppr'+pos).attr('onClick','removeReponse('+(pos-1)+')');
+			$('#suppr'+pos).attr('id','#suppr'+(pos-1));
+			$('#texte'+pos).attr('name','reponse'+(pos-1));
+			$('#texte'+pos).attr('id','texte'+(pos-1));
+			$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
+			pos++;
+		}
+		nombreDeReponses--;
 	}
 
 </script>

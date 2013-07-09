@@ -358,6 +358,32 @@ public class Application extends Controller {
 	}
 	public static Result editQuestion2(Long id){//id de la question que l'on édite
 		Question question = Question.find.ref(id);
+		DynamicForm info = Form.form().bindFromRequest();
+		String titre = info.get("titre");
+		String texte = info.get("texte");
+		//On edite le titre et le texte :
+		question.titre=titre;
+		question.texte=texte;
+		question.save();
+		//On ajoute les réponses à la DB :
+		if(question.typeQ.id<=2){
+			//D'abord, on supprime les réponses qui sont déjà dans la question :
+			for(Reponse r : question.reponses){
+				Reponse.removeReponse(r.id);
+			}
+			//Puis on ajoute les questions qui sont dans la Form :
+			List<Reponse> reponses = new ArrayList<Reponse>();
+			int i = 1;
+			Question questionQuiAppartientALaReponse = Question.find.ref(question.id);
+			while(info.get("reponse"+i)!=null){
+				Reponse reponse = new Reponse();
+				reponse.texte = info.get("reponse"+i);
+				reponse.question=questionQuiAppartientALaReponse;
+				reponse.position=i;
+				reponse.save();
+				i++;
+			}
+		}
 		return gererSeance(question.serie.seance.id);
 	}
 	
