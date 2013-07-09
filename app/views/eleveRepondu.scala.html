@@ -1,0 +1,40 @@
+@(resultats: List[Resultat])
+@main("ASCMII - Vous avez déjà répondu à cette série de question"){
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+ </head>
+ <h1>ASCMII</h1>
+	<p>Vous avez déjà répondu à cette série de questions !</p>
+	
+ @for(resultat <- resultats){
+	<p>@resultat.question.texte</p>
+	@if(resultat.question.typeQ.id==1){
+		@for(reponse <- resultat.question.reponses){
+			@if(resultat.reponsesChoisies.contains(reponse.position)){
+				<input type="radio" name="@resultat.question.id" value="" style="padding:0px 0px 0px 50px" checked disabled> @reponse.texte<br>
+			}else{
+				<input type="radio" name="@resultat.question.id" value="" style="padding:0px 0px 0px 50px" disabled> @reponse.texte<br>
+			}
+		}
+	}
+	@if(resultat.question.typeQ.id==2){
+		@for(reponse <- resultat.question.reponses){
+			@if(resultat.reponsesChoisies.contains(reponse.position)){
+				<input type="checkbox" style="padding:0px 0px 0px 50px" checked disabled> @reponse.texte<br>
+			}else{
+				<input type="checkbox" style="padding:0px 0px 0px 50px" disabled> @reponse.texte<br>
+			}
+		}
+	}
+	@if(resultat.question.typeQ.id==3){
+		<p>Votre réponse : @resultat.repond.texte</p>
+	}
+	@if(resultat.question.typeQ.id==4){
+		<p>Votre réponse : @resultat.repond.texte</p>
+	}
+ }
+ <p>Vous avez déjà répondu à cette série !</p>
+</html>
+}

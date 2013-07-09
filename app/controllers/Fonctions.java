@@ -4,7 +4,7 @@ public class Fonctions{
 
 public static boolean isDouble(String value)
 {
-	value.replace(',','.');
+	value = value.replace(',','.');
     boolean seenDot = false;
     boolean seenExp = false;
     boolean justSeenExp = false;

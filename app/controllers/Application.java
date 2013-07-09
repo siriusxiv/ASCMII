@@ -59,7 +59,7 @@ public class Application extends Controller {
 	{
 		DynamicForm fullInfos = Form.form().bindFromRequest();
 		String identifiant = fullInfos.get("login");
-		if(Professeur.find.where().eq("username",identifiant).findList().isEmpty()){
+		if(Professeur.find.byId(identifiant)==null){
 			session().clear();
 			return badRequest(login.render("F"));
 		}else{
@@ -422,7 +422,11 @@ public class Application extends Controller {
 			for(Question q : lien.serie.questions){
 				Collections.sort(q.reponses,new Reponse());
 			}
-			return ok(eleve.render(lien,""));
+			if(!lien.repondu){
+				return ok(eleve.render(lien,""));
+			}else{
+				return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+			}
 		}else{
 			return ok(p404.render());
 		}
@@ -435,7 +439,11 @@ public class Application extends Controller {
 			for(Question q : lien.serie.questions){
 				Collections.sort(q.reponses,new Reponse());
 			}
-			return ok(eleve.render(lien,message));
+			if(!lien.repondu){
+				return ok(eleve.render(lien,message));
+			}else{
+				return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+			}
 		}else{
 			return ok(p404.render());
 		}
@@ -443,6 +451,9 @@ public class Application extends Controller {
 	public static Result donnerReponse(String chemin){
 		DynamicForm info = Form.form().bindFromRequest();
 		Lien lien = Lien.find.ref(chemin);
+		if(lien.repondu){
+			return eleveRepondre(chemin);
+		}
 		//D'abord, il faut vérifier que toutes les réponses sont valides :
 		for(Question qu : lien.serie.questions){
 			switch(qu.typeQ.id){
@@ -530,7 +541,7 @@ public class Application extends Controller {
 		}
 		lien.repondu=true;
 		lien.save();
-		return ok(p404.render());
+		return eleveRepondre(chemin);
 	}
 	
 }

@@ -37,7 +37,6 @@ create table question (
   position                  bigint,
   type_q_id                 integer,
   serie_id                  bigint,
-  est_repondue_id           bigint,
   constraint pk_question primary key (id))
 ;
 
@@ -95,18 +94,16 @@ alter table question add constraint fk_question_typeQ_5 foreign key (type_q_id) 
 create index ix_question_typeQ_5 on question (type_q_id);
 alter table question add constraint fk_question_serie_6 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
 create index ix_question_serie_6 on question (serie_id);
-alter table question add constraint fk_question_estRepondue_7 foreign key (est_repondue_id) references repond (id) on delete restrict on update restrict;
-create index ix_question_estRepondue_7 on question (est_repondue_id);
-alter table repond add constraint fk_repond_question_8 foreign key (question_id) references question (id) on delete restrict on update restrict;
-create index ix_repond_question_8 on repond (question_id);
-alter table repond add constraint fk_repond_eleve_9 foreign key (eleve_ine) references eleve (ine) on delete restrict on update restrict;
-create index ix_repond_eleve_9 on repond (eleve_ine);
-alter table reponse add constraint fk_reponse_question_10 foreign key (question_id) references question (id) on delete restrict on update restrict;
-create index ix_reponse_question_10 on reponse (question_id);
-alter table seance add constraint fk_seance_professeur_11 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;
-create index ix_seance_professeur_11 on seance (professeur_username);
-alter table serie add constraint fk_serie_seance_12 foreign key (seance_id) references seance (id) on delete restrict on update restrict;
-create index ix_serie_seance_12 on serie (seance_id);
+alter table repond add constraint fk_repond_question_7 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_repond_question_7 on repond (question_id);
+alter table repond add constraint fk_repond_eleve_8 foreign key (eleve_ine) references eleve (ine) on delete restrict on update restrict;
+create index ix_repond_eleve_8 on repond (eleve_ine);
+alter table reponse add constraint fk_reponse_question_9 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_reponse_question_9 on reponse (question_id);
+alter table seance add constraint fk_seance_professeur_10 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;
+create index ix_seance_professeur_10 on seance (professeur_username);
+alter table serie add constraint fk_serie_seance_11 foreign key (seance_id) references seance (id) on delete restrict on update restrict;
+create index ix_serie_seance_11 on serie (seance_id);
 
 
 

@@ -50,7 +50,7 @@ public class Reponse extends Model implements Comparator<Reponse>{
 	
 	@ManyToOne
 	public Question question;
-	@OneToMany(targetEntity = Choisit.class)
+	@OneToOne(targetEntity = Choisit.class)
 	public List<Choisit> estChoisie;
 	
 	

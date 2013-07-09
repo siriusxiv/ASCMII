@@ -27,82 +27,86 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************/
 
+/*
+Je veux : la liste des "répond" fait par tel élève pour telle question
+et des "choisit"
+
+Objet{
+	Répond
+	Question
+}
+Objet{
+	List<Choisit>
+	Question
+}
+
+Objet{
+	Répond
+	List<Choisit>
+	question
+}
+question.typeQ.id donne le type de la réponse
+ */
+
 package models;
+
 import java.util.*;
 
-import javax.persistence.*;
-
-import play.db.ebean.*;
-import play.data.format.*;
-import play.data.validation.*;
-import play.data.validation.Constraints.*;
-
-
-@Entity
-public class Question extends Model implements Comparator<Question>{
-	@Id
-	public Long id;
+public class Resultat implements Comparator<Resultat>{
+	public Question question;
+	public Repond repond;
+	public List<Integer> reponsesChoisies;
 	
-	@Required
-	public String titre;
-	@Required
-	public String texte;
-	@Required
-	public Long position;
+	Resultat(Question q){
+		question=q;
+	}
 	
-	@ManyToOne
-	public TypeQuestion typeQ;
-	
-	@ManyToOne
-	public Serie serie;
-	
-	@OneToMany(targetEntity = Reponse.class)
-	public List<Reponse> reponses;
-	
-	@OneToMany(targetEntity = Repond.class)
-	public List<Repond> estRepondue;
-	
-	public static Finder<Long,Question> find = new Finder<Long,Question>(Long.class, Question.class);
-
 	@Override
-	public int compare(Question q1,Question q2){
-			return (q1.position<q2.position ? -1 : (q1.position==q2.position ? 0 : 1));
+	public int compare(Resultat r1,Resultat r2){
+			return (r1.question.position<r2.question.position ? -1 : (r1.question.position==r2.question.position ? 0 : 1));
 	}
 	
-	public static void addItem(Seance se){
-		se.save();
-	}
 	
-	public static void removeQuestion(Long id){
-		Question q = Question.find.byId(id);
-		if(q != null){
-			List<Reponse> rs = Reponse.find.where().eq("question", q).findList();
-			for(Reponse r : rs){
-				Reponse.removeReponse(r.id);
+	public static List<Resultat> listeResultat(Lien lien){
+		Serie serie = lien.serie;
+		Eleve eleve = lien.eleve;
+		List<Resultat> resultats = new ArrayList<Resultat>();
+		for(Question q : serie.questions){
+			Resultat resultat = new Resultat(q);
+			if(q.typeQ.id==1 || q.typeQ.id==2){
+				List<Integer> rChoisies = new ArrayList<Integer>();
+				for(Reponse r : q.reponses){
+					Choisit choisit = Choisit.find.where().eq("reponse",r).eq("eleve", eleve).findUnique();
+					if(choisit!=null){
+						rChoisies.add(choisit.reponse.position);
+					}
+				}
+				resultat.reponsesChoisies = rChoisies;
+			}else if(q.typeQ.id==3 || q.typeQ.id==4){
+				resultat.repond = Repond.find.where().eq("question", q).eq("eleve", eleve).findUnique();
 			}
-			List<Repond> re = Repond.find.where().eq("question", q).findList();
-			for(Repond r : re){
-				Repond.removeRepond(r.id);
-			}
-			q.delete();
+			resultats.add(resultat);
 		}
-	}
-	
-	public static Long positionMax(){
-		List<Question> qTemp = Question.find.orderBy("position desc").findList();
-		if(!qTemp.isEmpty()){
-			return qTemp.get(0).position;
-		}else{
-			return -1L;
+		//Maintenant, il faut trier les résultats par question
+		Collections.sort(resultats,new Resultat(new Question()));
+		//Et trier les reponses aux questions :
+		for(Resultat r : resultats){
+			Collections.sort(r.question.reponses,new Reponse());
 		}
-	}
-	
-	public static Long idNonUtilisee(){
-		List<Question> qTemp = Question.find.orderBy("id desc").findList();
-		if(!qTemp.isEmpty()){
-			return qTemp.get(0).id+1;
-		}else{
-			return 1L;
-		}
+		return resultats;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
