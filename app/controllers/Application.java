@@ -179,6 +179,7 @@ public class Application extends Controller {
 						Reponse newReponse = new Reponse();
 						newReponse.texte=r.texte;
 						newReponse.question=Question.find.ref(newQuestion.id);
+						newReponse.position=r.position;
 						newReponse.save();
 					}
 				}
@@ -261,31 +262,22 @@ public class Application extends Controller {
 		serieDuDessous.save();
 		return gererSeance(seance.id);
 	}
-	public static Result addQuestion(Long id){ //c'est l'id de la série à laquelle appartiendra la future question
-		return ok(nouvelleQuestion.render(id,Serie.find.ref(id).seance.id,TypeQuestion.find.all()));
+	public static Result addQuestion(Long serie_id){ //c'est l'id de la série à laquelle appartiendra la future question
+		return ok(nouvelleQuestion.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.all()));
 	}
-	public static Result addQuestion2(Long id){ //c'est l'id de la série à laquelle appartiendra la future question
+	public static Result addQuestion2(Long serie_id){ //c'est l'id de la série à laquelle appartiendra la future question
 		DynamicForm info = Form.form().bindFromRequest();
-		if(info.get("id")==null){
-			return ok(nouvelleQuestion.render(id,Serie.find.ref(id).seance.id,TypeQuestion.find.all()));
+		if(info.get("choixQuestion")==null){
+			return ok(nouvelleQuestion.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.all()));
 		}
-		Long n = Long.parseLong(info.get("id"));
-		return ok(nouvelleQuestion2.render(id,Serie.find.ref(id).seance.id,TypeQuestion.find.ref(n)));
+		Long n = Long.parseLong(info.get("choixQuestion"));
+		return ok(nouvelleQuestion2.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.ref(n)));
 	}
 	public static Result addQuestion3(Long serie_id, Long typeQ_id){
 		Serie serie = Serie.find.ref(serie_id);
 		DynamicForm info = Form.form().bindFromRequest();
 		String titre = info.get("titre");
 		String texte = info.get("texte");
-		//On ajoute les réponses à la DB :
-		Reponse r1 = new Reponse();
-		Reponse r2 = new Reponse();
-		if(typeQ_id<=2){
-			String reponse1 = info.get("reponse1");
-			String reponse2 = info.get("reponse2");
-			r1.texte = reponse1;
-			r2.texte = reponse2;
-		}
 		//On ajoute la question à la DB :
 		Question question = new Question();
 		question.titre=titre;
@@ -296,11 +288,19 @@ public class Application extends Controller {
 		question.reponses = new ArrayList<Reponse>();
 		question.id=Question.idNonUtilisee();
 		question.save();
+		//On ajoute les réponses à la DB :
 		if(typeQ_id<=2){
-			r1.question=Question.find.ref(question.id);
-			r2.question=Question.find.ref(question.id);
-			r1.save();
-			r2.save();
+			List<Reponse> reponses = new ArrayList<Reponse>();
+			int i = 1;
+			Question questionQuiAppartientALaReponse = Question.find.ref(question.id);
+			while(info.get("reponse"+i)!=null){
+				Reponse reponse = new Reponse();
+				reponse.texte = info.get("reponse"+i);
+				reponse.question=questionQuiAppartientALaReponse;
+				reponse.position=i;
+				reponse.save();
+				i++;
+			}
 		}
 		return gererSeance(serie.seance.id);
 	}
@@ -308,6 +308,57 @@ public class Application extends Controller {
 		Long seance_id = Question.find.ref(id).serie.seance.id;
 		Question.removeQuestion(id);
 		return gererSeance(seance_id);
+	}
+	public static Result monterQuestion(Long id){//cet id est l'id de la question à monter
+		Question qDuDessous = Question.find.ref(id);
+		Serie serie = qDuDessous.serie;
+		//D'abord, on trouve la question qui est au dessus
+		List<Question> qTemp = Question.find.where()
+								.lt("position",qDuDessous.position)
+								.eq("serie",serie)
+								.orderBy("position desc").findList();
+		if(qTemp.isEmpty()){ //rien à faire
+			return gererSeance(serie.seance.id);
+		}
+		Question qDuDessus = qTemp.get(0);
+		//Après, on swappe leur position
+		Long positionTemp = qDuDessus.position;
+		qDuDessus.position=qDuDessous.position;
+		qDuDessous.position=positionTemp;
+		//on save dans la database
+		qDuDessus.save();
+		qDuDessous.save();
+		return gererSeance(serie.seance.id);
+	}
+	public static Result descendreQuestion(Long id){//cet id est l'id de la question à descendre
+		Question qDuDessus = Question.find.ref(id);
+		Serie serie = qDuDessus.serie;
+		//D'abord, on trouve la question qui est au dessus
+		List<Question> qTemp = Question.find.where()
+								.gt("position",qDuDessus.position)
+								.eq("serie",serie)
+								.orderBy("position asc").findList();
+		if(qTemp.isEmpty()){ //rien à faire
+			return gererSeance(serie.seance.id);
+		}
+		Question qDuDessous = qTemp.get(0);
+		//Après, on swappe leur position
+		Long positionTemp = qDuDessus.position;
+		qDuDessus.position=qDuDessous.position;
+		qDuDessous.position=positionTemp;
+		//on save dans la database
+		qDuDessus.save();
+		qDuDessous.save();
+		return gererSeance(serie.seance.id);
+	}
+	public static Result editQuestion(Long id){//id de la question que l'on édite
+		Question q = Question.find.ref(id);
+		Collections.sort(q.reponses,new Reponse());
+		return ok(editQuestion.render(q));
+	}
+	public static Result editQuestion2(Long id){//id de la question que l'on édite
+		Question question = Question.find.ref(id);
+		return gererSeance(question.serie.seance.id);
 	}
 	
 	//Envoyer les mails

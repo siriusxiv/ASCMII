@@ -61,9 +61,17 @@ function addSerie(){
 								<button type="submit" class="suppr">X</button></form> @question.titre
 						</td>
 						<td>
-							<button type="submit">Editer</button>
-							<button type="submit">Descendre</button>
-							<button type="submit">Monter</button>
+							<form action="/prof/gerer/editquestion/@question.id" method="POST" style="display:inline">
+								<button type="submit">Editer</button>
+							</form>
+							@if(serie.questions.length!=1){
+							<form action="/prof/gerer/downquestion/@question.id" method="POST" style="display:inline">
+								<button type="submit">Descendre</button>
+							</form>
+							<form action="/prof/gerer/upquestion/@question.id" method="POST" style="display:inline">
+								<button type="submit">Monter</button>
+							</form>
+							}
 						</td>
 					</tr>
 					<tr>

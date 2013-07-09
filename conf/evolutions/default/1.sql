@@ -52,6 +52,7 @@ create table repond (
 create table reponse (
   id                        bigint auto_increment not null,
   texte                     varchar(255),
+  position                  integer,
   question_id               bigint,
   constraint pk_reponse primary key (id))
 ;

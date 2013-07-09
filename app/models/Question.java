@@ -39,7 +39,7 @@ import play.data.validation.Constraints.*;
 
 
 @Entity
-public class Question extends Model {
+public class Question extends Model implements Comparator<Question>{
 	@Id
 	public Long id;
 	
@@ -64,6 +64,10 @@ public class Question extends Model {
 	
 	public static Finder<Long,Question> find = new Finder<Long,Question>(Long.class, Question.class);
 
+	@Override
+	public int compare(Question q1,Question q2){
+			return (q1.position<q2.position ? -1 : (q1.position==q2.position ? 0 : 1));
+	}
 	
 	public static void addItem(Seance se){
 		se.save();

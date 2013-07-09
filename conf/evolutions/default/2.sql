@@ -3,11 +3,11 @@
 
 # --- !Ups
 
-INSERT INTO type_question(type_q) VALUES
-('Question avec un seul choix de réponse possible'),
-('Question avec plusieurs choix de réponse possible'),
-('Question à réponse libre de type "texte"'),
-('Question à réponse libre de type "nombre"')
+INSERT INTO type_question(id,type_q) VALUES
+(1,'Question avec un seul choix de réponse possible'),
+(2,'Question avec plusieurs choix de réponse possible'),
+(3,'Question à réponse libre de type "texte"'),
+(4,'Question à réponse libre de type "nombre"')
 ;
 
 INSERT INTO professeur(username) VALUES
@@ -17,9 +17,9 @@ INSERT INTO professeur(username) VALUES
 INSERT INTO seance(date,matiere,intitule,professeur_username) VALUES
 ('2014/01/31 08:00:00','S1_SIBAD','Amphi 1','mprofess');
 
-INSERT INTO eleve(ine) VALUES
-('00000000Q'),
-('05018883P');
+INSERT INTO eleve(ine,mail) VALUES
+('00000000Q','a@eleves.ec-nantes.fr'),
+('05018883P','malik.boussejra@eleves.ec-nantes.fr');
 
 # --- !Downs
 

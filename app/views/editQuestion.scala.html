@@ -1,5 +1,5 @@
-@(serie_id:Long, seance_id: Long, typeQ: TypeQuestion)
-@main("ASCMII - Création d'une nouvelle question - Etape 2/2"){
+@(question: Question)
+@main("ASCMII - Edition d'une question"){
 
 <!DOCTYPE html>
 
@@ -12,26 +12,27 @@
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
-	<form action="/prof/gerer/addq3/@serie_id/@typeQ.id" method="POST">
-		<p>Titre de la question : <input type="text" name="titre"></p>
+	<form action="/prof/gerer/editquestion/@question.id" method="POST">
+		<p>Titre de la question : <input type="text" name="titre" value="@question.titre"></p>
 		<p>Entrez la question : </p>
-		<p><input type="text" name="texte" size="100px"></p>
-		@if(typeQ.id<=2){
+		<p><input type="text" name="texte" size="100px" value="@question.texte"></p>
+		@if(question.typeQ.id<=2){
 			<p>Réponses :</p>
-			<p id="reponse1"> 1. <input type="text" name="reponse1"></p>
-			<p id="reponse2"> 2. <input type="text" name="reponse2"></p>
+			@for(reponse <- question.reponses){
+				<p id="reponse@reponse.position"> @reponse.position. <input type="text" name="reponse@reponse.position" value="@reponse.texte"></p>
+			}
 		}
 		<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
 	</form>
-	@if(typeQ.id<=2){
+	@if(question.typeQ.id<=2){
 		<button onClick="addReponse()" style="position:relative; top:-30px;">Ajouter une autre réponse</button>
 	}
-	<form action="/prof/gerer/@seance_id" method="POST"><button type="submit">Retour</button></form>
+	<form action="/prof/gerer/@question.serie.seance.id" method="POST"><button type="submit">Retour</button></form>
 	
 </html>
 <script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
 <script>
-	var nombreDeReponses = 2;
+	var nombreDeReponses = @question.reponses.length;
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);

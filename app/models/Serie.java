@@ -39,7 +39,7 @@ import play.data.validation.Constraints.*;
 
 
 @Entity
-public class Serie extends Model {
+public class Serie extends Model{
 	@Id
 	public Long id;
 	
@@ -61,14 +61,18 @@ public class Serie extends Model {
 	public List<Lien> liens;
 	
 	public static Finder<Long,Serie> find = new Finder<Long,Serie>(Long.class, Serie.class);
-
+	
+	
 	public static List<Serie> page(Long id){
 		Seance seance = Seance.find.ref(id);
-		return find
-				.where()
-					.eq("seance",seance)
-				.orderBy("position")
-				.findList();
+		List<Serie> series = find.where().eq("seance",seance).orderBy("position").findList();
+		for(Serie s : series){
+			Collections.sort(s.questions, new Question());
+			for(Question q : s.questions){
+				Collections.sort(q.reponses, new Reponse());
+			}
+		}
+		return series;
 	}
 	
 	public static void addSerie(Serie se){

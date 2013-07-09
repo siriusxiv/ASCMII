@@ -20,7 +20,7 @@
 	<form action="/prof/gerer/addq2/@serie_id" method="POST">
 	<div>
 	@for(questiontype <- listeTypes){
-		<input type="radio" name="id" value="@questiontype.id" style="padding:0px 0px 0px 50px"> @questiontype.typeQ<br>
+		<input type="radio" name="choixQuestion" value="@questiontype.id" style="padding:0px 0px 0px 50px"> @questiontype.typeQ<br>
 	}
 	<br>
 	</div>

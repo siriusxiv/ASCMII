@@ -50,5 +50,13 @@ POST	/prof/gerer/up/:id			controllers.Application.monterSerie(id: Long)
 
 POST	/prof/gerer/down/:id		controllers.Application.descendreSerie(id: Long)
 
+POST	/prof/gerer/upquestion/:id	controllers.Application.monterQuestion(id: Long)
+
+POST	/prof/gerer/downquestion/:id	controllers.Application.descendreQuestion(id: Long)
+
+POST	/prof/gerer/editquestion/:id	controllers.Application.editQuestion(id: Long)
+
+POST	/prof/gerer/editquestion2/:id	controllers.Application.editQuestion2(id: Long)
+
 #prof envoyer mail
 POST	/prof/sendmail/				controllers.Application.sendMail()

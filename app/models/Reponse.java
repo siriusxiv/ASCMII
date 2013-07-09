@@ -39,12 +39,14 @@ import play.data.validation.Constraints.*;
 
 
 @Entity
-public class Reponse extends Model {
+public class Reponse extends Model implements Comparator<Reponse>{
 	@Id
 	public Long id;
 	
 	@Required
 	public String texte;
+	@Required
+	public int position;
 	
 	@ManyToOne
 	public Question question;
@@ -54,6 +56,10 @@ public class Reponse extends Model {
 	
 	public static Finder<Long,Reponse> find = new Finder<Long,Reponse>(Long.class, Reponse.class);
 
+	@Override
+	public int compare(Reponse r1,Reponse r2){
+			return (r1.position<r2.position ? -1 : (r1.position==r2.position ? 0 : 1));
+	}
 	
 	public static void addReponse(Reponse re){
 		re.save();
