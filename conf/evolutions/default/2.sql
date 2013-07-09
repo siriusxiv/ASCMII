@@ -17,6 +17,10 @@ INSERT INTO professeur(username) VALUES
 INSERT INTO seance(date,matiere,intitule,professeur_username) VALUES
 ('2014/01/31 08:00:00','S1_SIBAD','Amphi 1','mprofess');
 
+INSERT INTO eleve(ine) VALUES
+('00000000Q'),
+('05018883P');
+
 # --- !Downs
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,6 +28,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM type_question;
 DELETE FROM professeur;
 DELETE FROM seance;
+DELETE FROM eleve;
 
 SET FOREIGN_KEY_CHECKS=1;
 

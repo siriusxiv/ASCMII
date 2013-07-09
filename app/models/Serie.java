@@ -57,6 +57,8 @@ public class Serie extends Model {
 	
 	@OneToMany(targetEntity = Question.class)
 	public List<Question> questions;
+	@OneToMany(targetEntity = Lien.class)
+	public List<Lien> liens;
 	
 	public static Finder<Long,Serie> find = new Finder<Long,Serie>(Long.class, Serie.class);
 
@@ -80,6 +82,10 @@ public class Serie extends Model {
 			for(Question q : qs){
 				Question.removeQuestion(q.id);
 			}
+			List<Lien> ls = Lien.find.where().eq("serie",se).findList();
+			for(Lien l : ls){
+				Lien.removeLien(l.chemin);
+			}
 			se.delete();
 		}
 	}
@@ -90,7 +96,7 @@ public class Serie extends Model {
 		if(!serieTemp.isEmpty()){
 			return serieTemp.get(0).position;
 		}else{
-			return 0L;
+			return -1L;
 		}
 	}
 	
@@ -99,7 +105,7 @@ public class Serie extends Model {
 		if(!serieTemp.isEmpty()){
 			return serieTemp.get(0).id+1;
 		}else{
-			return 0L;
+			return 1L;
 		}
 	}
 }

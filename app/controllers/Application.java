@@ -172,6 +172,7 @@ public class Application extends Controller {
 					newQuestion.titre=q.titre;
 					newQuestion.typeQ=q.typeQ;
 					newQuestion.serie=Serie.find.ref(newSerie.id);
+					newQuestion.position=q.position;
 					newQuestion.id=Question.idNonUtilisee();
 					newQuestion.save();
 					for(Reponse r : q.reponses){
@@ -187,7 +188,7 @@ public class Application extends Controller {
 	}
 	public static Result gererSeance(Long id){
 		session("seance_id",String.valueOf(id));
-		return ok(gerer.render(
+		return ok(gerer.render(// /!\ Ici, il faudra retrier les question dans chaque série !
 					Seance.find.ref(id),
 					Serie.page(id)
 					));
@@ -289,6 +290,7 @@ public class Application extends Controller {
 		Question question = new Question();
 		question.titre=titre;
 		question.texte=texte;
+		question.position=Question.positionMax()+1;
 		question.typeQ=TypeQuestion.find.ref(typeQ_id);
 		question.serie=serie;
 		question.reponses = new ArrayList<Reponse>();

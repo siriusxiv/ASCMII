@@ -39,34 +39,47 @@ import play.data.validation.Constraints.*;
 
 
 @Entity
-public class Reponse extends Model {
+public class Eleve extends Model {
 	@Id
-	public Long id;
+	public String ine;
 	
 	@Required
-	public String texte;
+	public String mail;
 	
-	@ManyToOne
-	public Question question;
+	@OneToMany(targetEntity = Lien.class)
+	public List<Lien> liens;
+	@OneToMany(targetEntity = Repond.class)
+	public List<Repond> repond;
 	@OneToMany(targetEntity = Choisit.class)
-	public List<Choisit> estChoisie;
+	public List<Choisit> choisit;
 	
-	
-	public static Finder<Long,Reponse> find = new Finder<Long,Reponse>(Long.class, Reponse.class);
+	public static Finder<String,Eleve> find = new Finder<String,Eleve>(String.class, Eleve.class);
 
-	
-	public static void addReponse(Reponse re){
-		re.save();
+	public static List<Eleve> page(){
+		return find.all();
 	}
 	
-	public static void removeReponse(Long id){
-		Reponse re = Reponse.find.ref(id);
-		if(re != null){
-			List<Choisit> ch = Choisit.find.where().eq("reponse", re).findList();
+	public static void addEleve(Eleve el){
+		el.save();
+	}
+	
+	public static void removeEleve(String ine){
+		Eleve el = Eleve.find.ref(ine);
+		if(el != null){
+			List<Lien> ls = Lien.find.where().eq("eleve", el).findList();
+			for(Lien l : ls){
+				Lien.removeLien(l.chemin);
+			}
+			List<Repond> re = Repond.find.where().eq("eleve", el).findList();
+			for(Repond r : re){
+				Repond.removeRepond(r.id);
+			}
+			List<Choisit> ch = Choisit.find.where().eq("eleve", el).findList();
 			for(Choisit c : ch){
 				Choisit.removeChoisit(c.id);
 			}
-			re.delete();
+			el.delete();
 		}
 	}
+	
 }

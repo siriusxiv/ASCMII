@@ -88,7 +88,7 @@ public class Seance extends Model {
 		if(!seanceTemp.isEmpty()){
 			return seanceTemp.get(0).id+1;
 		}else{
-			return 0L;
+			return 1L;
 		}
 	}
 }

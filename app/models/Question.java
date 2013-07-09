@@ -47,6 +47,8 @@ public class Question extends Model {
 	public String titre;
 	@Required
 	public String texte;
+	@Required
+	public Long position;
 	
 	@ManyToOne
 	public TypeQuestion typeQ;
@@ -56,6 +58,9 @@ public class Question extends Model {
 	
 	@OneToMany(targetEntity = Reponse.class)
 	public List<Reponse> reponses;
+	
+	@OneToOne
+	public Repond estRepondue;
 	
 	public static Finder<Long,Question> find = new Finder<Long,Question>(Long.class, Question.class);
 
@@ -71,8 +76,21 @@ public class Question extends Model {
 			for(Reponse r : rs){
 				Reponse.removeReponse(r.id);
 			}
+			List<Repond> re = Repond.find.where().eq("question", q).findList();
+			for(Repond r : re){
+				Repond.removeRepond(r.id);
+			}
+			q.delete();
 		}
-		q.delete();
+	}
+	
+	public static Long positionMax(){
+		List<Question> qTemp = Question.find.orderBy("position desc").findList();
+		if(!qTemp.isEmpty()){
+			return qTemp.get(0).position;
+		}else{
+			return -1L;
+		}
 	}
 	
 	public static Long idNonUtilisee(){
@@ -80,7 +98,7 @@ public class Question extends Model {
 		if(!qTemp.isEmpty()){
 			return qTemp.get(0).id+1;
 		}else{
-			return 0L;
+			return 1L;
 		}
 	}
 }
