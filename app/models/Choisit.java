@@ -34,7 +34,7 @@ public class Choisit extends Model {
 	}
 	
 	public static void removeChoisit(Long id){
-		Choisit c = Choisit.find.ref(id);
+		Choisit c = Choisit.find.byId(id);
 		if(c != null){
 			c.delete();
 		}

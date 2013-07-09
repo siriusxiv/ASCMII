@@ -49,9 +49,11 @@ function addSeance(){
 						<form action="@routes.Application.displayEditSeance(seance.id)" method="POST" style="display:inline">
 							<button type="submit">Editer</button>
 						</form>
+						@if(!seance.series.isEmpty()){
 						<form action="@routes.Application.voteSeance(seance.id)" method="POST" style="display:inline">						
 							<button type="submit">Vote et résultat</button>
 						</form>
+						}
 						<form action="@routes.Application.dupliquerSeance(seance.id)" method="POST" style="display:inline">
 							<button type="submit">Dupliquer</button>
 						</form>

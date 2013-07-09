@@ -80,7 +80,7 @@ public class Serie extends Model{
 	}
 	
 	public static void removeSerie(Long id){
-		Serie se = Serie.find.ref(id);
+		Serie se = Serie.find.byId(id);
 		if(se != null){
 			List<Question> qs = Question.find.where().eq("serie",se).findList();
 			for(Question q : qs){

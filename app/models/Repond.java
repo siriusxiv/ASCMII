@@ -36,7 +36,7 @@ public class Repond extends Model {
 	}
 	
 	public static void removeRepond(Long id){
-		Repond r = Repond.find.ref(id);
+		Repond r = Repond.find.byId(id);
 		if(r != null){
 			r.delete();
 		}

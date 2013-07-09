@@ -73,7 +73,7 @@ public class Seance extends Model {
 	}
 	
 	public static void removeSeance(Long id){
-		Seance se = Seance.find.ref(id);
+		Seance se = Seance.find.byId(id);
 		if(se != null){
 			List<Serie> ss = Serie.find.where().eq("seance",se).findList();
 			for(Serie s: ss){

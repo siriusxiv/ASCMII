@@ -52,8 +52,8 @@ public class Professeur extends Model {
 		pr.save();
 	}
 	
-	public static void removeItem(String username){
-		Professeur pr = Professeur.find.ref(username);
+	public static void removeProfesseur(String username){
+		Professeur pr = Professeur.find.byId(username);
 		if(pr != null){
 			pr.delete();
 		}

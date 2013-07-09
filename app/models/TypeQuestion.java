@@ -54,7 +54,7 @@ public class TypeQuestion extends Model{
 	}
 	
 	public static void removeType(Long id){
-		TypeQuestion typeQ = TypeQuestion.find.ref(id);
+		TypeQuestion typeQ = TypeQuestion.find.byId(id);
 		if(typeQ != null){
 			typeQ.delete();
 		}

@@ -27,23 +27,25 @@ public class Lien extends Model {
 	}
 	
 	public static void addLien(Eleve eleve, Serie serie){
-		int a = eleve.hashCode();
-		int b = serie.hashCode();
-		int c = a+b;
-		String chemin = Integer.toHexString(c);
-		while(Lien.find.ref(chemin)!=null){
-			c++;
-			chemin=Integer.toHexString(c);
+		if(Lien.find.where().eq("eleve",eleve).eq("serie",serie).findList().isEmpty()){//Si un tel lien exist déjà, pas besoin de le rajouter
+			int a = eleve.hashCode();
+			int b = serie.hashCode();
+			int c = a*b;
+			String chemin = Integer.toHexString(c);
+			while(find.byId(chemin)!=null){
+				c*=2;
+				chemin=Integer.toHexString(c);
+			}
+			Lien lien = new Lien();
+			lien.chemin = chemin;
+			lien.serie=serie;
+			lien.eleve=eleve;
+			lien.save();
 		}
-		Lien lien = new Lien();
-		lien.chemin = chemin;
-		lien.serie=serie;
-		lien.eleve=eleve;
-		lien.save();
 	}
 	
 	public static void removeLien(String chemin){
-		Lien l = Lien.find.ref(chemin);
+		Lien l = Lien.find.byId(chemin);
 		if(l != null){
 			l.delete();
 		}

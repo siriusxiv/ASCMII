@@ -64,7 +64,7 @@ public class Eleve extends Model {
 	}
 	
 	public static void removeEleve(String ine){
-		Eleve el = Eleve.find.ref(ine);
+		Eleve el = Eleve.find.byId(ine);
 		if(el != null){
 			List<Lien> ls = Lien.find.where().eq("eleve", el).findList();
 			for(Lien l : ls){

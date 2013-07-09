@@ -66,7 +66,7 @@ public class Reponse extends Model implements Comparator<Reponse>{
 	}
 	
 	public static void removeReponse(Long id){
-		Reponse re = Reponse.find.ref(id);
+		Reponse re = Reponse.find.byId(id);
 		if(re != null){
 			List<Choisit> ch = Choisit.find.where().eq("reponse", re).findList();
 			for(Choisit c : ch){

@@ -58,5 +58,8 @@ POST	/prof/gerer/editquestion/:id	controllers.Application.editQuestion(id: Long)
 
 POST	/prof/gerer/editquestion2/:id	controllers.Application.editQuestion2(id: Long)
 
-#prof envoyer mail
-POST	/prof/sendmail/				controllers.Application.sendMail()
+#prof voteEtRésultats
+POST	/prof/vote/send/:id			controllers.Application.creerLiens(id: Long)
+
+#eleve
+GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)

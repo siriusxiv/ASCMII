@@ -188,15 +188,16 @@ public class Application extends Controller {
 		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance. La séance dupliquée se situe en première position dans la liste."));
 	}
 	public static Result gererSeance(Long id){
-		session("seance_id",String.valueOf(id));
-		return ok(gerer.render(// /!\ Ici, il faudra retrier les question dans chaque série !
+		return ok(gerer.render(// page trie automatiquement les réponses et les questions selon leur position
 					Seance.find.ref(id),
 					Serie.page(id)
 					));
 	}
-	public static Result voteSeance(Long id){
-		session("seance_id",String.valueOf(id));
-		return ok(voteEtResultat.render(id));
+	public static Result voteSeance(Long id){//id de la séance pour laquelle on votera
+		return ok(voteEtResultat.render(// page trie automatiquement les réponses et les questions selon leur position
+				Seance.find.ref(id),
+				Serie.page(id)
+				));
 	}
 
 	//Gestion des séries
@@ -387,13 +388,43 @@ public class Application extends Controller {
 		return gererSeance(question.serie.seance.id);
 	}
 	
+	
+	//Vote et Résulats
+	public static Result creerLiens(Long id){//id de la séance
+		Seance seance = Seance.find.ref(id);
+		List<Eleve> eleves = Eleve.find.all();//pour l'instant, on va supposer que tous les élèves doivent répondre à la série de question
+		for(Eleve e : eleves){
+			for(Serie s : seance.series){
+				Lien.addLien(e, s);
+			}
+			//sendMail(e, seance);//on envoit le mail
+		}
+		return voteSeance(id);
+	}
+	
 	//Envoyer les mails
-	public static Result sendMail(){
+	public static Result sendMail(Eleve eleve, Seance seance){
 		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
 		mail.setSubject("[ASCMII] Test");
-		mail.addRecipient("Malik <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
+		mail.addRecipient("Truc <"+eleve.mail+">",eleve.mail);
 		mail.addFrom("ASCMII <ascmii.test@gmail.com>");
 		mail.sendHtml("<html>Ceci est un mail de<br>test.</html>");
 		return voteSeance(Long.parseLong(session("seance_id")));
+	}
+	
+	
+	//Côté Elève :
+	public static Result eleveRepondre(String chemin){
+		Lien lien = Lien.find.byId(chemin);
+		if(lien!=null){
+			//On trie les questions et les réponses
+			Collections.sort(lien.serie.questions, new Question());
+			for(Question q : lien.serie.questions){
+				Collections.sort(q.reponses,new Reponse());
+			}
+			return ok(eleve.render(lien));
+		}else{
+			return ok(p404.render());
+		}
 	}
 }
