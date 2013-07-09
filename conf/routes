@@ -63,3 +63,5 @@ POST	/prof/vote/send/:id			controllers.Application.creerLiens(id: Long)
 
 #eleve
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)
+
+POST	/eleve/reponse/:chemin		controllers.Application.donnerReponse(chemin: String)

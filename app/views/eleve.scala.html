@@ -1,4 +1,4 @@
-@(lien: Lien)
+@(lien: Lien,message: String)
 @main("Réponse"){
 <html>
  <head>
@@ -6,31 +6,34 @@
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
  </head>
  <h1>ASCMII</h1>
+ <h2>@message</h2>
  @if(lien.serie.questions.length<=1){
 	<p>Vous qui avez l'adresse mail suivante : @lien.eleve.mail, vous devez répondre à la question suivante :</p>
  }else{
 	<p>Vous qui avez l'adresse mail suivante : @lien.eleve.mail, vous devez répondre aux questions suivantes :</p>
  }
+ <form action="/eleve/reponse/@lien.chemin" method="POST">
  @for(question <- lien.serie.questions){
 	<p>@question.texte</p>
 	@if(question.typeQ.id==1){
 		@for(reponse <- question.reponses){
-			<input type="radio" name="choixReponse" style="padding:0px 0px 0px 50px"> @reponse.texte<br>
+			<input type="radio" name="choixReponse@question.id" value="@reponse.position" style="padding:0px 0px 0px 50px"> @reponse.texte<br>
 		}
 	}
 	@if(question.typeQ.id==2){
 		@for(reponse <- question.reponses){
-			<input type="checkbox" name="choixReponse@reponse.position" style="padding:0px 0px 0px 50px"> @reponse.texte<br>
+			<input id="question@question.id" type="checkbox" name="choixReponse@question.id.@reponse.position" value="@reponse.position" style="padding:0px 0px 0px 50px"> @reponse.texte<br>
 		}
 	}
 	@if(question.typeQ.id==3){
-		<input type="text" name="texteRepondu" style="padding:0px 0px 0px 50px" size="60px"><br>
+		<input type="text" name="texteRepondu@question.id" style="padding:0px 0px 0px 50px" size="60px"><br>
 	}
 	@if(question.typeQ.id==4){
-		<input type="text" name="nombreRepondu" style="padding:0px 0px 0px 50px" size="20px"><br>
+		<input type="text" name="nombreRepondu@question.id" style="padding:0px 0px 0px 50px" size="20px"><br>
 	}
  }
  <p>NB : Une fois que vous aurez cliqué sur "OK", votre choix sera final</p>
- <button type="submit">OK</button>
+ <button type="submit">OK</button><!-- Envoyer le chemin du lien pour connaître l'id des questions auxquelles l'élève repond. -->
+</form>
 </html>
 }

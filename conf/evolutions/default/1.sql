@@ -34,7 +34,7 @@ create table question (
   titre                     varchar(255),
   texte                     varchar(255),
   position                  bigint,
-  type_q_id                 bigint,
+  type_q_id                 integer,
   serie_id                  bigint,
   est_repondue_id           bigint,
   constraint pk_question primary key (id))
@@ -77,7 +77,7 @@ create table serie (
 ;
 
 create table type_question (
-  id                        bigint auto_increment not null,
+  id                        integer auto_increment not null,
   type_q                    varchar(255),
   constraint pk_type_question primary key (id))
 ;

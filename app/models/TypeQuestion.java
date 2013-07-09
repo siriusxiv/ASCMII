@@ -38,7 +38,7 @@ import play.data.validation.Constraints.*;
 @Entity
 public class TypeQuestion extends Model{
 	@Id
-	public Long id;
+	public int id;
 	
 	@Required
 	public String typeQ;

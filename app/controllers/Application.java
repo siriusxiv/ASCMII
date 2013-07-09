@@ -422,9 +422,113 @@ public class Application extends Controller {
 			for(Question q : lien.serie.questions){
 				Collections.sort(q.reponses,new Reponse());
 			}
-			return ok(eleve.render(lien));
+			return ok(eleve.render(lien,""));
 		}else{
 			return ok(p404.render());
 		}
 	}
+	public static Result eleveRepondreLog(String chemin,String message){
+		Lien lien = Lien.find.byId(chemin);
+		if(lien!=null){
+			//On trie les questions et les réponses
+			Collections.sort(lien.serie.questions, new Question());
+			for(Question q : lien.serie.questions){
+				Collections.sort(q.reponses,new Reponse());
+			}
+			return ok(eleve.render(lien,message));
+		}else{
+			return ok(p404.render());
+		}
+	}
+	public static Result donnerReponse(String chemin){
+		DynamicForm info = Form.form().bindFromRequest();
+		Lien lien = Lien.find.ref(chemin);
+		//D'abord, il faut vérifier que toutes les réponses sont valides :
+		for(Question qu : lien.serie.questions){
+			switch(qu.typeQ.id){
+			case 1:
+				if(info.get("choixReponse"+qu.id)==null){
+					return eleveRepondreLog(lien.chemin,"Vous n'avez pas sélectionné de réponse pour la question Radio");
+				}
+				break;
+			case 2:
+				boolean bool=false;
+				for(Reponse r : qu.reponses){
+					if(bool = info.get("choixReponse"+qu.id+"."+r.position)!=null){
+						break;
+					}
+				}
+				if(!bool){
+					return eleveRepondreLog(lien.chemin,"Vous n'avez pas sélectionné de réponse pour la question CheckBox");
+				}
+				break;
+			case 3:
+				if(info.get("texteRepondu"+qu.id)==""){
+					return eleveRepondreLog(lien.chemin,"Vous n'avez rien écrit !");
+				}
+				break;
+			case 4:
+				String nombre = info.get("nombreRepondu"+qu.id);
+				if(nombre=="" || !Fonctions.isDouble(nombre)){
+					return eleveRepondreLog(lien.chemin,"Vous n'avez pas écrit un nombre !");
+				}
+				break;
+			default:
+				System.out.println("mauvais type de question : " + qu.typeQ.id);
+			}
+		}
+		//Maintenant qu'on a vérifié les réponses, on les met dans la base de donnée
+		for(Question q : lien.serie.questions){
+			switch(q.typeQ.id){
+			case 1:
+				Choisit choix = new Choisit();
+				choix.date=Calendar.getInstance().getTime();
+				choix.eleve=lien.eleve;
+				List<Reponse> reponses = q.reponses;
+				int position = Integer.parseInt(info.get("choixReponse"+q.id));
+				for(Reponse r : reponses){
+					if(r.position==position){
+						choix.reponse=r;
+					}
+				}
+				choix.save();
+				break;
+			case 2:
+				Choisit choix2 = new Choisit();
+				choix2.date=Calendar.getInstance().getTime();
+				choix2.eleve=lien.eleve;
+				List<Reponse> reponses2 = q.reponses;
+				for(Reponse r : reponses2){
+					String str = info.get("choixReponse"+q.id+"."+r.position);
+					if(str!=null){
+						choix2.reponse=r;
+						choix2.save();
+					}
+				}
+				break;
+			case 3:
+				String ceQuIlARepondu = info.get("texteRepondu"+q.id);
+				Repond repond = new Repond();
+				repond.date=Calendar.getInstance().getTime();
+				repond.eleve=lien.eleve;
+				repond.question=q;
+				repond.texte=ceQuIlARepondu;
+				repond.save();
+				break;
+			case 4:
+				String ceQuIlARepondu2 = info.get("nombreRepondu"+q.id);
+				Repond repond2 = new Repond();
+				repond2.date=Calendar.getInstance().getTime();
+				repond2.eleve=lien.eleve;
+				repond2.question=q;
+				repond2.texte=ceQuIlARepondu2;
+				repond2.save();
+				break;
+			default:
+				System.out.println("mauvais type de question : " + q.typeQ.id);
+			}
+		}
+		return ok(p404.render());
+	}
+	
 }
