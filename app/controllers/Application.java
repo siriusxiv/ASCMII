@@ -494,13 +494,13 @@ public class Application extends Controller {
 				choix.save();
 				break;
 			case 2:
-				Choisit choix2 = new Choisit();
-				choix2.date=Calendar.getInstance().getTime();
-				choix2.eleve=lien.eleve;
 				List<Reponse> reponses2 = q.reponses;
 				for(Reponse r : reponses2){
 					String str = info.get("choixReponse"+q.id+"."+r.position);
 					if(str!=null){
+						Choisit choix2 = new Choisit();
+						choix2.date=Calendar.getInstance().getTime();
+						choix2.eleve=lien.eleve;
 						choix2.reponse=r;
 						choix2.save();
 					}
@@ -528,6 +528,8 @@ public class Application extends Controller {
 				System.out.println("mauvais type de question : " + q.typeQ.id);
 			}
 		}
+		lien.repondu=true;
+		lien.save();
 		return ok(p404.render());
 	}
 	

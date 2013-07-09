@@ -19,6 +19,7 @@ create table eleve (
 
 create table lien (
   chemin                    varchar(255) not null,
+  repondu                   tinyint(1) default 0,
   serie_id                  bigint,
   eleve_ine                 varchar(255),
   constraint pk_lien primary key (chemin))

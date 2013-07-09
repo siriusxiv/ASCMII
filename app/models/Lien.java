@@ -14,6 +14,8 @@ import play.db.ebean.Model.Finder;
 public class Lien extends Model {
 	@Id
 	public String chemin;
+	@Required
+	public boolean repondu;
 	
 	@OneToOne
 	public Serie serie;
@@ -40,6 +42,7 @@ public class Lien extends Model {
 			lien.chemin = chemin;
 			lien.serie=serie;
 			lien.eleve=eleve;
+			lien.repondu=false;
 			lien.save();
 		}
 	}
