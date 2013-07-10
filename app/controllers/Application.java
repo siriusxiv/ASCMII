@@ -463,6 +463,17 @@ public class Application extends Controller {
 	public static Result resultatEnCours(Long serie_id){
 		return ok(resultatEnCours.render(Resultat.listeResultat(Serie.find.ref(serie_id))));
 	}
+	public static Result resultatFin(Long serie_id){
+		return ok(resultatFin.render(Resultat.listeResultat(Serie.find.ref(serie_id))));
+	}
+	public static Result voirResultats(Long serie_id){
+		Serie serie = Serie.find.ref(serie_id);
+		if(serie.date_fermeture==null || serie.date_fermeture.after(Calendar.getInstance().getTime())){
+			return resultatEnCours(serie_id);
+		}else{
+			return resultatFin(serie_id);
+		}
+	}
 	//Envoyer les mails
 	public static Result sendMail(Eleve eleve, Seance seance){
 		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
