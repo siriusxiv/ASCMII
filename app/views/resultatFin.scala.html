@@ -1,4 +1,35 @@
-@(resultats : List[Resultat])
+@(resultats : List[Resultat], serie : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
 @main("ASCMII - Résultats de la série"){
-
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
+ </head>
+ <body>
+	<h1>ASCMII</h1>
+	<form action="@routes.Application.logOut()" method="POST" class="logout">
+		<button type="submit">Se déconnecter</button>
+	</form>
+	<p>La série serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
+	<br>
+	<p>@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>
+	@for(resultat <- resultats){
+		<p>@resultat.question.texte</p>
+		@if(resultat.question.typeQ.id==1 || resultat.question.typeQ.id==2){
+			@for(reponse <- resultat.question.reponses){
+				<p>@reponse.position. @reponse.texte @resultat.reponsesChoisies.get(reponse.position-1)</p>
+			}
+		}
+		@if(resultat.question.typeQ.id==3 || resultat.question.typeQ.id==4){
+			<table>
+			@for(i <- 0 to (resultat.listRepond.length-1)){
+				<tr>
+					<td>@resultat.listRepond.get(i).texte</td><td>@resultat.reponsesChoisies.get(i)</td>
+				</tr>
+			}
+			</table>
+		}
+	}
+ </body>
+</html>
 }

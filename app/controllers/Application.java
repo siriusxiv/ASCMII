@@ -461,10 +461,20 @@ public class Application extends Controller {
 		return resultatEnCours(id);
 	}
 	public static Result resultatEnCours(Long serie_id){
-		return ok(resultatEnCours.render(Resultat.listeResultat(Serie.find.ref(serie_id))));
+		Serie serie = Serie.find.ref(serie_id);
+		return ok(resultatEnCours.render(Resultat.listeResultat(serie),
+				serie,
+				Lien.find.where().eq("repondu", true).eq("serie",serie).findList().size(),
+				Lien.find.where().eq("serie",serie).findList().size()
+				));
 	}
 	public static Result resultatFin(Long serie_id){
-		return ok(resultatFin.render(Resultat.listeResultat(Serie.find.ref(serie_id))));
+		Serie serie = Serie.find.ref(serie_id);
+		return ok(resultatFin.render(Resultat.listeResultat(serie),
+				serie,
+				Lien.find.where().eq("repondu", true).eq("serie",serie).findList().size(),
+				Lien.find.where().eq("serie",serie).findList().size()
+				));
 	}
 	public static Result voirResultats(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
