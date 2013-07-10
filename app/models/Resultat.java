@@ -112,7 +112,7 @@ public class Resultat implements Comparator<Resultat>{
 					int i;
 					if( (i = r.isIn(listFinale)) >= 0){//Cette réponse à déjà été vue
 						//On incrémente le i-ème élément de listFinale
-						listFinale.set(i, new CoupleRI(r,i+1));
+						listFinale.set(i, new CoupleRI(r,listFinale.get(i).i+1));
 					}else{//On voit cette réponse pour la première fois
 						//On l'ajoute dans listFinale (avec une seule occurance pour l'instant)
 						listFinale.add(new CoupleRI(r,1));

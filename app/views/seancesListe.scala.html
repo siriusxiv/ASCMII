@@ -53,7 +53,7 @@ function addSeance(){
 						<form action="@routes.Application.voteSeance(seance.id)" method="POST" style="display:inline">						
 							<button type="submit">Vote et résultat</button>
 						</form>
-						}
+						}else{<button type="submit" disabled>Vote et résultat</button>}
 						<form action="@routes.Application.dupliquerSeance(seance.id)" method="POST" style="display:inline">
 							<button type="submit">Dupliquer</button>
 						</form>
