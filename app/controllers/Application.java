@@ -272,13 +272,28 @@ public class Application extends Controller {
 			return ok(nouvelleQuestion.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.all()));
 		}
 		Long n = Long.parseLong(info.get("choixQuestion"));
-		return ok(nouvelleQuestion2.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.ref(n)));
+		return ok(nouvelleQuestion2.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.ref(n),""));
+	}
+	public static Result addQuestionLog(Long serie_id, Long typeQ_id, String log){ //c'est l'id de la série à laquelle appartiendra la future question
+		return ok(nouvelleQuestion2.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.ref(typeQ_id),log));
 	}
 	public static Result addQuestion3(Long serie_id, Long typeQ_id){
 		Serie serie = Serie.find.ref(serie_id);
 		DynamicForm info = Form.form().bindFromRequest();
 		String titre = info.get("titre");
 		String texte = info.get("texte");
+		//D'abord, on vérifie toutes les infos rentrées :
+		if(titre.equals("")){
+			return addQuestionLog(serie_id,typeQ_id,"Veuillez entrez un titre.");
+		}
+		if(texte.equals("")){
+			return addQuestionLog(serie_id,typeQ_id,"Veuillez entrez l'intitulé de la question.");
+		}
+		if(typeQ_id<=2){
+			if(info.get("reponse1").equals("") || info.get("reponse2").equals("")){
+				return addQuestionLog(serie_id,typeQ_id,"Vous devez entrer au moins deux réponses.");
+			}
+		}
 		//On ajoute la question à la DB :
 		Question question = new Question();
 		question.titre=titre;
@@ -355,13 +370,30 @@ public class Application extends Controller {
 	public static Result editQuestion(Long id){//id de la question que l'on édite
 		Question q = Question.find.ref(id);
 		Collections.sort(q.reponses,new Reponse());
-		return ok(editQuestion.render(q));
+		return ok(editQuestion.render(q,""));
+	}
+	public static Result editQuestionLog(Long id, String log){//id de la question que l'on édite
+		Question q = Question.find.ref(id);
+		Collections.sort(q.reponses,new Reponse());
+		return ok(editQuestion.render(q, log));
 	}
 	public static Result editQuestion2(Long id){//id de la question que l'on édite
 		Question question = Question.find.ref(id);
 		DynamicForm info = Form.form().bindFromRequest();
 		String titre = info.get("titre");
 		String texte = info.get("texte");
+		//D'abord, on vérifie toutes les infos rentrées :
+		if(titre.equals("")){
+			return editQuestionLog(id,"Veuillez entrez un titre.");
+		}
+		if(texte.equals("")){
+			return editQuestionLog(id,"Veuillez entrez l'intitulé de la question.");
+		}
+		if(question.typeQ.id<=2){
+			if(info.get("reponse1").equals("") || info.get("reponse2").equals("")){
+				return editQuestionLog(id,"Vous devez entrer au moins deux réponses.");
+			}
+		}
 		//On edite le titre et le texte :
 		question.titre=titre;
 		question.texte=texte;
@@ -423,9 +455,9 @@ public class Application extends Controller {
 					serie.date_fermeture = now.getTime();
 				}
 			}
-		serie.save();
+			serie.save();
 		}
-		return voteSeance(serie.seance.id);
+		return ok(resultatEnCours.render());
 	}
 	
 	//Envoyer les mails

@@ -14,8 +14,16 @@ INSERT INTO professeur(username) VALUES
 ('mprofess'),
 ('mboussej');
 
-INSERT INTO seance(date,matiere,intitule,professeur_username) VALUES
-('2014/01/31 08:00:00','S1_SIBAD','Amphi 1','mprofess');
+INSERT INTO seance(id,date,matiere,intitule,professeur_username) VALUES
+(1,'2014/01/31 08:00:00','S1_SIBAD','Amphi 1','mprofess'),
+(2,'2014/02/02 10:00:00','S1_SIBAD','Amphi 2','mprofess');
+
+INSERT INTO serie(id,nom,position,seance_id) VALUES
+(1,'Série 1',0,1),
+(2,'Série 2',1,1);
+
+INSERT INTO question(id,titre,texte,position,type_q_id,serie_id) VALUES
+(1,'Question 1','Que voulez-vous ?',0,3,1);
 
 INSERT INTO eleve(ine,mail) VALUES
 ('00000000Q','a@eleves.ec-nantes.fr'),

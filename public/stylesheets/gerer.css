@@ -43,3 +43,11 @@ h2.intituleDeLaSeance{
 button.suppr{
 	color:red;
 }
+
+td.suppr{
+	color : red;
+	cursor : pointer;
+	cursor : hand;
+	background-color:white;
+	border:1px solid black;
+}

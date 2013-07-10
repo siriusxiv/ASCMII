@@ -1,4 +1,4 @@
-@(serie_id:Long, seance_id: Long, typeQ: TypeQuestion)
+@(serie_id:Long, seance_id: Long, typeQ: TypeQuestion, log: String)
 @main("ASCMII - Création d'une nouvelle question - Etape 2/2"){
 
 <!DOCTYPE html>
@@ -9,6 +9,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
  </head>
 	<h1>ASCMII</h1>
+	<p class="log">@log</p>
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
@@ -34,7 +35,7 @@
 		<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
 	</form>
 	@if(typeQ.id<=2){
-		<button onClick="addReponse()" style="position:relative; top:-30px;">Ajouter une autre réponse</button>
+		<button onClick="addReponse()" style="position:relative; top:-25px;">Ajouter une autre réponse</button>
 	}
 	<form action="/prof/gerer/@seance_id" method="POST"><button type="submit">Retour</button></form>
 	

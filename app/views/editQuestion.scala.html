@@ -1,4 +1,4 @@
-@(question: Question)
+@(question: Question, log: String)
 @main("ASCMII - Edition d'une question"){
 
 <!DOCTYPE html>
@@ -12,6 +12,7 @@
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
+	<p class="log">@log</p>
 	<form action="/prof/gerer/editquestion2/@question.id" method="POST">
 		<p>Titre de la question : <input type="text" name="titre" value="@question.titre"></p>
 		<p>Entrez la question : </p>
@@ -31,7 +32,7 @@
 		<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
 	</form>
 	@if(question.typeQ.id<=2){
-		<button onClick="addReponse()" style="position:relative; top:-30px;">Ajouter une autre réponse</button>
+		<button onClick="addReponse()" style="position:relative; top:-25px;">Ajouter une autre réponse</button>
 	}
 	<form action="/prof/gerer/@question.serie.seance.id" method="POST"><button type="submit">Retour</button></form>
 	
