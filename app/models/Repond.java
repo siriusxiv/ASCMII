@@ -44,4 +44,14 @@ public class Repond extends Model {
 		}
 	}
 	
+	public int isIn(List<CoupleRI> list){
+		int i=0;
+		while(i<list.size()){
+			if(list.get(i).repond.texte.equals(texte)){
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
 }

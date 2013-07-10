@@ -27,35 +27,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************/
 
-/*
-Je veux : la liste des "répond" fait par tel élève pour telle question
-et des "choisit"
-
-Objet{
-	Répond
-	Question
-}
-Objet{
-	List<Choisit>
-	Question
-}
-
-Objet{
-	Répond
-	List<Choisit>
-	question
-}
-question.typeQ.id donne le type de la réponse
- */
-
 package models;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Admin
+ *
+ */
 public class Resultat implements Comparator<Resultat>{
 	public Question question;
 	public Repond repond;
 	public List<Integer> reponsesChoisies;
+	public List<Repond> listRepond;
+	public Integer nombreDeRepondants;
 	
 	Resultat(Question q){
 		question=q;
@@ -66,7 +52,12 @@ public class Resultat implements Comparator<Resultat>{
 			return (r1.question.position<r2.question.position ? -1 : (r1.question.position==r2.question.position ? 0 : 1));
 	}
 	
-	
+	/**
+	 * Cette fonction permet de générer la page "eleveRepondu.scala.html". C'est la page où on voit les résultats
+	 * de l'élève quand il a déjà répondu.
+	 * @param lien
+	 * @return Cette fonction renvoie la liste des réponses au question d'un certain élève pour une certaine série
+	 */
 	public static List<Resultat> listeResultat(Lien lien){
 		Serie serie = lien.serie;
 		Eleve eleve = lien.eleve;
@@ -95,10 +86,61 @@ public class Resultat implements Comparator<Resultat>{
 		}
 		return resultats;
 	}
+	
+	public static List<Resultat> listeResultat(Serie serie){
+		List<Resultat> resultats = new ArrayList<Resultat>();
+		for(Question q : serie.questions){
+			Resultat resultat = new Resultat(q);
+			if(q.typeQ.id==1 || q.typeQ.id==2){
+				List<Integer> rChoisies = new ArrayList<Integer>();
+				//On commence par trier les réponses dans l'ordre :
+				Collections.sort(q.reponses,new Reponse());
+				int nombreTotalDeRepondants=0;
+				for(Reponse r : q.reponses){
+					//on compte le nombre de personnes ayant répondue à la question r et on les ajout dans rChoisies.
+					int nombreDeRepondantsACetteReponse = Choisit.find.where().eq("reponse",r).findList().size();
+					rChoisies.add(nombreDeRepondantsACetteReponse);
+					nombreTotalDeRepondants+=nombreDeRepondantsACetteReponse;
+				}
+				resultat.nombreDeRepondants=nombreTotalDeRepondants;
+				resultat.reponsesChoisies=rChoisies;
+			}else if(q.typeQ.id==3 || q.typeQ.id==4){
+				//On doit trouver toutes les réponses avec leur nombre respectif dans rChoisies
+				List<Repond> listRepond = Repond.find.where().eq("question", q).findList();
+				List<CoupleRI> listFinale = new ArrayList<CoupleRI>();
+				for(Repond r : listRepond){
+					int i;
+					if( (i = r.isIn(listFinale)) >= 0){//Cette réponse à déjà été vue
+						//On incrémente le i-ème élément de listFinale
+						listFinale.set(i, new CoupleRI(r,i+1));
+					}else{//On voit cette réponse pour la première fois
+						//On l'ajoute dans listFinale (avec une seule occurance pour l'instant)
+						listFinale.add(new CoupleRI(r,1));
+					}
+				}
+				//On trie la list par ordre de réponse du plus grand au plus petit
+				Collections.sort(listFinale,new CoupleRI(new Repond(),0));
+				resultat.nombreDeRepondants=listRepond.size();
+				resultat.distribue(listFinale);
+			}
+			resultats.add(resultat);
+		}
+		//Maintenant, il faut trier les résultats par question
+		Collections.sort(resultats,new Resultat(new Question()));
+		return resultats;
+	}
+	
+	
+	public void distribue(List<CoupleRI> listCRI)
+		listRepond=new ArrayList<Repond>();
+		reponsesChoisies=new ArrayList<Integer>();
+		for(int i = 0; i<listCRI.size(); i++){
+			listRepond.add(0,listCRI.get(i).repond);
+			reponsesChoisies.add(0,listCRI.get(i).i);
+		}
+		listRepond.
+	}
 }
-
-
-
 
 
 
