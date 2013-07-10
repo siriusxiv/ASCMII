@@ -18,8 +18,18 @@
 		<p><input type="text" name="texte" size="100px"></p>
 		@if(typeQ.id<=2){
 			<p>Réponses :</p>
-			<p id="reponse1"> 1. <input type="text" name="reponse1"></p>
-			<p id="reponse2"> 2. <input type="text" name="reponse2"></p>
+			<table>
+			<tr id="reponse1">
+				<td class="suppr"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
+				<td id="numero1"> 1.</td>
+				<td><input type="text" id="texte1" name="reponse1" value=""></td>
+			</tr>
+			<tr id="reponse2">
+				<td class="suppr"><a id="suppr2" onClick="removeReponse(2)">X</a></td>
+				<td id="numero2"> 2.</td>
+				<td><input type="text" id="texte2" name="reponse2" value=""></td>
+			</tr>
+			</table>
 		}
 		<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Terminer</button></div>
 	</form>
@@ -35,10 +45,29 @@
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);
-		$('#reponse'+nombreDeReponses).after('<p id="'+reponseNumero+'"> '+(nombreDeReponses+1)+'. <input type="text" name="'+reponseNumero+'"></p>');
+		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
+		var chaine2 = '<td id="numero'+(nombreDeReponses+1)+'"> '+(nombreDeReponses+1)+'.</td>';
+		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" value=""></td></tr>';
+		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3);
 		nombreDeReponses++;
 	}
-	function removeReponse(){
+	function removeReponse(pos){
+		if(nombreDeReponses<=2){
+			alert('Vous devez au moins laisser deux réponses !');
+		}else{
+			$('#reponse'+pos).remove();
+			pos++;
+			while(pos<=nombreDeReponses){ //On doit changer tous les attributs dans les questions qui suivent celle qu'on supprime
+				$('#reponse'+pos).attr('id','reponse'+(pos-1));
+				$('#suppr'+pos).replaceWith('<a id="suppr'+(pos-1)+'" onClick="removeReponse('+(pos-1)+')">X</a>');
+				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
+				var value = $('#texte'+pos).val();
+				$('#texte'+pos).replaceWith('<input type="text" id="texte'+(pos-1)+'" name="reponse'+(pos-1)+'" value="'+value+'">');
+				
+				pos++;
+			}
+			nombreDeReponses--;
+		}
 	}
 
 </script>

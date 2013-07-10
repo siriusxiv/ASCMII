@@ -42,25 +42,37 @@
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);
-		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+reponseNumero+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
-		var chaine2 = '<td id="numero'+reponseNumero+'"> '+(nombreDeReponses+1)+'.</td>';
-		var chaine3 = '<td><input type="text" id="texte'+reponseNumero+'" name="'+reponseNumero+'"></td></tr>';
+		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
+		var chaine2 = '<td id="numero'+(nombreDeReponses+1)+'"> '+(nombreDeReponses+1)+'.</td>';
+		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" value=""></td></tr>';
 		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3);
 		nombreDeReponses++;
 	}
 	function removeReponse(pos){
-		$('#reponse'+pos).remove();
-		pos++;
-		while(pos<=nombreDeReponses){ //On doit changer tous les attributs dans questions qui suivent celle qu'on supprime
-			$('#reponse'+pos).attr('id','reponse'+(pos-1));
-			$('#suppr'+pos).attr('onClick','removeReponse('+(pos-1)+')');
-			$('#suppr'+pos).attr('id','#suppr'+(pos-1));
-			$('#texte'+pos).attr('name','reponse'+(pos-1));
-			$('#texte'+pos).attr('id','texte'+(pos-1));
-			$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
+		if(nombreDeReponses<=2){
+			alert('Vous devez au moins laisser deux réponses !');
+		}else{
+			$('#reponse'+pos).remove();
 			pos++;
+			while(pos<=nombreDeReponses){ //On doit changer tous les attributs dans les questions qui suivent celle qu'on supprime
+				/*
+				$('#reponse'+pos).attr('id','reponse'+(pos-1));
+				$('#suppr'+pos).attr('onClick','removeReponse('+(pos-1)+')');
+				$('#suppr'+pos).attr('id','#suppr'+(pos-1));
+				$('#texte'+pos).attr('name','reponse'+(pos-1));
+				$('#texte'+pos).attr('id','texte'+(pos-1));
+				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
+				*/
+				$('#reponse'+pos).attr('id','reponse'+(pos-1));
+				$('#suppr'+pos).replaceWith('<a id="suppr'+(pos-1)+'" onClick="removeReponse('+(pos-1)+')">X</a>');
+				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
+				var value = $('#texte'+pos).val();
+				$('#texte'+pos).replaceWith('<input type="text" id="texte'+(pos-1)+'" name="reponse'+(pos-1)+'" value="'+value+'">');
+				
+				pos++;
+			}
+			nombreDeReponses--;
 		}
-		nombreDeReponses--;
 	}
 
 </script>
