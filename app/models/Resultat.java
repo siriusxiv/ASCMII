@@ -131,14 +131,13 @@ public class Resultat implements Comparator<Resultat>{
 	}
 	
 	
-	public void distribue(List<CoupleRI> listCRI)
+	public void distribue(List<CoupleRI> listCRI){
 		listRepond=new ArrayList<Repond>();
 		reponsesChoisies=new ArrayList<Integer>();
 		for(int i = 0; i<listCRI.size(); i++){
 			listRepond.add(0,listCRI.get(i).repond);
 			reponsesChoisies.add(0,listCRI.get(i).i);
 		}
-		listRepond.
 	}
 }
 

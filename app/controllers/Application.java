@@ -458,9 +458,11 @@ public class Application extends Controller {
 			}
 			serie.save();
 		}
-		return ok(resultatEnCours.render());
+		return resultatEnCours(id);
 	}
-	
+	public static Result resultatEnCours(Long serie_id){
+		return ok(resultatEnCours.render(Resultat.listeResultat(Serie.find.ref(serie_id))));
+	}
 	//Envoyer les mails
 	public static Result sendMail(Eleve eleve, Seance seance){
 		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
