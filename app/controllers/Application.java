@@ -402,9 +402,31 @@ public class Application extends Controller {
 		return voteSeance(id);
 	}
 	public static Result lancerSerie(Long id){//id de la série
-		return ok(demarrageSerie.render(Serie.find.ref(id)));
+		return ok(demarrageSerie.render(Serie.find.ref(id), ""));
 	}
-	
+	public static Result lancerSerieLog(Long id, String log){//id de la série
+		return ok(demarrageSerie.render(Serie.find.ref(id), log));
+	}
+	public static Result lancerSerie2(Long id){//id de la série
+		Serie serie = Serie.find.ref(id);
+		if(serie.date_ouverte==null){//Si la série est déjà ouverte, on ne doit rien faire (accessible avec le back du browser)
+			Calendar now = Calendar.getInstance();
+			serie.date_ouverte=now.getTime();
+			DynamicForm info = Form.form().bindFromRequest();
+			if(info.get("fin").equals("finAutomatique")){ //l'utilisateur à sélectionné fin automatique
+				String duree = info.get("duree");
+				if(!Fonctions.isInt(duree)){
+					return lancerSerieLog(id,"La durée spécifiée n'est pas valide !");
+				}else{
+					int dureeSeconde = Integer.parseInt(duree);
+					now.add(Calendar.SECOND, dureeSeconde);
+					serie.date_fermeture = now.getTime();
+				}
+			}
+		serie.save();
+		}
+		return voteSeance(serie.seance.id);
+	}
 	
 	//Envoyer les mails
 	public static Result sendMail(Eleve eleve, Seance seance){

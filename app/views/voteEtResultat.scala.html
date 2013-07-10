@@ -22,9 +22,13 @@
 				<td>@serie.nom</td>
 				<td>
 					@if(serie.date_ouverte==null){
+						@if(serie.liens.isEmpty()){
+						<button type="submit" disabled>Lancer la série</button>
+						}else{
 						<form action="/prof/lancer/@serie.id" method="POST" style="display:inline">
 							<button type="submit">Lancer la série</button>
 						</form>
+						}
 					}else{
 						<button type="submit">Résultats</button>
 						<button type="submit">Reset</button>

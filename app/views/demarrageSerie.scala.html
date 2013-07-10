@@ -1,4 +1,4 @@
-@(serie: Serie)
+@(serie: Serie, log: String)
 @main("ASCMII - Démarrer une série"){
 <html>
  <head>
@@ -6,11 +6,12 @@
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
  </head>
  <body>
+	<p>@log</p>
 	<h2>Démarrage d'une série :<br>Indiquez quand doit se finir la série</h2>
 	<form action="/prof/lancer2/@serie.id" method="POST">
-		<input type="radio" name="fin" value="finManuelle"> Fin manuelle<br>
+		<input type="radio" name="fin" value="finManuelle" checked> Fin manuelle<br>
 		<input type="radio" name="fin" value="finAutomatique"> Fin automatique<br>
-		<a> Si vous choisissez automatique, veuillez spécifier le temps de réponse : <input type="text" name="duree" size="5px"> secondes</a>
+		<a> Si vous choisissez automatique, veuillez spécifier le temps de réponse : <input type="text" name="duree" size="5px" value="120"> secondes</a>
 		<br><button type="submit">OK</button>
 	</form>
 	<form action="@routes.Application.voteSeance(serie.seance.id)" method="POST"><button type="submit">Retour</button></form>

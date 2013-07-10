@@ -63,6 +63,8 @@ POST	/prof/vote/send/:id			controllers.Application.creerLiens(id: Long)
 
 POST	/prof/lancer/:id			controllers.Application.lancerSerie(id: Long)
 
+POST	/prof/lancer2/:id			controllers.Application.lancerSerie2(id: Long)
+
 #eleve
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)
 

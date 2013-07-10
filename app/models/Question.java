@@ -46,6 +46,7 @@ public class Question extends Model implements Comparator<Question>{
 	@Required
 	public String titre;
 	@Required
+	@Column(columnDefinition = "TEXT")
 	public String texte;
 	@Required
 	public Long position;

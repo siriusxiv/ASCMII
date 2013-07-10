@@ -33,7 +33,7 @@ create table professeur (
 create table question (
   id                        bigint auto_increment not null,
   titre                     varchar(255),
-  texte                     varchar(255),
+  texte                     TEXT,
   position                  bigint,
   type_q_id                 integer,
   serie_id                  bigint,
@@ -42,7 +42,7 @@ create table question (
 
 create table repond (
   id                        bigint auto_increment not null,
-  texte                     varchar(255),
+  texte                     TEXT,
   date                      datetime,
   question_id               bigint,
   eleve_ine                 varchar(255),
@@ -51,7 +51,7 @@ create table repond (
 
 create table reponse (
   id                        bigint auto_increment not null,
-  texte                     varchar(255),
+  texte                     TEXT,
   position                  integer,
   question_id               bigint,
   constraint pk_reponse primary key (id))

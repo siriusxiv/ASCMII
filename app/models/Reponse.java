@@ -43,7 +43,7 @@ public class Reponse extends Model implements Comparator<Reponse>{
 	@Id
 	public Long id;
 	
-	@Required
+	@Column(columnDefinition = "TEXT")
 	public String texte;
 	@Required
 	public int position;

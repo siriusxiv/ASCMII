@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Column;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
@@ -16,6 +17,7 @@ public class Repond extends Model {
 	public Long id;
 	
 	@Required
+	@Column(columnDefinition = "TEXT")
 	public String texte;
 	@Required
 	public Date date;
