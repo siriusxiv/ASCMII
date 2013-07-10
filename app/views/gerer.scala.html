@@ -93,7 +93,11 @@ function addSerie(){
 	<p>
 		<form action="/prof/seances" method="GET" style="display:inline"><button type="submit">Retour</button></form>
 		<div style="padding:0px 0px 0px 250px;display:inline">
-		<button onClick="addSerie()">Ajouter une nouvelle série de question</button>
+		@if(seance.series.get(0).liens.length==0){
+			<button onClick="addSerie()">Ajouter une nouvelle série de question</button>
+		}else{
+			Vous avez déjà envoyé le mail, vous ne pouvez donc plus ajouter des séries de question.
+		}
 		</div>
 	</p>
 	

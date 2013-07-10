@@ -200,16 +200,17 @@ public class Application extends Controller {
 				));
 	}
 
-	//Gestion des séries
-	public static Result addSerie(Long id){
+	
+	public static Result addSerie(Long id){//id de la séance à laquelle appartiendra la future série
 		DynamicForm infos = Form.form().bindFromRequest();
 		String nom = infos.get("nom");
-		if(nom==""){
-			nom="Série sans nom";
+		Seance seance = Seance.find.ref(id);
+		if(nom.equals("")){
+			nom="Série "+(seance.series.size()+1);
 		}
 		Serie serie = new Serie();
 		serie.nom = nom;
-		serie.seance = Seance.find.ref(id);
+		serie.seance = seance;
 		serie.questions = new ArrayList<Question>();
 		//on trouve la position max et on le met à la fin
 		serie.position=Serie.positionMax()+1;
@@ -481,12 +482,16 @@ public class Application extends Controller {
 				Collections.sort(q.reponses,new Reponse());
 			}
 			if(lien.aLHeure() && !lien.repondu){
-				return ok(eleve.render(lien,""));
+				return ok(eleve.render(lien,""));//L'élève n'a pas répondu et il est dans les temps : il répondu donc aux questions
 			}else{
 				if(lien.serie.date_ouverte==null){
-					return(ok(serieNonCommencee.render()));
+					return(ok(serieNonCommencee.render()));//La série n'a pas commencée !
 				}else{
-					return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+					if(lien.repondu){//L'élève à déjà répondu : on affiche ses résultats
+						return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+					}else{//L'élève n'a jamais répondu à la question, et il est trop tard.
+						return ok(tropTard.render());
+					}
 				}
 			}
 			
