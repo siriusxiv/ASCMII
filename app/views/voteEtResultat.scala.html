@@ -21,9 +21,14 @@
 				<td></td>
 				<td>@serie.nom</td>
 				<td>
-					<button type="submit">Lancer la série</button>
-					<button type="submit">Résultats</button>
-					<button type="submit">Reset</button>
+					@if(serie.date_ouverte==null){
+						<form action="/prof/lancer/@serie.id" method="POST" style="display:inline">
+							<button type="submit">Lancer la série</button>
+						</form>
+					}else{
+						<button type="submit">Résultats</button>
+						<button type="submit">Reset</button>
+					}
 				</td>
 			</tr>
 				@for(question <- serie.questions){
@@ -45,10 +50,12 @@
 						</tr>
 					}
 				}
+			<tr id="div@serie.id"></tr>
 	}
 	</table>
 	<form action="/prof/vote/send/@seance.id" method="POST">
 		<button type="submit">Envoyer le mail</button>
 	</form>
+	<form action="/prof/seances" method="GET"><button type="submit">Retour</button></form>
 </html>
 }

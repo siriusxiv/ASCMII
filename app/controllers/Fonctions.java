@@ -1,3 +1,10 @@
+/****************************************************
+ * Merci à l'anonyme qui a posté cette fonction isDouble
+ * sur StackOverflow, j'ai juste rajouté la première
+ * ligne pour tenir compte de la virgule française. 
+ * 
+ ****************************************************/
+
 package controllers;
 
 public class Fonctions{

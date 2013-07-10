@@ -401,6 +401,10 @@ public class Application extends Controller {
 		}
 		return voteSeance(id);
 	}
+	public static Result lancerSerie(Long id){//id de la série
+		return ok(demarrageSerie.render(Serie.find.ref(id)));
+	}
+	
 	
 	//Envoyer les mails
 	public static Result sendMail(Eleve eleve, Seance seance){
@@ -422,11 +426,16 @@ public class Application extends Controller {
 			for(Question q : lien.serie.questions){
 				Collections.sort(q.reponses,new Reponse());
 			}
-			if(!lien.repondu){
+			if(lien.aLHeure() && !lien.repondu){
 				return ok(eleve.render(lien,""));
 			}else{
-				return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+				if(lien.serie.date_ouverte==null){
+					return(ok(serieNonCommencee.render()));
+				}else{
+					return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+				}
 			}
+			
 		}else{
 			return ok(p404.render());
 		}

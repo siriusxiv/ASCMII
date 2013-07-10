@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -45,6 +46,14 @@ public class Lien extends Model {
 			lien.repondu=false;
 			lien.save();
 		}
+	}
+	
+	public boolean aLHeure(){
+		return (serie.date_ouverte!=null &&
+					(serie.date_fermeture==null ||
+						Calendar.getInstance().getTime().compareTo(serie.date_fermeture)<=0
+					)
+				);
 	}
 	
 	public static void removeLien(String chemin){
