@@ -470,12 +470,24 @@ public class Application extends Controller {
 	}
 	public static Result resultatFin(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
+		List<Serie> seriesSuivantes = Serie.find.where()
+					.eq("seance",serie.seance)
+					.isNull("date_ouverte")
+					.gt("position", serie.position)
+					.orderBy("position").findList();
+		Serie serieSuivante;
+		if(seriesSuivantes.isEmpty()){
+			serieSuivante=null;
+		}else{
+			serieSuivante=seriesSuivantes.get(0);
+		}
 		return ok(resultatFin.render(Resultat.listeResultat(serie),
-				serie,
+				serie,serieSuivante,
 				Lien.find.where().eq("repondu", true).eq("serie",serie).findList().size(),
 				Lien.find.where().eq("serie",serie).findList().size()
 				));
 	}
+	@Security.Authenticated(Secured.class)
 	public static Result voirResultats(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
 		if(serie.date_fermeture==null || serie.date_fermeture.after(Calendar.getInstance().getTime())){
@@ -484,6 +496,41 @@ public class Application extends Controller {
 			return resultatFin(serie_id);
 		}
 	}
+	public static Result finirSerie(Long serie_id){
+		Serie serie = Serie.find.ref(serie_id);
+		serie.date_fermeture=Calendar.getInstance().getTime();
+		serie.save();
+		return resultatFin(serie_id);
+	}
+	public static Result resetSerie(Long serie_id){
+		Serie serie = Serie.find.ref(serie_id);
+		serie.date_ouverte=null;
+		serie.date_fermeture=null;
+		serie.save();
+		//On supprime toutes les réponses (Repond et Choisit) des élèves pour cette série
+		for(Question q: serie.questions){
+			//On supprime les réponses texte et nombre
+			for(Repond re : q.estRepondue){
+				Repond.removeRepond(re.id);
+			}
+			//On supprime les réponses choisies
+			for(Reponse r : q.reponses){
+				List<Choisit> list = Choisit.find.where().eq("reponse", r).findList();
+				for(Choisit c : list){
+					Choisit.removeChoisit(c.id);
+				}
+			}
+		}
+		//On change tous les lien.repondu en false
+		for(Lien lien : serie.liens){
+			lien.repondu=false;
+			lien.save();
+		}
+		return voteSeance(serie.seance.id);
+	}
+	
+	
+	
 	//Envoyer les mails
 	public static Result sendMail(Eleve eleve, Seance seance){
 		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();

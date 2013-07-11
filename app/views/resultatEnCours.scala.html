@@ -10,7 +10,7 @@
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
-	<p>La série serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
+	<p>La série @serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
 	<br>
 	<p>@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>
 	@for(resultat <- resultats){

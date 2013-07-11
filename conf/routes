@@ -67,6 +67,10 @@ POST	/prof/lancer2/:id			controllers.Application.lancerSerie2(id: Long)
 
 GET		/prof/voir/:id				controllers.Application.voirResultats(id: Long)
 
+POST	/prof/fin/:serie_id			controllers.Application.finirSerie(serie_id: Long)
+
+POST	/prof/reset/:serie_id		controllers.Application.resetSerie(serie_id: Long)
+
 #eleve
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)
 

@@ -1,4 +1,4 @@
-@(resultats : List[Resultat], serie : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
+@(resultats : List[Resultat], serie : Serie, serieSuivante : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
 @main("ASCMII - Résultats de la série"){
 <html>
  <head>
@@ -10,7 +10,7 @@
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
-	<p>La série serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
+	<p>La série @serie.nom est terminée.<br></p>
 	<br>
 	<p>@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>
 	@for(resultat <- resultats){
@@ -30,6 +30,14 @@
 			</table>
 		}
 	}
+	<form action="/prof/vote/@serie.seance.id" method="POST" style="display:inline">
+		<button type="submit">Retour à la liste des séries</button>
+	</form>
+	@if(serieSuivante!=null){
+	<form action="/prof/lancer/@serieSuivante.id" method="POST" style="display:inline">
+		<button type="submit">Démarrer la série suivante</button>
+	</form>
+	}else{<button type="submit" disabled>Démarrer la série suivante</button>}
  </body>
 </html>
 }
