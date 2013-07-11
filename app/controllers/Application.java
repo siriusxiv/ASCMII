@@ -285,7 +285,7 @@ public class Application extends Controller {
 		String texte = info.get("texte");
 		//D'abord, on vérifie toutes les infos rentrées :
 		if(titre.equals("")){
-			return addQuestionLog(serie_id,typeQ_id,"Veuillez entrez un titre.");
+			titre="Titre de la question";
 		}
 		if(texte.equals("")){
 			return addQuestionLog(serie_id,typeQ_id,"Veuillez entrez l'intitulé de la question.");
@@ -458,7 +458,7 @@ public class Application extends Controller {
 			}
 			serie.save();
 		}
-		return resultatEnCours(id);
+		return redirect(routes.Application.voirResultats(id));
 	}
 	public static Result resultatEnCours(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);

@@ -65,7 +65,7 @@ POST	/prof/lancer/:id			controllers.Application.lancerSerie(id: Long)
 
 POST	/prof/lancer2/:id			controllers.Application.lancerSerie2(id: Long)
 
-POST	/prof/voir/:id				controllers.Application.voirResultats(id: Long)
+GET		/prof/voir/:id				controllers.Application.voirResultats(id: Long)
 
 #eleve
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)

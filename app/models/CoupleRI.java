@@ -14,7 +14,7 @@ public class CoupleRI implements Comparator<CoupleRI>{
 	//Cela permet de trier le nombre de réponse par ordre décroissant
 	@Override
 	public int compare(CoupleRI a,CoupleRI b){
-			return (a.i>b.i ? -1 : (b.i==b.i ? 0 : 1));
+			return (a.i<b.i ? -1 : (b.i==b.i ? 0 : 1));
 	}
 	
 }

@@ -27,7 +27,8 @@ INSERT INTO question(id,titre,texte,position,type_q_id,serie_id) VALUES
 
 INSERT INTO eleve(ine,mail) VALUES
 ('00000000Q','a@eleves.ec-nantes.fr'),
-('05018883P','malik.boussejra@eleves.ec-nantes.fr');
+('05018883P','malik.boussejra@eleves.ec-nantes.fr'),
+('01018883P','qui.cest@eleves.ec-nantes.fr');
 
 # --- !Downs
 
@@ -36,6 +37,8 @@ SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM type_question;
 DELETE FROM professeur;
 DELETE FROM seance;
+DELETE FROM serie;
+DELETE FROM question;
 DELETE FROM eleve;
 
 SET FOREIGN_KEY_CHECKS=1;
