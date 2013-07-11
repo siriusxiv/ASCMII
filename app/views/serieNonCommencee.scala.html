@@ -1,1 +1,19 @@
-La série n'a pas commencée.
+@()
+@main("ASCMII - La série n'a pas commencée."){
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+ </head>
+ <body onLoad="rafraichir(2000)">
+ <h1>ASCMII</h1>
+	<p>La série n'a pas commencée.<br>Veuillez attendre que la série commence.<br><br>
+	Lorsque la série aura commencée, la page se rechargera automatiquement. Vous pouvez toutefois rafraîchir manuellement la page.</p>
+ </body>
+</html>
+<script>
+function rafraichir(duree){
+	setTimeout("location.reload(true);",duree);
+}
+</script>
+}

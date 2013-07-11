@@ -560,7 +560,7 @@ public class Application extends Controller {
 					if(lien.repondu){//L'élève à déjà répondu : on affiche ses résultats
 						return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
 					}else{//L'élève n'a jamais répondu à la question, et il est trop tard.
-						return ok(tropTard.render());
+						return ok(tropTard.render(lien));
 					}
 				}
 			}
@@ -577,10 +577,18 @@ public class Application extends Controller {
 			for(Question q : lien.serie.questions){
 				Collections.sort(q.reponses,new Reponse());
 			}
-			if(!lien.repondu){
-				return ok(eleve.render(lien,message));
+			if(lien.aLHeure() && !lien.repondu){
+				return ok(eleve.render(lien,message));//L'élève n'a pas répondu et il est dans les temps : il répondu donc aux questions
 			}else{
-				return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+				if(lien.serie.date_ouverte==null){
+					return(ok(serieNonCommencee.render()));//La série n'a pas commencée !
+				}else{
+					if(lien.repondu){//L'élève à déjà répondu : on affiche ses résultats
+						return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
+					}else{//L'élève n'a jamais répondu à la question, et il est trop tard.
+						return ok(tropTard.render(lien));
+					}
+				}
 			}
 		}else{
 			return ok(p404.render());
@@ -680,6 +688,14 @@ public class Application extends Controller {
 		lien.repondu=true;
 		lien.save();
 		return eleveRepondre(chemin);
+	}
+	public static Result infoHeure(Long serie_id){
+		Serie serie = Serie.find.ref(serie_id);
+		if(serie.date_fermeture!=null){
+			return ok(Long.toString(serie.date_fermeture.getTime()));
+		}else{
+			return ok("0");
+		}
 	}
 	
 }

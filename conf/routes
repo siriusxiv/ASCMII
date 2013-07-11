@@ -75,3 +75,8 @@ POST	/prof/reset/:serie_id		controllers.Application.resetSerie(serie_id: Long)
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)
 
 POST	/eleve/reponse/:chemin		controllers.Application.donnerReponse(chemin: String)
+
+GET		/eleve/reponse/:chemin		controllers.Application.eleveRepondre(chemin: String)
+
+#Cette route permet de savoir si la série est finie ou pas (quand le prof met fin à la série)
+POST	/eleve/infoheure/:serie_id	controllers.Application.infoHeure(serie_id: Long)
