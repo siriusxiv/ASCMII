@@ -36,14 +36,13 @@
  <p>NB : Une fois que vous aurez cliqué sur "OK", votre choix sera final</p>
  <button type="submit">OK</button><!-- Envoyer le chemin du lien pour connaître l'id des questions auxquelles l'élève repond. -->
 </form>
-<div id="date"></div>
 @if(lien.serie.date_fermeture!=null){
 <script>
 	var tempsFin = @lien.serie.date_fermeture.getTime();
 	function termine(){
 		var now = new Date().getTime();
 		if(now>tempsFin){
-			setTimeout("location.reload(true);",0);
+			location.reload(true);
 		}
 	}
 }else{

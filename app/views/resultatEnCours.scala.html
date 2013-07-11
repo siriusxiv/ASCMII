@@ -4,6 +4,7 @@
  <head>
   <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/jquery.countdown.css")">
  </head>
  <body onLoad="rafraichir(5000)">
 	<h1>ASCMII</h1>
@@ -36,12 +37,17 @@
 		</form>
 	}else{
 		<p>La série se termine à @serie.date_fermeture.format("hh:mm:ss"). Il est @Calendar.getInstance.getTime().format("hh:mm:ss").</p>
+		<div id="countdown"></div>
 	}
- </body>
-</html>
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script src="@routes.Assets.at("/javascripts/jquery.countdown.min.js")"></script>
+<script src="@routes.Assets.at("/javascripts/jquery.countdown-fr.js")"></script>
 <script>
 function rafraichir(duree){
+	$('#countdown').countdown({until: new Date(@serie.date_fermeture.getTime()), format: 'MS'});
 	setTimeout("location.reload(true);",duree);
 }
 </script>
 }
+ </body>
+</html>

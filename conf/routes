@@ -79,4 +79,4 @@ POST	/eleve/reponse/:chemin		controllers.Application.donnerReponse(chemin: Strin
 GET		/eleve/reponse/:chemin		controllers.Application.eleveRepondre(chemin: String)
 
 #Cette route permet de savoir si la série est finie ou pas (quand le prof met fin à la série)
-POST	/eleve/infoheure/:serie_id	controllers.Application.infoHeure(serie_id: Long)
+GET		/eleve/infoheure/:serie_id	controllers.Application.infoHeure(serie_id: Long)
