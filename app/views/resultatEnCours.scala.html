@@ -17,12 +17,14 @@
 	@for(resultat <- resultats){
 		<p>@resultat.question.texte</p>
 		@if(resultat.question.typeQ.id==1 || resultat.question.typeQ.id==2){
+			<span id="q@resultat.question.id">
 			@for(reponse <- resultat.question.reponses){
 				<p>@reponse.position. @reponse.texte @resultat.reponsesChoisies.get(reponse.position-1)</p>
 			}
+			</span>
 		}
 		@if(resultat.question.typeQ.id==3 || resultat.question.typeQ.id==4){
-			<table>
+			<table id="q@resultat.question.id">
 			@for(i <- 0 to (resultat.listRepond.length-1)){
 				<tr>
 					<td>@resultat.listRepond.get(i).texte</td><td>@resultat.reponsesChoisies.get(i)</td>
@@ -37,15 +39,20 @@
 		</form>
 	}else{
 		<p>La série se termine à @serie.date_fermeture.format("hh:mm:ss"). Il est @Calendar.getInstance.getTime().format("hh:mm:ss").</p>
-		<div id="countdown"></div>
+		<span id="countdown"></span>
 	}
 <script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
 <script src="@routes.Assets.at("/javascripts/jquery.countdown.min.js")"></script>
 <script src="@routes.Assets.at("/javascripts/jquery.countdown-fr.js")"></script>
 <script>
 function rafraichir(duree){
-	$('#countdown').countdown({until: new Date(@serie.date_fermeture.getTime()), format: 'MS'});
-	setTimeout("location.reload(true);",duree);
+	@if(serie.date_fermeture!=null){$('#countdown').countdown({until: new Date(@serie.date_fermeture.getTime()), format: 'MS'});}
+	setInterval("loadAgain();",duree);
+}
+function loadAgain(){
+	@for(i:Int <- 0 to (resultats.length-1)){
+	$('#q'+@resultats.get(i).question.id).load('/prof/voir/@resultats.get(i).question.serie.id #q'+@resultats.get(i).question.id);
+	}
 }
 </script>
 }
