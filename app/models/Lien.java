@@ -11,6 +11,11 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 
+/**
+ * Contient les liens unique entre chaque élève et chaque série.
+ * @author Admin
+ *
+ */
 @Entity
 public class Lien extends Model {
 	@Id
@@ -29,6 +34,13 @@ public class Lien extends Model {
 		return find.all();
 	}
 	
+	/**
+	 * Ajoute un lien dans la base de donnée à partir d'un élève et d'une série.
+	 * Le chemin du lien doit avoir l'être aléatoire. On génère ce chemin avec les
+	 * hashCode des classes Eleve et Serie convertis en chaîne hexadécimale.
+	 * @param eleve
+	 * @param serie
+	 */
 	public static void addLien(Eleve eleve, Serie serie){
 		if(Lien.find.where().eq("eleve",eleve).eq("serie",serie).findList().isEmpty()){//Si un tel lien exist déjà, pas besoin de le rajouter
 			int a = eleve.hashCode();
@@ -48,6 +60,10 @@ public class Lien extends Model {
 		}
 	}
 	
+	/**
+	 * Vérifie que, pour une lien donnée, il n'est pas trop tard pour répondre à la question
+	 * @return Vrai ou Faux
+	 */
 	public boolean aLHeure(){
 		return (serie.date_ouverte!=null &&
 					(serie.date_fermeture==null ||

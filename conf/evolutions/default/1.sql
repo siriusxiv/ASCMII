@@ -14,7 +14,15 @@ create table choisit (
 create table eleve (
   ine                       varchar(255) not null,
   mail                      varchar(255),
+  prenom                    varchar(255),
+  nom                       varchar(255),
   constraint pk_eleve primary key (ine))
+;
+
+create table image (
+  id                        bigint auto_increment not null,
+  file_name                 varchar(255),
+  constraint pk_image primary key (id))
 ;
 
 create table lien (
@@ -33,7 +41,7 @@ create table professeur (
 create table question (
   id                        bigint auto_increment not null,
   titre                     varchar(255),
-  texte                     TEXT,
+  texte                     LONGTEXT,
   position                  bigint,
   type_q_id                 integer,
   serie_id                  bigint,
@@ -54,6 +62,7 @@ create table reponse (
   texte                     TEXT,
   position                  integer,
   question_id               bigint,
+  image_id                  bigint,
   constraint pk_reponse primary key (id))
 ;
 
@@ -100,10 +109,12 @@ alter table repond add constraint fk_repond_eleve_8 foreign key (eleve_ine) refe
 create index ix_repond_eleve_8 on repond (eleve_ine);
 alter table reponse add constraint fk_reponse_question_9 foreign key (question_id) references question (id) on delete restrict on update restrict;
 create index ix_reponse_question_9 on reponse (question_id);
-alter table seance add constraint fk_seance_professeur_10 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;
-create index ix_seance_professeur_10 on seance (professeur_username);
-alter table serie add constraint fk_serie_seance_11 foreign key (seance_id) references seance (id) on delete restrict on update restrict;
-create index ix_serie_seance_11 on serie (seance_id);
+alter table reponse add constraint fk_reponse_image_10 foreign key (image_id) references image (id) on delete restrict on update restrict;
+create index ix_reponse_image_10 on reponse (image_id);
+alter table seance add constraint fk_seance_professeur_11 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;
+create index ix_seance_professeur_11 on seance (professeur_username);
+alter table serie add constraint fk_serie_seance_12 foreign key (seance_id) references seance (id) on delete restrict on update restrict;
+create index ix_serie_seance_12 on serie (seance_id);
 
 
 
@@ -114,6 +125,8 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table choisit;
 
 drop table eleve;
+
+drop table image;
 
 drop table lien;
 

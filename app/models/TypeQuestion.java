@@ -35,6 +35,12 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
+/**
+ * Contient les types de questions. Voir conf/evolutions/2.sql pour voir les détails
+ * de ce qu'il y a dans cette table.
+ * @author Admin
+ *
+ */
 @Entity
 public class TypeQuestion extends Model{
 	@Id

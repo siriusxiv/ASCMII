@@ -16,7 +16,6 @@ body{
 	padding:50px 50px 50px 50px;
 	border:5px solid rgb(170,170,170);
 }
-
 table.liste{
 	border-collapse:collapse;
 	border:1px solid black;
@@ -30,27 +29,11 @@ td.liste, th.liste{
 	padding:1px 3px 1px 3px; /*padding : haut droite bas gauche*/
 	border:1px solid black;
 }
-td.listeDate{
-	text-align:center;
-	padding:1px 3px 1px 3px;
-	border:1px solid black;
-	width:150px;
-}
-
-p.avertissement{
-	color:orange;
-	font-family:"Times New Roman",Times,serif;
-}
-
-p.explications{
-	font-size:80%;
-}
 
 form.logout{
 	padding:1px 0px 0px 400px;
 }
 
-/* pour la page gérer :*/
-h2.intituleDeLaSeance{
-	padding:1px 0px 0px 300px;
+p.explications{
+	font-size:80%;
 }

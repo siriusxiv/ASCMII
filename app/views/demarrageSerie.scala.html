@@ -12,8 +12,8 @@
 		<input type="radio" name="fin" value="finManuelle" checked> Fin manuelle<br>
 		<input type="radio" name="fin" value="finAutomatique"> Fin automatique<br>
 		<a> Si vous choisissez automatique, veuillez spécifier le temps de réponse : <input type="text" name="duree" size="5px" value="120"> secondes</a>
-		<br><button type="submit">OK</button>
-	</form>
+		<br><span style="padding:0px 0px 0px 100px"><button type="submit">Lancer la série</button></span>
+	</form><br>
 	<form action="@routes.Application.voteSeance(serie.seance.id)" method="POST"><button type="submit">Retour</button></form>
  </body>
 </html>

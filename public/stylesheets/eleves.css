@@ -10,7 +10,7 @@ body{
 	background-color:#b0c4de;
 	text-align:left;
 	font-family:"Comic Sans MS",Times,serif;
-	width:800px;
+	width:640px;
 	margin-left:auto;
 	margin-right:auto;
 	padding:50px 50px 50px 50px;
@@ -30,27 +30,12 @@ td.liste, th.liste{
 	padding:1px 3px 1px 3px; /*padding : haut droite bas gauche*/
 	border:1px solid black;
 }
-td.listeDate{
-	text-align:center;
-	padding:1px 3px 1px 3px;
-	border:1px solid black;
-	width:150px;
-}
 
-p.avertissement{
-	color:orange;
+h2.avertissement{
+	color:red;
 	font-family:"Times New Roman",Times,serif;
 }
 
 p.explications{
-	font-size:80%;
-}
-
-form.logout{
-	padding:1px 0px 0px 400px;
-}
-
-/* pour la page gérer :*/
-h2.intituleDeLaSeance{
-	padding:1px 0px 0px 300px;
+	font-size:70%;
 }

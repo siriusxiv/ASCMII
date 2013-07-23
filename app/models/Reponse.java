@@ -37,7 +37,13 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
-
+/**
+ * Contient les réponses prédifinies par un professeur pour les questions
+ * de type 1 ou 2. On a définit une relation d'ordre pour trier les réponses
+ * selon leur position.
+ * @author Admin
+ *
+ */
 @Entity
 public class Reponse extends Model implements Comparator<Reponse>{
 	@Id
@@ -50,12 +56,17 @@ public class Reponse extends Model implements Comparator<Reponse>{
 	
 	@ManyToOne
 	public Question question;
-	@OneToOne(targetEntity = Choisit.class)
+	@OneToMany(targetEntity = Choisit.class)
 	public List<Choisit> estChoisie;
 	
+	@OneToOne
+	public Image image;
 	
 	public static Finder<Long,Reponse> find = new Finder<Long,Reponse>(Long.class, Reponse.class);
-
+	
+	/**
+	 * Relation d'ordre
+	 */
 	@Override
 	public int compare(Reponse r1,Reponse r2){
 			return (r1.position<r2.position ? -1 : (r1.position==r2.position ? 0 : 1));
@@ -65,12 +76,19 @@ public class Reponse extends Model implements Comparator<Reponse>{
 		re.save();
 	}
 	
+	/**
+	 * Supprime une réponse et supprime en cascade les "Choisit" et les "Image".
+	 * @param id : id de la réponse que l'on supprime
+	 */
 	public static void removeReponse(Long id){
 		Reponse re = Reponse.find.byId(id);
 		if(re != null){
 			List<Choisit> ch = Choisit.find.where().eq("reponse", re).findList();
 			for(Choisit c : ch){
 				Choisit.removeChoisit(c.id);
+			}
+			if(re.image!=null){
+				Image.removeImage(re.image.id);
 			}
 			re.delete();
 		}

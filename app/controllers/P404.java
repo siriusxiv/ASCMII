@@ -29,26 +29,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package controllers;
 
+import play.mvc.Controller;
+import play.mvc.Result;
 
-import play.*;
-import play.mvc.*;
-import play.mvc.Http.*;
 import views.html.*;
 
 /**
- * Permet d'assurer la sécurité. On ne peut pas aller sur n'importe quelle page
- * avec une requête 'GET'.
+ * Pour faire une page 404.
  * @author Admin
  *
  */
-public class Secured extends Security.Authenticator {
-    @Override
-    public String getUsername(Context ctx) {
-        return ctx.session().get("username");
-    }
-
-    @Override
-    public Result onUnauthorized(Context ctx) {
-        return forbidden(login.render("T"));
+public class P404 extends Controller{
+	
+	/**
+	 * Affiche la page 404, sauf si un professeur est déjà connecté. Dans ce cas,
+	 * il est redirigé vers la page de gestion des séances.
+	 * On peut envisager de rediriger vers plusieurs pages possibles en fonction de ce que
+	 * le professeur a entré en url (c'est pour l'instant non implémenté).
+	 * @param url : l'url que le prof a rentré.
+	 * @return affiche la page 404 ou bien redirige vers la liste des séances
+	 */
+	public static Result p404(String url) {
+		if(session("username")==null){
+	        return ok(error404.render());
+		}else{
+			return redirect(routes.Application.profSeancesListe(""));
+		}
     }
 }

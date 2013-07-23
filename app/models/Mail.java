@@ -27,28 +27,60 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************/
 
-package controllers;
+package models;
 
 
-import play.*;
-import play.mvc.*;
-import play.mvc.Http.*;
-import views.html.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import com.typesafe.plugin.*;
 
 /**
- * Permet d'assurer la sécurité. On ne peut pas aller sur n'importe quelle page
- * avec une requête 'GET'.
+ * Cette classe contient les infos relatives à l'envoie d'un mail.
  * @author Admin
  *
  */
-public class Secured extends Security.Authenticator {
-    @Override
-    public String getUsername(Context ctx) {
-        return ctx.session().get("username");
-    }
-
-    @Override
-    public Result onUnauthorized(Context ctx) {
-        return forbidden(login.render("T"));
-    }
+public class Mail{
+	String sujet;
+	String contenu;
+	String to;
+	String recipient;
+	String from;
+	
+	/**
+	 * Permet de créer le mail qui sera envoyé à un élève donné pour une séance donnée.
+	 * Ne pas oublier de changer le nom de domaine en cas de besoin.
+	 * @param eleve
+	 * @param seance
+	 */
+	public Mail(Eleve eleve, Seance seance){
+		DateFormat df = new SimpleDateFormat("dd/MM");
+		sujet="[ASCMII] Lien pour les questions concernant le cours de "+seance.matiere+" le "+df.format(seance.date);
+		to=eleve.mail;
+		recipient=eleve.prenom+" "+eleve.nom+" <"+to+">";
+		from="ASCMII <ascmii.test@gmail.com>";
+		contenu="<html>Bonjour,<br>"+eleve.prenom+" "+eleve.nom+", vous trouverez ci-dessous les séries de questions concernant le cours de "+
+				seance.matiere+" le "+df.format(seance.date)+" :<br><br>";
+		int i=1;
+		for(Serie s : seance.series){
+			Lien lien = Lien.find.where().eq("serie", s).eq("eleve",eleve).findUnique();
+			contenu+="Série "+i+" : http://localhost:9000/eleve/"+lien.chemin+"<br>";
+			i++;
+		}
+		contenu+="</html>";
+	}
+	
+	/**
+	 * Envoie le mail
+	 */
+	public void sendMail(){
+			MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
+			mail.setSubject(sujet);
+			mail.addRecipient("Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
+			//mail.addRecipient(recipient,to);
+			mail.addFrom(from);
+			mail.sendHtml(contenu);
+	}
+	
 }
+

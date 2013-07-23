@@ -38,42 +38,82 @@ import play.data.*;
 import java.text.*;
 import java.util.*;
 
-import com.typesafe.plugin.*;
 
+/**
+ * Cette classe contient toutes les méthodes relatives qui sont appelées par l'intermédiaire des routes.
+ * @author Admin
+ *
+ */
 public class Application extends Controller {
   
+	/**
+	 * La page d'index renvoie sur le login du professeur
+	 * @return
+	 */
     public static Result index() {
-        return ok(index.render("Your new application is ready."));
+        return redirect(routes.Application.profLogin());
     }
     
+    /**
+     * Affiche la page de login sans aucun message
+     * @return
+     */
     public static Result profLogin() {
     	return ok(login.render("T"));
     }
     
+    /**
+     * Affiche la liste des séances à condition que l'utilisateur soit authentifié
+     * @param log : un message que l'on fera apparaître dans la page qui montre la liste des séances.
+     * @return
+     */
     @Security.Authenticated(Secured.class)
     public static Result profSeancesListe(String log) {
     	return ok(seancesListe.render(Seance.page(session()),log));
     }
-    
+    /**
+     * Vérifie que le professeur est bien authentifié. Si tel est le cas, renvoie la page affichant
+     * la liste des séances.
+     * @return
+     */
 	public static Result profAuthenticate()
 	{
-		DynamicForm fullInfos = Form.form().bindFromRequest();
-		String identifiant = fullInfos.get("login");
-		if(Professeur.find.byId(identifiant)==null){
+		DynamicForm info = Form.form().bindFromRequest();
+		String identifiant = info.get("login");
+		String passw = info.get("passw");
+		/*if(Professeur.find.byId(identifiant)==null){
 			session().clear();
 			return badRequest(login.render("F"));
 		}else{
 			session().clear();
 			session("username",identifiant);
 			return profSeancesListe("");
+		}*/
+		LDAP user = new LDAP();
+		if(user.check(identifiant, passw)){
+			session().clear();
+			session("username",identifiant);
+			return profSeancesListe("");
+		}else{
+			session().clear();
+			return badRequest(login.render("F"));
 		}
 	}
+	/**
+	 * Pour se déconnecter. On vide d'abord la session.
+	 * @return
+	 */
 	public static Result logOut(){
 		session().clear();
 		return redirect(routes.Application.profLogin());
 	}
 	
-	//Gestion des séances
+	
+	//Gestion des séances :
+	/**
+	 * Permet l'ajout d'une séance. On vérifie déjà les informations entrées.
+	 * @return
+	 */
 	public static Result addSeance(){
 		DynamicForm info = Form.form().bindFromRequest();
 		String day = info.get("day");
@@ -92,8 +132,8 @@ public class Application extends Controller {
 			newSeance.matiere=info.get("matiere");
 			newSeance.professeur=Professeur.find.ref(session("username"));
 			try{
-			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			newSeance.date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
+				DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				newSeance.date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
 			} catch(ParseException e){
 				e.printStackTrace();
 			}
@@ -103,13 +143,28 @@ public class Application extends Controller {
 		}
 		return redirect(routes.Application.profSeancesListe("Cette matière n'existe pas."));
 	}
+	/**
+	 * Supprime une séance
+	 * @param id : id de la séance à supprimer.
+	 * @return
+	 */
 	public static Result removeSeance(Long id){
 		Seance.removeSeance(id);
 		return redirect(routes.Application.profSeancesListe("Séance supprimée."));
 	}
+	/**
+	 * Affiche la page qui permet l'édition des infos d'une séance.
+	 * @param id : id de la séance à éditer.
+	 * @return
+	 */
 	public static Result displayEditSeance(Long id){
 		return ok(editSeance.render(Seance.find.ref(id)));
 	}
+	/**
+	 * Edite une séance. On commence par vérifier les informations entrées
+	 * @param id : id de la séance à éditer.
+	 * @return
+	 */
 	public static Result editSeance(Long id){
 		DynamicForm fullInfos = Form.form().bindFromRequest();
 		String day = fullInfos.get("day");
@@ -139,7 +194,13 @@ public class Application extends Controller {
 		}
 		return redirect(routes.Application.profSeancesListe("Erreur dans l'édition de la séance, cette matière n'existe pas."));
 	}
-	public static Result dupliquerSeance(Long id){ //il faudra l'éditer pour prendre en compte les séries, questions, etc.
+	/**
+	 * Permet la duplication d'une séance.
+	 * Il faut dupliquer aussi toutes les séries, questions et réponses dépendant de cette séance.
+	 * @param id : id de la séance à dupliquer.
+	 * @return
+	 */
+	public static Result dupliquerSeance(Long id){
 		Seance seanceADupliquer = Seance.find.ref(id);
 		Seance newSeance = new Seance();
 		newSeance.intitule=seanceADupliquer.intitule;
@@ -184,15 +245,24 @@ public class Application extends Controller {
 					}
 				}
 		}
-		//suite à écrire... (notamment pour les nouvelles URL des élèves)
 		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance. La séance dupliquée se situe en première position dans la liste."));
 	}
+	/**
+	 * Affiche la page qui permet la gestion d'une séance (ajout de questions et de séries)
+	 * @param id : id de la séance que l'on va gérer
+	 * @return
+	 */
 	public static Result gererSeance(Long id){
 		return ok(gerer.render(// page trie automatiquement les réponses et les questions selon leur position
 					Seance.find.ref(id),
 					Serie.page(id)
 					));
 	}
+	/**
+	 * Affiche la page permettant de lancer les votes pour une séance donnée.
+	 * @param id : id de la séance pour laquelle le vote va avoir lieu
+	 * @return
+	 */
 	public static Result voteSeance(Long id){//id de la séance pour laquelle on votera
 		return ok(voteEtResultat.render(// page trie automatiquement les réponses et les questions selon leur position
 				Seance.find.ref(id),
@@ -201,7 +271,12 @@ public class Application extends Controller {
 	}
 
 	
-	public static Result addSerie(Long id){//id de la séance à laquelle appartiendra la future série
+	/**
+	 * Ajoute une série.
+	 * @param id : id de la séance à laquelle appartiendra la future série
+	 * @return
+	 */
+	public static Result addSerie(Long id){
 		DynamicForm infos = Form.form().bindFromRequest();
 		String nom = infos.get("nom");
 		Seance seance = Seance.find.ref(id);
@@ -217,12 +292,22 @@ public class Application extends Controller {
 		Serie.addSerie(serie);
 		return gererSeance(id);
 	}
+	/**
+	 * Supprime une série
+	 * @param serie_id : id de la série que l'on va supprimer
+	 * @return
+	 */
 	public static Result delSerie(Long serie_id){
 		Long seance_id = Serie.find.ref(serie_id).seance.id;
 		Serie.removeSerie(serie_id);
 		return gererSeance(seance_id);
 	}
-	public static Result monterSerie(Long id){//cet id est l'id de la série à monter
+	/**
+	 * Monte la série d'un cran.
+	 * @param id : id de la série à monter
+	 * @return
+	 */
+	public static Result monterSerie(Long id){
 		Serie serieDuDessous = Serie.find.ref(id);
 		Seance seance = serieDuDessous.seance;
 		//D'abord, on trouve la série qui est au dessus
@@ -243,6 +328,11 @@ public class Application extends Controller {
 		serieDuDessous.save();
 		return gererSeance(seance.id);
 	}
+	/**
+	 * Descend la série d'un cran.
+	 * @param id : id de la série à descendre
+	 * @return
+	 */
 	public static Result descendreSerie(Long id){//cet id est l'id de la série à monter
 		Serie serieDuDessus = Serie.find.ref(id);
 		Seance seance = serieDuDessus.seance;
@@ -264,10 +354,21 @@ public class Application extends Controller {
 		serieDuDessous.save();
 		return gererSeance(seance.id);
 	}
-	public static Result addQuestion(Long serie_id){ //c'est l'id de la série à laquelle appartiendra la future question
+	/**
+	 * Affiche la page donnant le choix du type de question
+	 * @param serie_id : id de la série à laquelle appartiendra la future question
+	 * @return
+	 */
+	public static Result addQuestion(Long serie_id){
 		return ok(nouvelleQuestion.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.all()));
 	}
-	public static Result addQuestion2(Long serie_id){ //c'est l'id de la série à laquelle appartiendra la future question
+	/**
+	 * Affiche la deuxième page qui permet de créer un question
+	 * (celle où on entre toutes les infos à par son type)
+	 * @param serie_id : id de la série à laquelle appartiendra la future question
+	 * @return
+	 */
+	public static Result addQuestion2(Long serie_id){
 		DynamicForm info = Form.form().bindFromRequest();
 		if(info.get("choixQuestion")==null){
 			return ok(nouvelleQuestion.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.all()));
@@ -275,15 +376,32 @@ public class Application extends Controller {
 		Long n = Long.parseLong(info.get("choixQuestion"));
 		return ok(nouvelleQuestion2.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.ref(n),""));
 	}
-	public static Result addQuestionLog(Long serie_id, Long typeQ_id, String log){ //c'est l'id de la série à laquelle appartiendra la future question
+	/**
+	 * Affiche la deuxième page d'ajout de question. Permet de faire passer un message d'erreur,
+	 * comme par exemple : "Vous n'avez pas écrit d'intitulé à la question".
+	 * @param serie_id : id de la série à laquelle appartiendra la future question
+	 * @param typeQ_id : type de la future question
+	 * @param log : un message que l'on veut faire apparaître sur la page
+	 * @return
+	 */
+	public static Result addQuestionLog(Long serie_id, Long typeQ_id, String log){
 		return ok(nouvelleQuestion2.render(serie_id,Serie.find.ref(serie_id).seance.id,TypeQuestion.find.ref(typeQ_id),log));
 	}
+	/**
+	 * Ajoute une question dans la base de donnée
+	 * @param serie_id : id de la série à laquelle appartiendra la future question
+	 * @param typeQ_id : type de la future question
+	 * @return
+	 */
 	public static Result addQuestion3(Long serie_id, Long typeQ_id){
 		Serie serie = Serie.find.ref(serie_id);
 		DynamicForm info = Form.form().bindFromRequest();
 		String titre = info.get("titre");
 		String texte = info.get("texte");
 		//D'abord, on vérifie toutes les infos rentrées :
+		if(titre==null){//Cela arrive quand trop d'images sont là et que le texte est trop gros.
+			return addQuestionLog(serie_id,typeQ_id,"Le texte de votre question est trop long. Vous avez certainement mis trop d'images, ou bien l'image que vous avez mise est trop volumineuse. Essayez d'en diminuer la taille avant de l'importer.");
+		}
 		if(titre.equals("")){
 			titre="Titre de la question";
 		}
@@ -321,12 +439,22 @@ public class Application extends Controller {
 		}
 		return gererSeance(serie.seance.id);
 	}
+	/**
+	 * Supprime la question
+	 * @param id : id de la question à supprimer
+	 * @return
+	 */
 	public static Result delQuestion(Long id){
 		Long seance_id = Question.find.ref(id).serie.seance.id;
 		Question.removeQuestion(id);
 		return gererSeance(seance_id);
 	}
-	public static Result monterQuestion(Long id){//cet id est l'id de la question à monter
+	/**
+	 * Monte la question d'un cran.
+	 * @param id : id de la question à monter
+	 * @return
+	 */
+	public static Result monterQuestion(Long id){
 		Question qDuDessous = Question.find.ref(id);
 		Serie serie = qDuDessous.serie;
 		//D'abord, on trouve la question qui est au dessus
@@ -347,7 +475,12 @@ public class Application extends Controller {
 		qDuDessous.save();
 		return gererSeance(serie.seance.id);
 	}
-	public static Result descendreQuestion(Long id){//cet id est l'id de la question à descendre
+	/**
+	 * Descend la question d'un cran.
+	 * @param id : id de la question à descend
+	 * @return
+	 */
+	public static Result descendreQuestion(Long id){
 		Question qDuDessus = Question.find.ref(id);
 		Serie serie = qDuDessus.serie;
 		//D'abord, on trouve la question qui est au dessus
@@ -368,22 +501,41 @@ public class Application extends Controller {
 		qDuDessous.save();
 		return gererSeance(serie.seance.id);
 	}
-	public static Result editQuestion(Long id){//id de la question que l'on édite
+	/**
+	 * Affiche la page qui permet d'éditer une question
+	 * @param id : id de la question que l'on édite
+	 * @return
+	 */
+	public static Result editQuestion(Long id){
 		Question q = Question.find.ref(id);
 		Collections.sort(q.reponses,new Reponse());
 		return ok(editQuestion.render(q,""));
 	}
+	/**
+	 * Affiche la page qui permet d'éditer une question avec un petit message d'erreur.
+	 * @param id : id de la question que l'on édite
+	 * @param log : message d'erreur
+	 * @return
+	 */
 	public static Result editQuestionLog(Long id, String log){//id de la question que l'on édite
 		Question q = Question.find.ref(id);
 		Collections.sort(q.reponses,new Reponse());
 		return ok(editQuestion.render(q, log));
 	}
+	/**
+	 * Enregistre les modifications de la question dans la base de donnée.
+	 * @param id : id de la question que l'on édite
+	 * @return
+	 */
 	public static Result editQuestion2(Long id){//id de la question que l'on édite
 		Question question = Question.find.ref(id);
 		DynamicForm info = Form.form().bindFromRequest();
 		String titre = info.get("titre");
 		String texte = info.get("texte");
 		//D'abord, on vérifie toutes les infos rentrées :
+		if(titre==null){//Cela arrive quand trop d'images sont là et que le texte est trop gros.
+			return editQuestionLog(id,"Le texte de votre question est trop long. Vous avez certainement mis trop d'images, ou bien l'image que vous avez mise est trop volumineuse. Essayez d'en diminuer la taille avant de l'importer.");
+		}
 		if(titre.equals("")){
 			return editQuestionLog(id,"Veuillez entrez un titre.");
 		}
@@ -401,21 +553,24 @@ public class Application extends Controller {
 		question.save();
 		//On ajoute les réponses à la DB :
 		if(question.typeQ.id<=2){
-			//D'abord, on supprime les réponses qui sont déjà dans la question :
-			for(Reponse r : question.reponses){
-				Reponse.removeReponse(r.id);
-			}
-			//Puis on ajoute les questions qui sont dans la Form :
-			List<Reponse> reponses = new ArrayList<Reponse>();
 			int i = 1;
 			Question questionQuiAppartientALaReponse = Question.find.ref(question.id);
+			List<Reponse> reponses = Reponse.find.where().eq("question",questionQuiAppartientALaReponse).orderBy("position").findList();
 			while(info.get("reponse"+i)!=null){
-				Reponse reponse = new Reponse();
-				reponse.texte = info.get("reponse"+i);
-				reponse.question=questionQuiAppartientALaReponse;
-				reponse.position=i;
-				reponse.save();
+				if(i<=reponses.size()){
+					reponses.get(i-1).texte = info.get("reponse"+i);
+					reponses.get(i-1).save();
+				}else{
+					Reponse reponse = new Reponse();
+					reponse.texte = info.get("reponse"+i);
+					reponse.question=questionQuiAppartientALaReponse;
+					reponse.position=i;
+					reponse.save();
+				}
 				i++;
+			}
+			while(i<=reponses.size()){
+				Reponse.removeReponse(reponses.get(i-1).id);
 			}
 		}
 		return gererSeance(question.serie.seance.id);
@@ -423,24 +578,48 @@ public class Application extends Controller {
 	
 	
 	//Vote et Résulats
-	public static Result creerLiens(Long id){//id de la séance
+	/**
+	 * Cette fonction crée les liens qui permettront aux élèves de répondre aux questions.
+	 * Elle envoie de plus aux élèves le mail contenant ses liens.
+	 * @param id : id de la série pour laquelle on génère les liens
+	 * @return
+	 */
+	public static Result creerLiens(Long id){
 		Seance seance = Seance.find.ref(id);
 		List<Eleve> eleves = Eleve.find.all();//pour l'instant, on va supposer que tous les élèves doivent répondre à la série de question
 		for(Eleve e : eleves){
 			for(Serie s : seance.series){
 				Lien.addLien(e, s);
 			}
-			//sendMail(e, seance);//on envoit le mail
+			Mail mail = new Mail(e,seance);
+			mail.sendMail();//on envoit le mail
 		}
 		return voteSeance(id);
 	}
-	public static Result lancerSerie(Long id){//id de la série
+	/**
+	 * Affiche la page où l'on choisit la manière dont se finira la série juste avant de la lancer
+	 * @param id : id de la série
+	 * @return
+	 */
+	public static Result lancerSerie(Long id){
 		return ok(demarrageSerie.render(Serie.find.ref(id), ""));
 	}
-	public static Result lancerSerieLog(Long id, String log){//id de la série
+	/**
+	 * Affiche la page où l'on choisit la manière dont se finira la série juste avant de la lancer
+	 * avec un petit message d'erreur
+	 * @param id : id de la série
+	 * @param log : message d'erreur
+	 * @return
+	 */
+	public static Result lancerSerieLog(Long id, String log){
 		return ok(demarrageSerie.render(Serie.find.ref(id), log));
 	}
-	public static Result lancerSerie2(Long id){//id de la série
+	/**
+	 * Lance la série conformément aux information entrées sur la template demarrageSerie.scala.html.
+	 * @param id : id de la série qui va démarrer
+	 * @return
+	 */
+	public static Result lancerSerie2(Long id){
 		Serie serie = Serie.find.ref(id);
 		if(serie.date_ouverte==null){//Si la série est déjà ouverte, on ne doit rien faire (accessible avec le back du browser)
 			Calendar now = Calendar.getInstance();
@@ -460,6 +639,11 @@ public class Application extends Controller {
 		}
 		return redirect(routes.Application.voirResultats(id));
 	}
+	/**
+	 * Affiche les résultats alors que les élèves sont en train de répondre. La page se rafraîchi au fur et à mesure
+	 * @param serie_id
+	 * @return
+	 */
 	public static Result resultatEnCours(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
 		return ok(resultatEnCours.render(Resultat.listeResultat(serie),
@@ -468,6 +652,11 @@ public class Application extends Controller {
 				Lien.find.where().eq("serie",serie).findList().size()
 				));
 	}
+	/**
+	 * Affiche les résultats finaux une fois qu'une série est close.
+	 * @param serie_id
+	 * @return
+	 */
 	public static Result resultatFin(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
 		List<Serie> seriesSuivantes = Serie.find.where()
@@ -487,6 +676,13 @@ public class Application extends Controller {
 				Lien.find.where().eq("serie",serie).findList().size()
 				));
 	}
+	/**
+	 * Permet à un professeur authentifié de voir les résultats
+	 * Si la série est terminée, on verra les résultats finaux, sinon,
+	 * on verra les résultats au fur et à mesure.
+	 * @param serie_id
+	 * @return
+	 */
 	@Security.Authenticated(Secured.class)
 	public static Result voirResultats(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
@@ -496,12 +692,23 @@ public class Application extends Controller {
 			return resultatFin(serie_id);
 		}
 	}
+	/**
+	 * Met fin manuellement à une série.
+	 * @param serie_id
+	 * @return
+	 */
 	public static Result finirSerie(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
 		serie.date_fermeture=Calendar.getInstance().getTime();
 		serie.save();
 		return resultatFin(serie_id);
 	}
+	/**
+	 * Remet à zéro une série. Toutes les réponses sont supprimées et la série est considérée comme n'ayant
+	 * jamais été ouverte. Les élèves peuvent alors à nouveau y répondre.
+	 * @param serie_id
+	 * @return
+	 */
 	public static Result resetSerie(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
 		serie.date_ouverte=null;
@@ -528,21 +735,22 @@ public class Application extends Controller {
 		}
 		return voteSeance(serie.seance.id);
 	}
-	
-	
-	
-	//Envoyer les mails
-	public static Result sendMail(Eleve eleve, Seance seance){
-		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
-		mail.setSubject("[ASCMII] Test");
-		mail.addRecipient("Truc <"+eleve.mail+">",eleve.mail);
-		mail.addFrom("ASCMII <ascmii.test@gmail.com>");
-		mail.sendHtml("<html>Ceci est un mail de<br>test.</html>");
-		return voteSeance(Long.parseLong(session("seance_id")));
+	/**
+	 * Affiche exhaustivement les réponses données par les élèves pour une question de type 3 ou 4.
+	 * @param question_id
+	 * @return
+	 */
+	public static Result reponsesExhaustives(Long question_id){
+		return ok(reponsesExhaustives.render(Resultat.exhaustive(question_id)));
 	}
 	
 	
 	//Côté Elève :
+	/**
+	 * Affiche la page où l'élève peut répondre à la question.
+	 * @param chemin : lien unique qui lie l'élève à la série de question
+	 * @return
+	 */
 	public static Result eleveRepondre(String chemin){
 		Lien lien = Lien.find.byId(chemin);
 		if(lien!=null){
@@ -555,7 +763,7 @@ public class Application extends Controller {
 				return ok(eleve.render(lien,""));//L'élève n'a pas répondu et il est dans les temps : il répondu donc aux questions
 			}else{
 				if(lien.serie.date_ouverte==null){
-					return(ok(serieNonCommencee.render()));//La série n'a pas commencée !
+					return(ok(serieNonCommencee.render(chemin)));//La série n'a pas commencée !
 				}else{
 					if(lien.repondu){//L'élève à déjà répondu : on affiche ses résultats
 						return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
@@ -569,6 +777,12 @@ public class Application extends Controller {
 			return ok(p404.render());
 		}
 	}
+	/**
+	 * Affiche la page où l'élève peut répondre à la question avec un petit message qui s'affiche sur la page.
+	 * @param chemin : lien unique qui lie l'élève à la série de question
+	 * @param log : message d'erreur
+	 * @return
+	 */
 	public static Result eleveRepondreLog(String chemin,String message){
 		Lien lien = Lien.find.byId(chemin);
 		if(lien!=null){
@@ -581,7 +795,7 @@ public class Application extends Controller {
 				return ok(eleve.render(lien,message));//L'élève n'a pas répondu et il est dans les temps : il répondu donc aux questions
 			}else{
 				if(lien.serie.date_ouverte==null){
-					return(ok(serieNonCommencee.render()));//La série n'a pas commencée !
+					return(ok(serieNonCommencee.render(chemin)));//La série n'a pas commencée !
 				}else{
 					if(lien.repondu){//L'élève à déjà répondu : on affiche ses résultats
 						return ok(eleveRepondu.render(Resultat.listeResultat(lien)));
@@ -594,6 +808,12 @@ public class Application extends Controller {
 			return ok(p404.render());
 		}
 	}
+	/**
+	 * Enregistre dans la base de donnée la réponse de l'élève. On vérifie au préalable que toutes les 
+	 * informations qu'il a entré sont valides.
+	 * @param chemin : lien unique qui lie l'élève à la série de question
+	 * @return
+	 */
 	public static Result donnerReponse(String chemin){
 		DynamicForm info = Form.form().bindFromRequest();
 		Lien lien = Lien.find.ref(chemin);
@@ -678,24 +898,16 @@ public class Application extends Controller {
 				repond2.date=Calendar.getInstance().getTime();
 				repond2.eleve=lien.eleve;
 				repond2.question=q;
-				repond2.texte=ceQuIlARepondu2;
+				repond2.texte=ceQuIlARepondu2.replace('.', ',');
 				repond2.save();
 				break;
 			default:
-				System.out.println("mauvais type de question : " + q.typeQ.id);
+				System.out.println("Mauvais type de question : " + q.typeQ.id);
 			}
 		}
 		lien.repondu=true;
 		lien.save();
 		return eleveRepondre(chemin);
 	}
-	public static Result infoHeure(Long serie_id){
-		Serie serie = Serie.find.ref(serie_id);
-		if(serie.date_fermeture!=null){
-			return ok(Long.toString(serie.date_fermeture.getTime()));
-		}else{
-			return ok("0");
-		}
-	}
-	
+
 }

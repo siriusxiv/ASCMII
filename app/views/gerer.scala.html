@@ -31,10 +31,9 @@ function addSerie(){
 		<table>
 		@for(serie <- listSerie){
 			<tr>
-				<td>
-					<form action="/prof/gerer/del/@serie.id" method="POST" style="display:inline">
-						<button type="submit" class="suppr">X</button>
-					</form>
+				<td class="left">
+					<form id="s@serie.id" action="/prof/gerer/del/@serie.id" method="POST" style="display:inline"></form>
+						<button onClick="supprimerSerie(@serie.id)" class="suppr">X</button>
 				</td>
 				<td>@serie.nom</td>
 				<td>
@@ -51,14 +50,16 @@ function addSerie(){
 						<button type="submit">Ajouter une question à la série</button>
 					</form>
 					}else{<button type="submit" disabled>Ajouter une question à la série</button>}
-					<button type="submit">Exporter</button>
+					<form action="/prof/export/@serie.id" method="POST" style="display:inline">
+						<button type="submit">Exporter</button>
+					</form>
 				</td>
 			</tr>
 				@for(question <- serie.questions){
 					<tr>
-						<td></td>
-						<td><form action="/prof/gerer/delquestion/@question.id" method="POST" style="display:inline">
-								<button type="submit" class="suppr">X</button></form> @question.titre
+						<td class="left"></td>
+						<td><form id="q@question.id" action="/prof/gerer/delquestion/@question.id" method="POST" style="display:inline"></form>
+								<button onClick="supprimerQuestion(@question.id)" class="suppr">X</button> @question.titre
 						</td>
 						<td>
 							@if(serie.date_ouverte==null){
@@ -77,15 +78,25 @@ function addSerie(){
 						</td>
 					</tr>
 					<tr>
-						<td></td>
+						<td class="left"></td>
 						<td style="padding:0px 0px 0px 40px">@question.typeQ.typeQ</td>
 						<td></td>
 					</tr>
 					@for(reponse <- question.reponses){
 						<tr>
-							<td></td>
+							<td class="left">@if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName">}</td>
 							<td style="padding:0px 0px 0px 40px">@reponse.texte</td>
-							<td></td>
+							<td>@if(reponse.image==null){
+								<button onClick="addImage(@reponse.id)">Ajouter une image à la réponse</button>
+								<form id="r@reponse.id" action="/prof/upload/@reponse.id" method="POST" enctype="multipart/form-data" style="display:none">
+									<input type="file" name="image">
+								<button type="submit">Uploader</button>
+								</form>}else{
+								<form action="/prof/upload/del/@reponse.id" method="POST" style="display:inline">
+									<button type="submit">Supprimer l'image</button>
+								</form>
+								}
+							</td>
 						</tr>
 					}
 				}
@@ -94,10 +105,10 @@ function addSerie(){
 	}
 	<p>
 		<form action="/prof/seances" method="GET" style="display:inline"><button type="submit">Retour</button></form>
-		<div style="padding:0px 0px 0px 250px;display:inline">
-		@if(seance.series.isEmpty() || seance.series.get(0).liens.isEmpty()){
-			<button onClick="addSerie()">Ajouter une nouvelle série de question</button>
-		}else{
+		<div 
+		@if(seance.series.isEmpty() || seance.series.get(0).liens.isEmpty()){style="padding:0px 0px 0px 250px;display:inline">
+			<button onClick="addSerie()">Ajouter une nouvelle série de questions</button>
+		}else{>
 			Vous avez déjà envoyé le mail, vous ne pouvez donc plus ajouter des séries de question.
 		}
 		</div>
@@ -110,6 +121,32 @@ function addSerie(){
 		<input type="text" name="nom" size="40">
 		<button type="submit">Valider</button>
 		</form>
+		<p>OU</p>
+		<p>Uploadez une série depuis votre ordinateur :</p>
+		@helper.form(action = routes.Export.uploadSerie(seance.id), 'enctype -> "multipart/form-data"){
+		<input type="file" name="fichier">
+		<button type="submit">Valider</button>
+		}
 	</div>
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script>
+function supprimerSerie(serie_id){
+	if(confirm("Attention ! Si vous supprimer cette série, toutes les questions à l'intérieur seront supprimées ! Confirmez-vous votre décision ?")){
+		$('#s'+serie_id).submit();
+	}
+}
+function supprimerQuestion(question_id){
+	if(confirm("Voulez-vous vraiment supprimer cette question ?")){
+		$('#q'+question_id).submit();
+	}
+}
+function addImage(reponse_id){
+	if(document.getElementById('r'+reponse_id).style.display == 'none'){
+		document.getElementById('r'+reponse_id).style.display = 'inline';
+	} else {
+		document.getElementById('r'+reponse_id).style.display = 'none';
+	}
+}
+</script>
 </html>
 }

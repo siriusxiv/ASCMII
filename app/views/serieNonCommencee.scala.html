@@ -1,9 +1,9 @@
-@()
+@(chemin: String)
 @main("ASCMII - La série n'a pas commencée."){
 <html>
  <head>
   <title>ASCMII</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
  </head>
  <body onLoad="rafraichir(2000)">
  <h1>ASCMII</h1>
@@ -11,9 +11,24 @@
 	Lorsque la série aura commencée, la page se rechargera automatiquement. Vous pouvez toutefois rafraîchir manuellement la page.</p>
  </body>
 </html>
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
 <script>
 function rafraichir(duree){
-	setTimeout("location.reload(true);",duree);
+	setInterval("reload();",duree);
+}
+function reload(){
+	$.ajax({
+            type : 'GET',
+            url : '@routes.Ajax.hasSerieBegun(chemin)',
+            success: function(data, textStatus, jqXHR) {
+				if(parseInt(data)==1){
+					location.reload(true);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				//window.alert(textStatus);
+			}
+        });
 }
 </script>
 }

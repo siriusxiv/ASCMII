@@ -35,7 +35,11 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
-
+/**
+ * Contient les professeurs
+ * @author Admin
+ *
+ */
 @Entity
 public class Professeur extends Model {
 	@Id

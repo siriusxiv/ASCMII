@@ -8,53 +8,85 @@
  </head>
  <body onLoad="rafraichir(5000)">
 	<h1>ASCMII</h1>
-	<form action="@routes.Application.logOut()" method="POST" class="logout">
-		<button type="submit">Se déconnecter</button>
-	</form>
 	<p>La série @serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
 	<br>
-	<p>@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>
-	@for(resultat <- resultats){
-		<p>@resultat.question.texte</p>
+	<p id="pourcent" value="@{nombreDeReponses*100/nombreDeReponsesMAX}">@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>
+	<div id="jauge" class="barre"></div>
+	<ol>@for(resultat <- resultats){
+		<li>@Html(resultat.question.texte)</li>
 		@if(resultat.question.typeQ.id==1 || resultat.question.typeQ.id==2){
-			<span id="q@resultat.question.id">
+			<table id="q@resultat.question.id" class="reponses">
 			@for(reponse <- resultat.question.reponses){
-				<p>@reponse.position. @reponse.texte @resultat.reponsesChoisies.get(reponse.position-1)</p>
-			}
-			</span>
+				<tr>
+					<td class="reponsesNombre">@reponse.position. </td>
+					<td class="img">@if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="40px">}</td>
+					<td class="reponses">@reponse.texte</td><td class="reponsesNombre">@resultat.reponsesChoisies.get(reponse.position-1)</td><td class="reponsesPourcent">@{resultat.reponsesChoisies.get(reponse.position-1)*100/nombreDeReponsesMAX} %</td>
+				</tr>}
+			</table>
 		}
 		@if(resultat.question.typeQ.id==3 || resultat.question.typeQ.id==4){
-			<table id="q@resultat.question.id">
-			@for(i <- 0 to (resultat.listRepond.length-1)){
+			<table id="q@resultat.question.id" class="reponses">
+			@for(i <- 0 to resultat.listRepond.length-1){
 				<tr>
-					<td>@resultat.listRepond.get(i).texte</td><td>@resultat.reponsesChoisies.get(i)</td>
+					<td class="reponses">@resultat.listRepond.get(i).texte</td><td class="reponsesNombre">@resultat.reponsesChoisies.get(i)</td>
 				</tr>
 			}
 			</table>
 		}
-	}
+	}</ol>
 	@if(serie.date_fermeture==null){
 		<form action="/prof/fin/@serie.id" method="POST">
 			<button type="submit">Mettre fin à la série</button>
 		</form>
 	}else{
-		<p>La série se termine à @serie.date_fermeture.format("hh:mm:ss"). Il est @Calendar.getInstance.getTime().format("hh:mm:ss").</p>
-		<span id="countdown"></span>
+		<p>La série se termine à @serie.date_fermeture.format("hh:mm:ss"). Plus que :</p>
+		<div id="countdown" class="compteur"></div>
 	}
 <script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
 <script src="@routes.Assets.at("/javascripts/jquery.countdown.min.js")"></script>
 <script src="@routes.Assets.at("/javascripts/jquery.countdown-fr.js")"></script>
 <script>
 function rafraichir(duree){
-	@if(serie.date_fermeture!=null){$('#countdown').countdown({until: new Date(@serie.date_fermeture.getTime()), format: 'MS'});}
+	$(function() {
+		$( "#jauge" ).progressbar({
+			value: @{nombreDeReponses*100/nombreDeReponsesMAX}
+		});
+	});
+	@if(serie.date_fermeture!=null){$('#countdown').countdown({until: new Date(@serie.date_fermeture.getTime()), format: 'MS', expiryUrl:'/prof/voir/@serie.id'});}
 	setInterval("loadAgain();",duree);
 }
 function loadAgain(){
+	$('#pourcent').load('/prof/voir/@serie.id #pourcent');
 	@for(i:Int <- 0 to (resultats.length-1)){
-	$('#q'+@resultats.get(i).question.id).load('/prof/voir/@resultats.get(i).question.serie.id #q'+@resultats.get(i).question.id);
+		$('#q'+@resultats.get(i).question.id).load('/prof/voir/@serie.id #q'+@resultats.get(i).question.id);
+	}
+	$.ajax({
+            type : 'GET',
+            url : '@routes.Ajax.infoNReponses(serie.id)',
+            success: function(data, textStatus, jqXHR) {
+				value = parseInt(data);
+				updateJauge();
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				//window.alert(textStatus);
+			}
+        });
+}
+var value;
+function updateJauge(){
+	setInterval("changeValue();",100);
+}
+function changeValue(){
+	var currentValue = $('#jauge').progressbar('value');
+	if(currentValue<value){
+		$( '#jauge' ).progressbar( 'value', currentValue+1 );
+	}else if (currentValue>value){
+		$( '#jauge' ).progressbar( 'value', currentValue-1 );
 	}
 }
 </script>
-}
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery-ui.css")" />
+<script src="@routes.Assets.at("/javascripts/jquery-ui.js")"></script>
  </body>
 </html>
+}

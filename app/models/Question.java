@@ -37,7 +37,12 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
-
+/**
+ * Contient les questions. On créée de plus une relation d'ordre entres les questions
+ * avec un comparateur.
+ * @author Admin
+ *
+ */
 @Entity
 public class Question extends Model implements Comparator<Question>{
 	@Id
@@ -46,7 +51,7 @@ public class Question extends Model implements Comparator<Question>{
 	@Required
 	public String titre;
 	@Required
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "LONGTEXT")
 	public String texte;
 	@Required
 	public Long position;
@@ -64,7 +69,10 @@ public class Question extends Model implements Comparator<Question>{
 	public List<Repond> estRepondue;
 	
 	public static Finder<Long,Question> find = new Finder<Long,Question>(Long.class, Question.class);
-
+	
+	/**
+	 * La relation d'ordre est définie à partir des positions des questions.
+	 */
 	@Override
 	public int compare(Question q1,Question q2){
 			return (q1.position<q2.position ? -1 : (q1.position==q2.position ? 0 : 1));
@@ -74,6 +82,10 @@ public class Question extends Model implements Comparator<Question>{
 		se.save();
 	}
 	
+	/**
+	 * On supprime en cascade les élément de classe "Reponse" et "Repond".
+	 * @param id : id de la question qu'on supprime
+	 */
 	public static void removeQuestion(Long id){
 		Question q = Question.find.byId(id);
 		if(q != null){

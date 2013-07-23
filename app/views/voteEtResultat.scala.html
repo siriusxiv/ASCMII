@@ -6,7 +6,7 @@
 <html>
  <head>
   <title>ASCMII</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/vote.css")">
  </head>
 	<h1>ASCMII</h1>
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
@@ -15,12 +15,14 @@
 	<h2 class="intituleDeLaSeance">@seance.intitule</h2>
 	<h2>Liste des questions pour la séance de @seance.matiere le @seance.date.format("dd/MM/yyyy à H") h</h2>
 	
-		<table>
+		<table class="liste">
+			<tr>
+			<th class="liste">Liste des séries</th><th class="liste">Actions</th>
+			<tr>
 		@for(serie <- listSerie){
 			<tr>
-				<td></td>
-				<td>@serie.nom</td>
-				<td>
+				<td class="liste">@serie.nom</td>
+				<td class="liste">
 					@if(serie.date_ouverte==null){
 						@if(serie.liens.isEmpty()){
 						<button type="submit" disabled>Lancer la série</button>
@@ -39,31 +41,32 @@
 					}
 				</td>
 			</tr>
-				@for(question <- serie.questions){
+				<!-- @for(question <- serie.questions){
 					<tr>
-						<td></td>
 						<td style="padding:0px 0px 0px 40px">@question.titre</td>
 						<td></td>
 					</tr>
 					<tr>
-						<td></td>
 						<td style="padding:0px 0px 0px 60px">@question.typeQ.typeQ</td>
 						<td></td>
 					</tr>
 					@for(reponse <- question.reponses){
 						<tr>
-							<td></td>
 							<td style="padding:0px 0px 0px 60px">@reponse.texte</td>
 							<td></td>
 						</tr>
 					}
 				}
-			<tr id="div@serie.id"></tr>
+				-->
 	}
 	</table>
-	<form action="/prof/vote/send/@seance.id" method="POST">
+	<br>
+	<form action="/prof/vote/send/@seance.id" method="POST" style="padding:1px 0px 0px 150px;">
 		<button type="submit">Envoyer le mail</button>
 	</form>
+	<p class="explications">Le bouton "Envoyer le mail" sert à envoyer le mail contenant les liens vers les questions à tous les élèves.<br>
+	Vous devez envoyer ce mail pour pouvoir lancer la série.<br>
+	Une fois que le mail sera envoyé, vous ne pourrez plus modifier ni les séries, ni les questions.</p>
 	<form action="/prof/seances" method="GET"><button type="submit">Retour</button></form>
 </html>
 }

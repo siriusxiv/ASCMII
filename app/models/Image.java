@@ -28,86 +28,85 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************/
 
 package models;
-import java.util.*;
 
-import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
-import play.db.ebean.*;
-import play.data.format.*;
-import play.data.validation.*;
-import play.data.validation.Constraints.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
 
 /**
- * Contient les séances
+ * Stocke les références des images dans la base de donnée
+ * (son nom de fichier suffit car elles sont dans le dossier
+ * "public/uploads/".
  * @author Admin
  *
  */
 @Entity
-public class Seance extends Model {
+public class Image extends Model{
 	@Id
 	public Long id;
 	
 	@Required
-	public Date date;
-	@Required
-	public String matiere;
-	@Required
-	public String intitule;
+	public String fileName;
 	
-	@ManyToOne
-	public Professeur professeur;
-	
-	@OneToMany(targetEntity = Serie.class)
-	public List<Serie> series;
-	
-	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
-
 	/**
-	 * Renvoie la liste des séances sous la responsabilité du professeur connecté,
-	 * c'est-à-dire celui dont le nom est dans la session.
-	 * @param session
-	 * @return Liste de séance
+	 * Crée un objet de type image ayant une ID pré-choisie et un nom formaté.
+	 * @param filename
 	 */
-	public static List<Seance> page(HashMap<String,String> session){
-		Professeur prof = Professeur.find.ref(session.get("username"));
-		return find
-				.where()
-					.eq("professeur",prof)
-				.orderBy("date desc")
-				.findList();
+	public Image(String filename){
+		id=idNonUtilisee();
+		fileName=id+"_"+filename;
 	}
 	
-	public static void addSeance(Seance se){
-		se.save();
-	}
+	public static Finder<Long,Image> find = new Finder<Long,Image>(Long.class, Image.class);
 	
 	/**
-	 * Suppression en cascade nécessaire.
+	 * Supprime la référence de l'image dans la base de donnée et le fichier en lui-même
+	 * stocké dans "/public/uploads".
+	 * Attention, la référence à l'image dans la table "Reponse" n'est pas supprimée par cette fonction !
+	 * Il faut la supprimer au préalable. 
 	 * @param id
 	 */
-	public static void removeSeance(Long id){
-		Seance se = Seance.find.byId(id);
-		if(se != null){
-			List<Serie> ss = Serie.find.where().eq("seance",se).findList();
-			for(Serie s: ss){
-				Serie.removeSerie(s.id);
+	public static void removeImage(Long id){
+		Image i = Image.find.byId(id);
+		if(i!=null){
+			i.delete();
+			try {
+				Files.delete(Paths.get(play.Play.application().path().toString() + "//public//uploads//" + i.fileName));
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			se.delete();
 		}
 	}
 	
 	/**
-	 * Trouve une id non utilisée. Cela permet de rajouter un séance en choisissant son ID
-	 * plutôt que de laisser faire ebean. Cela peut parfois être utile.
-	 * @return ID non utilisée.
+	 * Trouve une ID non utilisée.
+	 * @return une ID non utilisée.
 	 */
 	public static Long idNonUtilisee(){
-		List<Seance> seanceTemp = Seance.find.orderBy("id desc").findList();
-		if(!seanceTemp.isEmpty()){
-			return seanceTemp.get(0).id+1;
+		List<Image> iTemp = Image.find.orderBy("id desc").findList();
+		if(!iTemp.isEmpty()){
+			return iTemp.get(0).id+1;
 		}else{
 			return 1L;
 		}
+	}
+	
+	/**
+	 * Ajoute la référence de l'image dans la base de donnée et la lie à la Reponse
+	 * donnée en argument.
+	 * @param reponse
+	 */
+	public void addImage(Reponse reponse){
+		this.save();
+		reponse.image=this;
+		reponse.save();
 	}
 }

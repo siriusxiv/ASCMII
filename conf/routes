@@ -58,6 +58,12 @@ POST	/prof/gerer/editquestion/:id	controllers.Application.editQuestion(id: Long)
 
 POST	/prof/gerer/editquestion2/:id	controllers.Application.editQuestion2(id: Long)
 
+POST	/prof/export/:serie_id		controllers.Export.downloadSerie(serie_id: Long)
+
+POST	/prof/upload/:reponse_id	controllers.UploadImages.upload(reponse_id: Long)
+
+POST	/prof/upload/del/:reponse_id	controllers.UploadImages.deleteImage(reponse_id: Long)
+
 #prof voteEtRésultats
 POST	/prof/vote/send/:id			controllers.Application.creerLiens(id: Long)
 
@@ -71,6 +77,12 @@ POST	/prof/fin/:serie_id			controllers.Application.finirSerie(serie_id: Long)
 
 POST	/prof/reset/:serie_id		controllers.Application.resetSerie(serie_id: Long)
 
+GET		/prof/exhaustive/:question_id	controllers.Application.reponsesExhaustives(question_id: Long)
+
+POST	/prof/downloads/:question_id	controllers.Export.downloadExhaustive(question_id: Long)
+
+POST	/prof/upload/:seance_id		controllers.Export.uploadSerie(seance_id: Long)
+
 #eleve
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)
 
@@ -78,5 +90,13 @@ POST	/eleve/reponse/:chemin		controllers.Application.donnerReponse(chemin: Strin
 
 GET		/eleve/reponse/:chemin		controllers.Application.eleveRepondre(chemin: String)
 
+#Routes AJAX
 #Cette route permet de savoir si la série est finie ou pas (quand le prof met fin à la série)
-GET		/eleve/infoheure/:serie_id	controllers.Application.infoHeure(serie_id: Long)
+GET		/eleve/infoheure/:serie_id	controllers.Ajax.infoHeure(serie_id: Long)
+#Pour connaître le proportion de personnes qui ont répondu.
+GET		/prof/propRepondant/:serie_id	controllers.Ajax.infoNReponses(serie_id: Long)
+#Pour savoir si une série a commencée ou pas
+GET		/eleve/hasSerieBegun/:chemin	controllers.Ajax.hasSerieBegun(chemin: String)
+
+#Affiche la page 404
+GET		/*nameUrl							controllers.P404.p404(nameUrl: String)

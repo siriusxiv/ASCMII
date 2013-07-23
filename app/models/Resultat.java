@@ -32,7 +32,10 @@ package models;
 import java.util.*;
 
 /**
- * 
+ * Cette classe permet de rendre compte des résultats d'un questionnaire.
+ * Elle est utilisée de deux manière complètement différentes :
+ * l'une pour afficher les résultats d'un élève à une série de questions,
+ * l'autre pour afficher les résultats de tous les élèves à une série de questions.
  * @author Admin
  *
  */
@@ -47,6 +50,9 @@ public class Resultat implements Comparator<Resultat>{
 		question=q;
 	}
 	
+	/**
+	 * Définit une relation d'ordre dépendant de la position des questions.
+	 */
 	@Override
 	public int compare(Resultat r1,Resultat r2){
 			return (r1.question.position<r2.question.position ? -1 : (r1.question.position==r2.question.position ? 0 : 1));
@@ -55,6 +61,10 @@ public class Resultat implements Comparator<Resultat>{
 	/**
 	 * Cette fonction permet de générer la page "eleveRepondu.scala.html". C'est la page où on voit les résultats
 	 * de l'élève quand il a déjà répondu.
+	 * Ici :	- question contient la question à laquelle l'élève à répondu
+	 * 			- repond contient le repond éventuelle (si la question est de type 3 ou 4)
+	 * 			- reponsesChoisies contient la liste des réponses que l'élève à choisie pour cette question (pour les questions de type 1 ou 2)
+	 * 			- listRepond et nombreDeRepondants ne servent à rien ici.
 	 * @param lien
 	 * @return Cette fonction renvoie la liste des réponses au question d'un certain élève pour une certaine série
 	 */
@@ -87,6 +97,19 @@ public class Resultat implements Comparator<Resultat>{
 		return resultats;
 	}
 	
+	/**
+	 * Cette fonction permet de générer les pages "resultatFin.scala.html" et "resultatEnCours.scala.html".
+	 * À partir d'une série, on fait la liste de toutes ses questions, pour chaque question :
+	 * 		- si la question est de type 1 ou 2 : reponsesChoisies contient la nombre de réponses pour
+	 * chaque réponse en comptant tous les votants.
+	 * 		- si la question est de type 3 ou 4 : listRepond (celui qui sera stocké dans les résultats)
+	 * contiendra les 10 réponses les plus fréquentes. reponsesChoisies contiendra le nombre de répondants.
+	 * C'est pourquoi on stocke chaque Repond et nombre de réponses comme un couple dans une liste. En effet,
+	 * on ne veut pas perdre la correspondance "réponse"<->"Nombre de réponse".
+	 * 		Dans tous les dasn nombreDeRepondants contient le nombre de personnes ayant répondu à la série.
+	 * @param serie
+	 * @return Renvoie la liste des résultats
+	 */
 	public static List<Resultat> listeResultat(Serie serie){
 		List<Resultat> resultats = new ArrayList<Resultat>();
 		for(Question q : serie.questions){
@@ -121,6 +144,13 @@ public class Resultat implements Comparator<Resultat>{
 				//On trie la list par ordre de réponse du plus grand au plus petit
 				Collections.sort(listFinale,new CoupleRI(new Repond(),0));
 				resultat.nombreDeRepondants=listRepond.size();
+				//Il faut maintenant ne garder que les 10 premiers et ajouter une case 11 contenant les autres.
+				if(listFinale.size()>10){
+					while(listFinale.size()>10){
+						listFinale.remove(0);
+					}
+					listFinale.add(0,new CoupleRI(listFinale,resultat.nombreDeRepondants));
+				}
 				resultat.distribue(listFinale);
 			}
 			resultats.add(resultat);
@@ -130,7 +160,11 @@ public class Resultat implements Comparator<Resultat>{
 		return resultats;
 	}
 	
-	
+	/**
+	 * Prend les réponses et le nombre de réponse dans une liste de couples RI et
+	 * les redistribue dans un objet de classe "Resultat".
+	 * @param listCRI
+	 */
 	public void distribue(List<CoupleRI> listCRI){
 		listRepond=new ArrayList<Repond>();
 		reponsesChoisies=new ArrayList<Integer>();
@@ -138,6 +172,34 @@ public class Resultat implements Comparator<Resultat>{
 			listRepond.add(0,listCRI.get(i).repond);
 			reponsesChoisies.add(0,listCRI.get(i).i);
 		}
+	}
+	
+	/**
+	 * Renvoie la liste exhaustive des réponses à une question de type 3 ou 4, sur le modèle
+	 * de listeResultat(Serie serie), mais sans tronquer la liste au-delà de 10 réponses.
+	 * @param question_id
+	 * @return liste exhaustive des réponses
+	 */
+	public static Resultat exhaustive(Long question_id){
+		Question q = Question.find.ref(question_id);
+		Resultat resultat = new Resultat(q);
+		List<Repond> listRepond = Repond.find.where().eq("question", q).findList();
+		List<CoupleRI> listFinale = new ArrayList<CoupleRI>();
+		for(Repond r : listRepond){
+			int i;
+			if( (i = r.isIn(listFinale)) >= 0){//Cette réponse à déjà été vue
+				//On incrémente le i-ème élément de listFinale
+				listFinale.set(i, new CoupleRI(r,listFinale.get(i).i+1));
+			}else{//On voit cette réponse pour la première fois
+				//On l'ajoute dans listFinale (avec une seule occurance pour l'instant)
+				listFinale.add(new CoupleRI(r,1));
+			}
+		}
+		//On trie la list par ordre de réponse du plus grand au plus petit
+		Collections.sort(listFinale,new CoupleRI(new Repond(),0));
+		resultat.nombreDeRepondants=listRepond.size();
+		resultat.distribue(listFinale);
+		return resultat;
 	}
 }
 

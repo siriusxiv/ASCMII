@@ -8,8 +8,12 @@ import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
+/**
+ * Fait le lien entre un élève et la réponse qu'il choisit (pour une question de type 1 ou 2).
+ * @author Admin
+ *
+ */
 @Entity
 public class Choisit extends Model {
 	@Id

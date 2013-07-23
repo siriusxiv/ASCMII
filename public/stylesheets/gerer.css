@@ -2,10 +2,19 @@ h1{
 	padding:1px 0px 0px 50px;
 }
 
+html{
+	background-color:lightblue;
+}
+
 body{
 	background-color:#b0c4de;
 	text-align:left;
 	font-family:"Comic Sans MS",Times,serif;
+	width:800px;
+	margin-left:auto;
+	margin-right:auto;
+	padding:50px 50px 50px 50px;
+	border:5px solid rgb(170,170,170);
 }
 
 table.liste{
@@ -45,9 +54,73 @@ button.suppr{
 }
 
 td.suppr{
-	color : red;
-	cursor : pointer;
-	cursor : hand;
+	color:red;
+	cursor:pointer;
+	cursor:hand;
 	background-color:white;
 	border:1px solid black;
+}
+
+.log{
+	color:red;
+	font-family:"Times New Roman",Times,serif;
+}
+
+td.left{
+	max-width:35px;
+}
+img{
+	height:25px;
+	float:right;
+	position:relative;
+	left:37px;
+}
+
+
+/* pour la page résultatEnCours :*/
+table.reponses{
+	border-collapse:collapse;
+	background-color:white;
+	min-width: 200px;
+	position: left;
+	width:400px;
+	padding:10px;
+}
+td.reponses,td.img,table.reponses{
+	border: 1px solid black;
+}
+td.reponses{
+	padding: 1px 5px 1px 5px;
+}
+td.reponsesNombre{
+	border: 1px solid black;
+	padding: 1px 5px 1px 5px;
+	width:25px;
+	text-align:right;
+}
+td.reponsesPourcent{
+	border: 1px solid black;
+	padding: 1px 5px 1px 5px;
+	width:45px;
+	text-align:right;
+}
+
+img{
+	text-align:center;
+    display:block;
+}
+
+div.compteur{
+	background: rgb(238,238,238);
+	min-width: 50px;
+	position: left;
+	height: 50px;
+	width:100px;
+	padding:10px;
+}
+
+/* Progress Bar */
+.barre{
+	min-width: 200px;
+	width:400px;
 }

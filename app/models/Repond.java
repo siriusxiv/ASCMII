@@ -11,6 +11,11 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
 
+/**
+ * Contient les réponses d'un élève à une question de type 3 ou 4.
+ * @author Admin
+ *
+ */
 @Entity
 public class Repond extends Model {
 	@Id
@@ -44,6 +49,12 @@ public class Repond extends Model {
 		}
 	}
 	
+	/**
+	 * Vérifie si la réponse est déjà dans une liste de couple "Répond,Integer".
+	 * Voir CoupleRI pour plus de détails.
+	 * @param list
+	 * @return La position de la réponse dans la liste si elle est déjà présente, -1 sinon.
+	 */
 	public int isIn(List<CoupleRI> list){
 		int i=0;
 		while(i<list.size()){

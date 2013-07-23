@@ -37,7 +37,11 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
-
+/**
+ * Contient les élèves
+ * @author Admin
+ *
+ */
 @Entity
 public class Eleve extends Model {
 	@Id
@@ -45,6 +49,10 @@ public class Eleve extends Model {
 	
 	@Required
 	public String mail;
+	@Required
+	public String prenom;
+	@Required
+	public String nom;
 	
 	@OneToMany(targetEntity = Lien.class)
 	public List<Lien> liens;
@@ -63,6 +71,10 @@ public class Eleve extends Model {
 		el.save();
 	}
 	
+	/**
+	 * On doit supprimer d'autres éléments en cascade si on supprime un élève/
+	 * @param ine
+	 */
 	public static void removeEleve(String ine){
 		Eleve el = Eleve.find.byId(ine);
 		if(el != null){

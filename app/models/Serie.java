@@ -37,7 +37,11 @@ import play.data.format.*;
 import play.data.validation.*;
 import play.data.validation.Constraints.*;
 
-
+/**
+ * Contient les séries
+ * @author Admin
+ *
+ */
 @Entity
 public class Serie extends Model{
 	@Id
@@ -63,6 +67,12 @@ public class Serie extends Model{
 	public static Finder<Long,Serie> find = new Finder<Long,Serie>(Long.class, Serie.class);
 	
 	
+	/**
+	 * Renvoie la liste des séries appartenant à une séance donnée.
+	 * Le tout est ensuite trié (questions et réponses).
+	 * @param id : id de la séance pour laquelle on désire avoir les séries
+	 * @return liste de séries.
+	 */
 	public static List<Serie> page(Long id){
 		Seance seance = Seance.find.ref(id);
 		List<Serie> series = find.where().eq("seance",seance).orderBy("position").findList();
@@ -77,8 +87,18 @@ public class Serie extends Model{
 	
 	public static void addSerie(Serie se){
 		se.save();
+		for(Question q : se.questions){
+			q.save();
+			for(Reponse r: q.reponses){
+				r.save();
+			}
+		}
 	}
 	
+	/**
+	 * Suppression en cascade nécessaire.
+	 * @param id
+	 */
 	public static void removeSerie(Long id){
 		Serie se = Serie.find.byId(id);
 		if(se != null){
@@ -94,7 +114,11 @@ public class Serie extends Model{
 		}
 	}
 	
-	
+	/**
+	 * Renvoie la position maximale parmi la position de toutes les séries.
+	 * S'il n'y a aucune série dans la base de donnée, renvoie -1.
+	 * @return
+	 */
 	public static Long positionMax(){
 		List<Serie> serieTemp = Serie.find.orderBy("position desc").findList();
 		if(!serieTemp.isEmpty()){
@@ -104,6 +128,11 @@ public class Serie extends Model{
 		}
 	}
 	
+	/**
+	 * Trouve une id non utilisée. Cela permet de rajouter un série en choisissant son ID
+	 * plutôt que de laisser faire ebean. Cela peut parfois être utile.
+	 * @return ID non utilisée.
+	 */
 	public static Long idNonUtilisee(){
 		List<Serie> serieTemp = Serie.find.orderBy("id desc").findList();
 		if(!serieTemp.isEmpty()){
