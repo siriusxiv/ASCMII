@@ -1,0 +1,41 @@
+@(resultats: List[Resultat])
+@main("ASCMII - Vous avez déjà répondu à cette série de question"){
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
+ </head>
+ <h1>ASCMII</h1>
+	<p>Vous avez déjà répondu à cette série de questions !</p>
+	
+  <ol>@for(resultat <- resultats){
+	<li><p>@Html(resultat.question.texte)</p></li>
+	@if(resultat.question.typeQ.id==1){
+		@for(reponse <- resultat.question.reponses){
+			@if(resultat.reponsesChoisies.contains(reponse.position)){
+				<input type="radio" name="@resultat.question.id" value="" style="padding:0px 0px 0px 50px" checked disabled> @if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="35px">} @reponse.texte<br>
+			}else{
+				<input type="radio" name="@resultat.question.id" value="" style="padding:0px 0px 0px 50px" disabled> @if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="35px">} @reponse.texte<br>
+			}
+		}
+	}
+	@if(resultat.question.typeQ.id==2){
+		@for(reponse <- resultat.question.reponses){
+			@if(resultat.reponsesChoisies.contains(reponse.position)){
+				<input type="checkbox" style="padding:0px 0px 0px 50px" checked disabled> @if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="35px">} @reponse.texte<br>
+			}else{
+				<input type="checkbox" style="padding:0px 0px 0px 50px" disabled> @if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="35px">} @reponse.texte<br>
+			}
+		}
+	}
+	@if(resultat.question.typeQ.id==3){
+		<p>Votre réponse : @resultat.repond.texte</p>
+	}
+	@if(resultat.question.typeQ.id==4){
+		<p>Votre réponse : @resultat.repond.texte</p>
+	}
+ }
+ </ol>
+ <p>Vous avez déjà répondu à cette série !</p>
+</html>
+}

@@ -1,0 +1,81 @@
+@(seance: Seance, listSerie: List[Serie])
+@main("ASCMII - Démarrer les séries"){
+
+ <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/vote.css")">
+	<h1>ASCMII</h1>
+	<form action="@routes.Application.logOut()" method="POST" class="logout">
+		<button type="submit">Se déconnecter</button>
+	</form>
+	<h2 class="intituleDeLaSeance">@seance.intitule</h2>
+	<h2>Liste des questions pour la séance de @seance.matiere le @seance.date.format("dd/MM/yyyy à H") h</h2>
+	
+		<table class="liste">
+			<tr>
+			<th class="liste">Liste des séries</th><th class="liste">Actions</th>
+			<tr>
+		@for(serie <- listSerie){
+			<tr>
+				<td class="liste">@serie.nom</td>
+				<td class="liste">
+					@if(serie.date_ouverte==null){
+						@if(serie.liens.isEmpty()){
+						<button type="submit" disabled>Lancer la série</button>
+						}else{
+						<form action="/prof/lancer/@serie.id" method="POST" style="display:inline">
+							<button type="submit">Lancer la série</button>
+						</form>
+						}
+					}else{
+						<form action="/prof/voir/@serie.id" method="GET" style="display:inline">
+							<button type="submit">Résultats</button>
+						</form>
+						<form action="/prof/reset/@serie.id" method="POST" style="display:inline">
+							<button type="submit">Reset</button>
+						</form>
+					}
+				</td>
+			</tr>
+				@*<!-- @for(question <- serie.questions){
+					<tr>
+						<td style="padding:0px 0px 0px 40px">@question.titre</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td style="padding:0px 0px 0px 60px">@question.typeQ.typeQ</td>
+						<td></td>
+					</tr>
+					@for(reponse <- question.reponses){
+						<tr>
+							<td style="padding:0px 0px 0px 60px">@reponse.texte</td>
+							<td></td>
+						</tr>
+					}
+				}
+				-->*@
+	}
+	</table>
+	<br>
+	@if(!listSerie.isEmpty()){
+		@if(seance.hasEmptySerie()){
+			<p class="explications">Des séries sont vides à l'intérieur de cette séance, veuillez soit la supprimer, soit y ajouter des questions.</p>
+		}else{
+			@if(listSerie.get(0).liens.isEmpty()){@*Pour vérifier si le mail a déjà été envoyé au non (dans ce cas, les liens sont générés)*@
+			<form action="/prof/vote/send/@seance.id" method="POST" style="padding:1px 0px 0px 150px;">
+				<button type="submit">Envoyer le mail</button>
+			</form>
+			}else{<form id="mail" action="/prof/vote/send/@seance.id" method="POST"></form><span style="padding:1px 0px 0px 150px;"><button onClick="sendMail()">Envoyer le mail</button></span>}
+			<p class="explications">Le bouton "Envoyer le mail" sert à envoyer le mail contenant les liens vers les questions à tous les élèves.<br>
+			Cependant, sachez que le mail sera envoyé automatiquement 15 minutes avant l'amphi. Le mail doit être envoyé pour pouvoir lancer la série.<br>
+			Une fois que le mail sera envoyé, vous ne pourrez plus modifier ni les séries, ni les questions.</p>
+		}
+	}
+	<form action="/prof/seances" method="GET"><button type="submit">Retour</button></form>
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script>
+function sendMail(){
+	if(confirm("Il semblerait que les mails aient déjà été envoyés. Êtes-vous sûr(e) de vouloir continuer ?")){
+		$('#mail').submit();
+	}
+}
+</script>
+}

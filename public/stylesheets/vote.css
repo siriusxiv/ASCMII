@@ -1,0 +1,39 @@
+h1{
+	padding:1px 0px 0px 50px;
+}
+
+html{
+	background-color:lightblue;
+}
+
+body{
+	background-color:#b0c4de;
+	text-align:left;
+	font-family:"Comic Sans MS",Times,serif;
+	width:800px;
+	margin-left:auto;
+	margin-right:auto;
+	padding:50px 50px 50px 50px;
+	border:5px solid rgb(170,170,170);
+}
+table.liste{
+	border-collapse:collapse;
+	border:1px solid black;
+}
+
+th.liste{
+	text-align:center;
+}
+
+td.liste, th.liste{
+	padding:1px 3px 1px 3px; /*padding : haut droite bas gauche*/
+	border:1px solid black;
+}
+
+form.logout{
+	padding:1px 0px 0px 400px;
+}
+
+p.explications{
+	font-size:80%;
+}

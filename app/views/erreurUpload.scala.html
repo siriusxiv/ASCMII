@@ -1,0 +1,18 @@
+@(message: String)
+@main("Erreur d'upload"){
+<body onLoad="redirect();">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
+	<h2>Erreur d'upload</h2>
+	<p>Le fichier que vous avez uploadé est sûrement invalide. Vous allez être redirigé dans quelques secondes</p>
+<form id="form" action="/prof/gerer" method="GET"></form>
+</body>
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script>
+function redirect(){
+	setTimeout('retour();',3000);
+}
+function retour(){
+	$('#form').submit();
+}
+</script>
+}

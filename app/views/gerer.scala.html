@@ -1,0 +1,148 @@
+@(seance: Seance, listSerie: List[Serie], message: String)
+@main("ASCMII - Liste des questions"){
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
+	<h1>ASCMII</h1>
+	<form action="@routes.Application.logOut()" method="POST" class="logout">
+		<button type="submit">Se déconnecter</button>
+	</form>
+	<p class="log">@message</p>
+	<h2 class="intituleDeLaSeance">@seance.intitule</h2>
+	<h2>Liste des questions pour la séance de @seance.matiere le @seance.date.format("dd/MM/yyyy à H") h</h2>
+	
+	@if(listSerie.isEmpty()){
+	<p> Aucune série de question n'est pour l'instant définie. Cliquez sur le bouton ci-dessous pour en créer une.</p>
+	}else{
+		<table class="listeSerie">
+		@for(serie <- listSerie){
+			<tr>
+				<td class="left serie">
+					<form id="s@serie.id" action="/prof/gerer/del/@serie.id" method="POST" style="display:inline"></form>
+						<button onClick="supprimerSerie(@serie.id)" class="suppr">X</button>
+				</td>
+				<td class="serie">@serie.nom</td>
+				<td class="right serie">
+					@if(listSerie.length!=1){
+						<form action="/prof/gerer/down/@serie.id" method="POST" style="display:inline">
+							<input type="image" src="/assets/images/upgrade_misc.png" title="Descendre" onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Descendre la série d\'un cran')">
+						</form>
+						<form action="/prof/gerer/up/@serie.id" method="POST" style="display:inline">
+							<input type="image" src="/assets/images/uninstall-product.png" title="Monter" onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Monter la série d\'un cran')">
+						</form>
+					}else{<img src="/assets/images/upgrade_misc-grey.png" title="Descendre"> <img src="/assets/images/uninstall-product-grey.png" title="Monter">}
+					@if(serie.date_ouverte==null){
+					<form action="/prof/gerer/addquestion/@serie.id" method="POST" style="display:inline">
+						<input type="image" src="/assets/images/db_add-2.png" title="Ajouter une question à la série"  onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Ajouter une question')">
+					</form>
+					}else{<button type="submit" disabled>Ajouter une question à la série</button>}
+					@if(!serie.questions.isEmpty()){
+					<form action="/prof/export/@serie.id" method="POST" style="display:inline">
+						<input type="image" src="/assets/images/download-3.png" title="Exporter" onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Exporter la série')">
+					</form>
+					}else{<img src="/assets/images/download-3-grey.png" title="Exporter">}
+					<span class="message" id="t@serie.id">Gestion de la série</span>
+				</td>
+			</tr>
+				@for(question <- serie.questions){
+					<tr>
+						<td class="left"></td>
+						<td class="question"><form id="q@question.id" action="/prof/gerer/delquestion/@question.id" method="POST" style="display:inline"></form>
+								<button onClick="supprimerQuestion(@question.id)" class="suppr">X</button> @question.titre
+						</td>
+						<td class="right question">
+							@if(serie.date_ouverte==null){
+							<form action="/prof/gerer/editquestion/@question.id" method="POST" style="display:inline">
+								<input type="image" src="/assets/images/edit-find-and-replace-2.png" title="Editer la question" onMouseOut="$('#spanq'+@question.id).html('Gestion de la question')" onMouseOver="$('#spanq'+@question.id).html('Editer la question')">
+							</form>
+							}else{<img src="/assets/images/edit-find-and-replace-2-grey.png" title="Editer la question">}
+							@if(serie.questions.length!=1){
+							<form action="/prof/gerer/downquestion/@question.id" method="POST" style="display:inline">
+								<input type="image" src="/assets/images/upgrade_misc.png" title="Descendre la question" onMouseOut="$('#spanq'+@question.id).html('Gestion de la question')" onMouseOver="$('#spanq'+@question.id).html('Descendre la question d\'un cran')">
+							</form>
+							<form action="/prof/gerer/upquestion/@question.id" method="POST" style="display:inline">
+								<input type="image" src="/assets/images/uninstall-product.png" title="Monter la question" onMouseOut="$('#spanq'+@question.id).html('Gestion de la question')" onMouseOver="$('#spanq'+@question.id).html('Monter la question d\'un cran')">
+							</form>
+							}else{<img src="/assets/images/upgrade_misc-grey.png" title="Descendre"> <img src="/assets/images/uninstall-product-grey.png" title="Monter">}
+							 <span class="message" id="spanq@question.id">Gestion de la question</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="left"></td>
+						<td style="padding:0px 0px 0px 40px">@question.typeQ.typeQ</td>
+						<td></td>
+					</tr>
+					@for(reponse <- question.reponses){
+						<tr>
+							<td class="left">@if(reponse.image!=null){<img class="reponse" src="/assets/uploads/@reponse.image.fileName">}</td>
+							<td class="reponseText reponse">@reponse.texte</td>
+							<td class="right reponse">@if(reponse.image==null){
+								<img class="insertImage" src="/assets/images/insert-image-3.png" title="Ajouter une image à la réponse" onClick="addImage(@reponse.id)">
+								<button class="insertImage" onClick="addImage(@reponse.id)">Ajouter une image à la réponse</button>
+								<form id="r@reponse.id" action="/prof/uploadimage/@reponse.id" method="POST" enctype="multipart/form-data" style="display:none">
+									<input type="file" name="image">
+								<button type="submit">Uploader</button>
+								</form>}else{
+								<img class="insertImage" src="/assets/images/insert-image-2.png" title="Ajouter une image à la réponse" onClick="addImage(@reponse.id)">
+								<form action="/prof/upload/del/@reponse.id" method="POST" style="display:inline">
+									<button type="submit">Supprimer l'image</button>
+								</form>
+								}
+							</td>
+						</tr>
+					}
+				}
+		}
+		</table>
+	}
+	<p>
+		<form action="/prof/seances" method="GET" style="display:inline"><button type="submit">Retour</button></form>
+		<div 
+		@if(seance.series.isEmpty() || seance.series.get(0).liens.isEmpty()){style="padding:0px 0px 0px 250px;display:inline">
+			<button onClick="addSerie()">Ajouter une nouvelle série de questions</button>
+		}else{>
+			Vous avez déjà envoyé le mail, vous ne pouvez donc plus ajouter des séries de question.
+		}
+		</div>
+	</p>
+	
+	<div id="new_serie" style="display:none">
+		<h2>Création d'une nouvelle séance :</h2>
+		<p>Entrez le nom de la nouvelle série :</p>
+		<form action="@routes.Application.addSerie(seance.id)" method="POST">
+		<input type="text" name="nom" size="40">
+		<button type="submit">Valider</button>
+		</form>
+		<p>OU</p>
+		<p>Importez une série depuis votre ordinateur :</p>
+		@helper.form(action = routes.Export.uploadSerie(seance.id), 'enctype -> "multipart/form-data"){
+		<input type="file" name="fichier">
+		<button type="submit">Valider</button>
+		}
+	</div>
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script>
+function supprimerSerie(serie_id){
+	if(confirm("Attention ! Si vous supprimer cette série, toutes les questions à l'intérieur seront supprimées ! Confirmez-vous votre décision ?")){
+		$('#s'+serie_id).submit();
+	}
+}
+function supprimerQuestion(question_id){
+	if(confirm("Voulez-vous vraiment supprimer cette question ?")){
+		$('#q'+question_id).submit();
+	}
+}
+function addSerie(){
+	if(document.getElementById("new_serie").style.display == "none"){
+		document.getElementById("new_serie").style.display = "block";
+	} else {
+		document.getElementById("new_serie").style.display = "none";
+	}
+}
+function addImage(reponse_id){
+	if(document.getElementById('r'+reponse_id).style.display == 'none'){
+		document.getElementById('r'+reponse_id).style.display = 'inline';
+	} else {
+		document.getElementById('r'+reponse_id).style.display = 'none';
+	}
+}
+</script>
+}

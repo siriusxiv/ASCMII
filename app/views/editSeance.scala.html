@@ -1,0 +1,72 @@
+@(seance: Seance)
+
+<html>
+ <head>
+  <title>ASCMII - Editer la séance</title>
+  <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/options.png")">
+  <link rel="icon" type="image/png" href="@routes.Assets.at("images/options.png")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+ </head>
+ <body>
+ 	<h1>ASCMII</h1>
+	<form action="/prof/seances/edit/put/@seance.id" method="POST">
+		<h2>Edition de @seance.intitule</h2>
+		<table>
+			<tbody>
+			<tr>
+				<td>Matière :</td>
+				<td><input type="text" size="20" name="matiere" value="@seance.matiere"></td>
+			</tr>
+			<tr>
+				<td>Intitulé de séance :</td>
+				<td><input type="text" size="20" name="intitule" value="@seance.intitule"></td>
+			</tr>
+			</tr>
+			</tbody>
+		</table>
+			<table>
+			<tr>
+				<td>Date et heure :</td>
+				<td><select name="day">
+					@for(i: Int <- 1 to 31){
+					<option value="@i" @if(i==Integer.parseInt(seance.date.format("d"))){ selected="selected"}>@i</option>
+				}
+				</td>
+				<td><select name="month">
+				@for(i: Int <- 1 to 12){
+					<option value="@i" @if(i==Integer.parseInt(seance.date.format("M"))){ selected="selected"}>
+					@{i match {
+						case 1 => "Janvier"
+						case 2 => "Février"
+						case 3 => "Mars"
+						case 4 => "Avril"
+						case 5 => "Mai"
+						case 6 => "Juin"
+						case 7 => "Juillet"
+						case 8 => "Août"
+						case 9 => "Septembre"
+						case 10 => "Octobre"
+						case 11 => "Novembre"
+						case 12 => "Décembre"
+					}}
+					</option>
+				}
+				</td>
+				<td><select name="year">
+					@for(i: Int <- 2013 to 2019){
+						<option value="@i" @if(i==Integer.parseInt(seance.date.format("yyyy"))){ selected="selected"}>@i</option>
+					}
+				</td>
+				<td>à</td>
+				<td><select name="hour">
+					@for(i: Int <- 8 to 18){
+						<option value="@i" @if(i==Integer.parseInt(seance.date.format("H"))){ selected="selected"}>@{i+"h"}</option>
+					}
+				</td>
+			</tr>
+			</table>
+		<br>
+		<button type="submit">Valider</button>
+	</form>
+ </body>
+</html>

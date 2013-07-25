@@ -1,0 +1,116 @@
+@(resultats : List[Resultat], serie : Serie, serieSuivante : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
+@main("ASCMII - Résultats de la série"){
+<html>
+ <head>
+  <title>ASCMII</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/resultats.css")">
+  <link rel="icon"  type="image/png" href="@routes.Assets.at("images/favicon.png")" />
+ </head>
+ <body>
+	<h1>ASCMII</h1>
+	<form action="@routes.Application.logOut()" method="POST" class="logout">
+		<button type="submit">Se déconnecter</button>
+	</form>
+	<p>La série @serie.nom est terminée.<br></p>
+	<br>
+	<p>@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>
+	<div id="jauge" class="barre"></div>
+	<ol>@for(resultat <- resultats){
+		<li>@Html(resultat.question.texte)</li>
+		@if(resultat.question.typeQ.id==1 || resultat.question.typeQ.id==2){
+		<table>
+			<td><div id="c@resultat.question.id" style="min-width: 200px; position: left; height: 400px; width:600px; padding:10px;"></div></td>
+			<td><div class="resultats">
+			<ol>@for(reponse <- resultat.question.reponses){
+				@if(reponse.image!=null){<li><img class="resultats" src="/assets/uploads/@reponse.image.fileName" height="35px"></li>}
+			}</ol>
+			</div></td>
+		</table>}
+		@if(resultat.question.typeQ.id==3 || resultat.question.typeQ.id==4){
+			<table class="reponses">
+			@for(i <- 0 to (resultat.listRepond.length-1)){
+				<tr>
+					<td class="reponses">@resultat.listRepond.get(i).texte</td><td class="reponsesNombre">@resultat.reponsesChoisies.get(i)</td>
+				</tr>
+			}
+			</table>
+			<button type="submit" onClick="popup(@resultat.question.id)">Voir liste exhaustive</button><br>
+		}
+	}</ol>
+	<form action="/prof/vote/@serie.seance.id" method="POST" style="display:inline">
+		<button type="submit">Retour à la liste des séries</button>
+	</form>
+	@if(serieSuivante!=null){
+	<form action="/prof/lancer/@serieSuivante.id" method="POST" style="display:inline">
+		<button type="submit">Démarrer la série suivante</button>
+	</form>
+	}else{<button type="submit" disabled>Démarrer la série suivante</button>}
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script src="@routes.Assets.at("/javascripts/highcharts.js")"></script>
+<script src="@routes.Assets.at("/javascripts/exporting.js")"></script>
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery-ui.css")" />
+<script src="@routes.Assets.at("/javascripts/jquery-ui.js")"></script>
+<script>
+function popup(question_id){
+	window.open('/prof/exhaustive/'+question_id);
+}
+</script>
+<script>
+@for(resultat <- resultats){
+@if(resultat.question.typeQ.id==1 || resultat.question.typeQ.id==2){
+$(function () {
+        $('#c@resultat.question.id').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '@resultat.question.titre'
+            },
+            xAxis: {
+                categories: [@for(i:Int <- 0 to (resultat.question.reponses.length-2)){"@Html(resultat.question.reponses.get(i).texte)",} "@Html(resultat.question.reponses.get(resultat.question.reponses.length-1).texte)"],
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Nombre de réponses',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' personnes'
+            },
+            legend: {
+				enabled: false
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Nombre de réponse',
+                data: [@for(i:Int <- 0 to (resultat.reponsesChoisies.length-2)){@resultat.reponsesChoisies.get(i),} @resultat.reponsesChoisies.get(resultat.reponsesChoisies.length-1)]
+            }]
+        });
+    });
+}}
+$(function() {
+		$( "#jauge" ).progressbar({
+			value: @{nombreDeReponses*100/nombreDeReponsesMAX}
+		});
+	});
+</script>
+ </body>
+</html>
+}
