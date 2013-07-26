@@ -148,4 +148,20 @@ public class Serie extends Model implements Comparator<Serie>{
 			return 1L;
 		}
 	}
+	
+	/**
+	 * Renvoie si oui ou non la série est lançable.
+	 * @return VRAI ou FAUX
+	 */
+	public boolean launchable(){
+		return !liens.isEmpty() && !questions.isEmpty() && date_ouverte==null;
+	}
+	
+	/**
+	 * Renvoie si oui ou non la série est terminée.
+	 * @return VRAI ou FAUX
+	 */
+	public boolean isNotFinished(){
+		return date_fermeture==null || date_fermeture.after(Calendar.getInstance().getTime());
+	}
 }

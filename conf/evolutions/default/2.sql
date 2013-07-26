@@ -10,8 +10,8 @@ INSERT INTO type_question(id,type_q) VALUES
 (4,'Question à réponse libre de type "nombre"')
 ;
 
-INSERT INTO professeur(username) VALUES
-('mprofess');
+INSERT INTO professeur(username,mail,prenom,nom) VALUES
+('mprofess','malik.boussejra@eleves.ec-nantes.fr','Professeur','Numéro1');
 
 INSERT INTO seance(id,date,matiere,intitule,professeur_username) VALUES
 (1,'2014/01/31 08:00:00','ASCMII','Test ASCMII','mprofess'),

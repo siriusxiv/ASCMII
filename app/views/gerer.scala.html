@@ -1,3 +1,32 @@
+@****************************************************************************
+
+Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors
+  may be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************************@
+
 @(seance: Seance, listSerie: List[Serie], message: String)
 @main("ASCMII - Liste des questions"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
@@ -17,7 +46,8 @@
 			<tr>
 				<td class="left serie">
 					<form id="s@serie.id" action="/prof/gerer/del/@serie.id" method="POST" style="display:inline"></form>
-						<button onClick="supprimerSerie(@serie.id)" class="suppr">X</button>
+						@if(serie.date_ouverte==null){<button onClick="supprimerSerie(@serie.id)" class="suppr">X</button>
+						}else{<button disabled class="suppr">X</button>}
 				</td>
 				<td class="serie">@serie.nom</td>
 				<td class="right serie">
@@ -33,7 +63,7 @@
 					<form action="/prof/gerer/addquestion/@serie.id" method="POST" style="display:inline">
 						<input type="image" src="/assets/images/db_add-2.png" title="Ajouter une question à la série"  onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Ajouter une question')">
 					</form>
-					}else{<button type="submit" disabled>Ajouter une question à la série</button>}
+					}else{<img src="/assets/images/db_add-2-grey.png" title="Ajouter une question à la série">}
 					@if(!serie.questions.isEmpty()){
 					<form action="/prof/export/@serie.id" method="POST" style="display:inline">
 						<input type="image" src="/assets/images/download-3.png" title="Exporter" onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Exporter la série')">
@@ -46,7 +76,7 @@
 					<tr>
 						<td class="left"></td>
 						<td class="question"><form id="q@question.id" action="/prof/gerer/delquestion/@question.id" method="POST" style="display:inline"></form>
-								<button onClick="supprimerQuestion(@question.id)" class="suppr">X</button> @question.titre
+							@if(serie.date_ouverte==null){<button onClick="supprimerQuestion(@question.id)" class="suppr">X</button>}else{<button disabled class="suppr">X</button>} @question.titre
 						</td>
 						<td class="right question">
 							@if(serie.date_ouverte==null){
@@ -121,7 +151,7 @@
 <script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
 <script>
 function supprimerSerie(serie_id){
-	if(confirm("Attention ! Si vous supprimer cette série, toutes les questions à l'intérieur seront supprimées ! Confirmez-vous votre décision ?")){
+	if(confirm("Attention ! Si vous supprimez cette série, toutes les questions à l'intérieur seront supprimées ! Confirmez-vous votre décision ?")){
 		$('#s'+serie_id).submit();
 	}
 }

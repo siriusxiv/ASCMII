@@ -53,18 +53,23 @@ public class Events {
 	 * @param seance
 	 */
 	static void sendMailAndCreateLinks(Seance seance){
-		List<Eleve> eleves = find(seance);//pour l'instant, on va supposer que tous les élèves doivent répondre à la série de question
+		List<Eleve> eleves = find(seance);
 		for(Eleve e : eleves){
 			for(Serie s : seance.series){
 				Lien.addLien(e, s);
 			}
 			Mail mail = new Mail(e,seance);
-			mail.sendMail();//on envoit le mail
+			mail.sendMail();//on envoie le mail
 		}
+		//On envoie aussi un mail au professeur pour confirmer l'envoie du mail :
+		Mail mail = new Mail(seance);
+		mail.sendMail();
 	}
 	
 	/**
-	 * Cette fonction trouve les élèves concernés par telle séance
+	 * Cette fonction trouve les élèves concernés par telle séance.
+	 * Pour l'instant, on va supposer que tous les élèves doivent répondre
+	 * à la série de question
 	 * @param seance
 	 * @return la liste des élèves concernés
 	 */

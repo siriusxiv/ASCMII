@@ -73,6 +73,19 @@ public class Mail{
 	}
 	
 	/**
+	 * Permet de créer le mail qui sera envoyé à un professeur pour confirmer l'envoi du mail.
+	 * @param seance
+	 */
+	public Mail(Seance seance){
+		DateFormat df = new SimpleDateFormat("dd/MM");
+		sujet="[ASCMII] Confirmation de l'envoi du mail concernant le cours de "+seance.matiere+" le "+df.format(seance.date);
+		to=seance.professeur.mail;
+		recipient=seance.professeur.prenom+" "+seance.professeur.nom+" <"+to+">";
+		from="ASCMII <ascmii.test@gmail.com>";
+		contenu="<html>Bonjour,<br> concernant la séance de "+seance.matiere+" le "+df.format(seance.date)+", le mail contenant les liens pour répondre aux questions a été envoyé à tous les élèves suivant ce cours.<br>Bonne journée.<br><br><span style=\"font-size:75%;\">Ce mail est un message automatique, il ne sert à rien d'y répondre.</span></html>";
+	}
+	
+	/**
 	 * Envoie le mail
 	 */
 	public void sendMail(){

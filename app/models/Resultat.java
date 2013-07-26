@@ -161,6 +161,55 @@ public class Resultat implements Comparator<Resultat>{
 	}
 	
 	/**
+	 * Comme la fonction ci-dessus mais est renvoie un résultat exhaustif pour les questions de type 3 ou 4
+	 * @param serie
+	 * @return Renvoie la liste des résultats de manière exhaustive
+	 */
+	public static List<Resultat> listeResultatExhaustif(Serie serie){
+		List<Resultat> resultats = new ArrayList<Resultat>();
+		for(Question q : serie.questions){
+			Resultat resultat = new Resultat(q);
+			if(q.typeQ.id==1 || q.typeQ.id==2){
+				List<Integer> rChoisies = new ArrayList<Integer>();
+				//On commence par trier les réponses dans l'ordre :
+				Collections.sort(q.reponses,new Reponse());
+				int nombreTotalDeRepondants=0;
+				for(Reponse r : q.reponses){
+					//on compte le nombre de personnes ayant répondue à la question r et on les ajout dans rChoisies.
+					int nombreDeRepondantsACetteReponse = Choisit.find.where().eq("reponse",r).findList().size();
+					rChoisies.add(nombreDeRepondantsACetteReponse);
+					nombreTotalDeRepondants+=nombreDeRepondantsACetteReponse;
+				}
+				resultat.nombreDeRepondants=nombreTotalDeRepondants;
+				resultat.reponsesChoisies=rChoisies;
+			}else if(q.typeQ.id==3 || q.typeQ.id==4){
+				//On doit trouver toutes les réponses avec leur nombre respectif dans rChoisies
+				List<Repond> listRepond = Repond.find.where().eq("question", q).findList();
+				List<CoupleRI> listFinale = new ArrayList<CoupleRI>();
+				for(Repond r : listRepond){
+					int i;
+					if( (i = r.isIn(listFinale)) >= 0){//Cette réponse à déjà été vue
+						//On incrémente le i-ème élément de listFinale
+						listFinale.set(i, new CoupleRI(r,listFinale.get(i).i+1));
+					}else{//On voit cette réponse pour la première fois
+						//On l'ajoute dans listFinale (avec une seule occurance pour l'instant)
+						listFinale.add(new CoupleRI(r,1));
+					}
+				}
+				//On trie la liste par ordre de réponse du plus grand au plus petit
+				Collections.sort(listFinale,new CoupleRI(new Repond(),0));
+				resultat.nombreDeRepondants=listRepond.size();
+				resultat.distribue(listFinale);
+			}
+			resultats.add(resultat);
+		}
+		//Maintenant, il faut trier les résultats par question
+		Collections.sort(resultats,new Resultat(new Question()));
+		return resultats;
+	}
+	
+	
+	/**
 	 * Prend les réponses et le nombre de réponse dans une liste de couples RI et
 	 * les redistribue dans un objet de classe "Resultat".
 	 * @param listCRI

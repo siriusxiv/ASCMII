@@ -35,6 +35,9 @@ create table lien (
 
 create table professeur (
   username                  varchar(255) not null,
+  mail                      varchar(255),
+  prenom                    varchar(255),
+  nom                       varchar(255),
   constraint pk_professeur primary key (username))
 ;
 

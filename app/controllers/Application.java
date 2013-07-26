@@ -41,6 +41,9 @@ import java.util.*;
 
 /**
  * Cette classe contient toutes les méthodes relatives qui sont appelées par l'intermédiaire des routes.
+ * La plupart des fonctions ici sont très mal écrites car je les ai écrites tout en apprenant le langage.
+ * Il faudrait revoire beaucoup de choses, mais aussi séparer cet énorme classe et plusieurs plus petites
+ * classes par soucis de lisibilité.
  * @author Admin
  *
  */
@@ -641,60 +644,6 @@ public class Application extends Controller {
 	
 	
 	//Vote et Résulats
-	/**
-	 * Cette fonction crée les liens qui permettront aux élèves de répondre aux questions.
-	 * Elle envoie de plus aux élèves le mail contenant ses liens.
-	 * @param id : id de la série pour laquelle on génère les liens
-	 * @return
-	 */
-	public static Result creerLiens(Long id){
-		Seance seance = Seance.find.ref(id);
-		Events.sendMailAndCreateLinks(seance);
-		return voteSeance(id);
-	}
-	/**
-	 * Affiche la page où l'on choisit la manière dont se finira la série juste avant de la lancer
-	 * @param id : id de la série
-	 * @return
-	 */
-	public static Result lancerSerie(Long id){
-		return ok(demarrageSerie.render(Serie.find.ref(id), ""));
-	}
-	/**
-	 * Affiche la page où l'on choisit la manière dont se finira la série juste avant de la lancer
-	 * avec un petit message d'erreur
-	 * @param id : id de la série
-	 * @param log : message d'erreur
-	 * @return
-	 */
-	public static Result lancerSerieLog(Long id, String log){
-		return ok(demarrageSerie.render(Serie.find.ref(id), log));
-	}
-	/**
-	 * Lance la série conformément aux information entrées sur la template demarrageSerie.scala.html.
-	 * @param id : id de la série qui va démarrer
-	 * @return
-	 */
-	public static Result lancerSerie2(Long id){
-		Serie serie = Serie.find.ref(id);
-		if(serie.date_ouverte==null){//Si la série est déjà ouverte, on ne doit rien faire (accessible avec le back du browser)
-			Calendar now = Calendar.getInstance();
-			serie.date_ouverte=now.getTime();
-			DynamicForm info = Form.form().bindFromRequest();
-			if(info.get("fin").equals("finAutomatique")){ //l'utilisateur à sélectionné fin automatique
-				String duree = info.get("duree");
-				if(!Fonctions.isInt(duree)){
-					return lancerSerieLog(id,"La durée spécifiée n'est pas valide !");
-				}else{
-					int dureeSeconde = Integer.parseInt(duree);
-					now.add(Calendar.SECOND, dureeSeconde);
-					serie.date_fermeture = now.getTime();
-				}
-			}
-			serie.save();
-		}
-		return redirect(routes.Application.voirResultats(id));
-	}
 	/**
 	 * Affiche les résultats alors que les élèves sont en train de répondre. La page se rafraîchi au fur et à mesure
 	 * @param serie_id

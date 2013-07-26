@@ -45,6 +45,16 @@ public class Professeur extends Model {
 	@Id
 	public String username;
 	
+	@Required
+	public String mail;
+	
+	@Required
+	public String prenom;
+	
+	@Required
+	public String nom;
+	
+	
 	public static Finder<String,Professeur> find = new Finder<String,Professeur>(String.class, Professeur.class);
 
 

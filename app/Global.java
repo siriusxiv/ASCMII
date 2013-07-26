@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************/
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import play.Application;

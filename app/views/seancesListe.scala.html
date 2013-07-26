@@ -1,24 +1,35 @@
+@****************************************************************************
+
+Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors
+  may be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************************@
+
 @(listSeance: List[Seance], log: String)
 @main("ASCMII - Les séances programmées"){
-
-<!DOCTYPE html>
-
-<script>
-function addSeance(){
-	if(document.getElementById("new_seance").style.display == "none"){
-		document.getElementById("new_seance").style.display = "block";
-	} else {
-		document.getElementById("new_seance").style.display = "none";
-	}
-}
-
-</script>
-
-<html>
- <head>
-  <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
- </head>
 	<h1>ASCMII</h1>
 	<form action="@routes.Application.logOut()" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
@@ -44,25 +55,25 @@ function addSeance(){
 				<td class="liste">@seance.intitule</td>
 				<td class="liste right">
 						<form action="@routes.Application.displayEditSeance(seance.id)" method="POST" style="display:inline">
-							<input type="image" src="/assets/images/edit-find-and-replace-2.png" title="Editer" onMouseOut="$('#t'+@seance.id).html('Choisissez quoi faire')" onMouseOver="$('#t'+@seance.id).html('Editer la séance')">
+							<input type="image" src="/assets/images/edit-find-and-replace-2.png" title="Editer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Editer la séance')">
 						</form>
 						<form action="@routes.Application.gererSeance(seance.id)" method="POST" style="display:inline">
-							<input type="image" src="/assets/images/view-list-text-2.png" title="Gérer" onMouseOut="$('#t'+@seance.id).html('Choisissez quoi faire')" onMouseOver="$('#t'+@seance.id).html('Gérer la séance')">
+							<input type="image" src="/assets/images/view-list-text-2.png" title="Gérer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Gérer la séance')">
 						</form>
 						@if(!seance.series.isEmpty()){
 						<form action="@routes.Application.voteSeance(seance.id)" method="POST" style="display:inline">						
-							<input type="image" src="/assets/images/view-pim-tasks.png" title="Vote et résultat" onMouseOut="$('#t'+@seance.id).html('Choisissez quoi faire')" onMouseOver="$('#t'+@seance.id).html('Vote et résultat')">
+							<input type="image" src="/assets/images/view-pim-tasks.png" title="Vote et résultats" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Vote et résultats')">
 						</form>
 						}else{<img src="/assets/images/view-pim-tasks-grey.png" title="Vote et résultat">}
 						<form action="@routes.Application.dupliquerSeance(seance.id)" method="POST" style="display:inline">
-							<input type="image" src="/assets/images/view-presentation.png" title="Dupliquer" onMouseOut="$('#t'+@seance.id).html('Choisissez quoi faire')" onMouseOver="$('#t'+@seance.id).html('Dupliquer la séance')">
+							<input type="image" src="/assets/images/view-presentation.png" title="Dupliquer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Dupliquer la séance')">
 						</form>
 						<form action="@routes.Export.downloadSeance(seance.id)" method="POST" style="display:inline">
-							<input type="image" src="/assets/images/download-3.png" title="Exporter la séance" onMouseOut="$('#t'+@seance.id).html('Choisissez quoi faire')" onMouseOver="$('#t'+@seance.id).html('Exporter la séance')">
+							<input type="image" src="/assets/images/download-3.png" title="Exporter la séance" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Exporter la séance')">
 						</form>
 						<form action="@routes.Application.removeSeance(seance.id)" method="POST" style="display:inline" id="f@seance.id"></form>
-						<img src="/assets/images/edit-delete-5.png" title="Supprimer" onClick="supprimer(@seance.id)" style="cursor:pointer;cursor:hand;" onMouseOut="$('#t'+@seance.id).html('Choisissez quoi faire')" onMouseOver="$('#t'+@seance.id).html('Supprimer la séance')">
-						<span class="message" id="t@seance.id">Choisissez quoi faire</span>
+						<img src="/assets/images/edit-delete-5.png" title="Supprimer" onClick="supprimer(@seance.id)" style="cursor:pointer;cursor:hand;" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Supprimer la séance')">
+						<span class="message" id="t@seance.id">Choisir une action</span>
 				</td>
 			</tr>
 		}
@@ -154,10 +165,16 @@ function addSeance(){
 <script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
 <script>
 function supprimer(seance_id){
-	if(confirm("Attention ! Si vous supprimer cette séance, toutes les questions à l'intérieur ainsi que leurs résultats seront supprimés ! Confirmez-vous votre décision ?")){
+	if(confirm("Attention ! Si vous supprimez cette séance, toutes les questions à l'intérieur ainsi que leurs résultats seront supprimés ! Confirmez-vous votre décision ?")){
 		$('#f'+seance_id).submit();
 	}
 }
+function addSeance(){
+	if(document.getElementById("new_seance").style.display == "none"){
+		document.getElementById("new_seance").style.display = "block";
+	} else {
+		document.getElementById("new_seance").style.display = "none";
+	}
+}
 </script>
-</html>
 }

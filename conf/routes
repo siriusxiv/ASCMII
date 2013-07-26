@@ -77,11 +77,13 @@ POST	/prof/uploadimage/:reponse_id	controllers.UploadImages.upload(reponse_id: L
 POST	/prof/upload/del/:reponse_id	controllers.UploadImages.deleteImage(reponse_id: Long)
 
 #prof voteEtRésultats
-POST	/prof/vote/send/:id			controllers.Application.creerLiens(id: Long)
+POST	/prof/vote/send/:id			controllers.LancerSerie.creerLiens(id: Long)
 
-POST	/prof/lancer/:id			controllers.Application.lancerSerie(id: Long)
+POST	/prof/lancer/:id			controllers.LancerSerie.lancerSerie(id: Long)
 
-POST	/prof/lancer2/:id			controllers.Application.lancerSerie2(id: Long)
+POST	/prof/lancer2/:id			controllers.LancerSerie.lancerSerie2(id: Long)
+
+POST	/prof/lancertout/:seance_id	controllers.LancerSerie.lancerToutesLesSeries2(seance_id: Long)
 
 GET		/prof/voir/:id				controllers.Application.voirResultats(id: Long)
 
@@ -92,6 +94,8 @@ POST	/prof/reset/:serie_id		controllers.Application.resetSerie(serie_id: Long)
 GET		/prof/exhaustive/:question_id	controllers.Application.reponsesExhaustives(question_id: Long)
 
 POST	/prof/downloads/:question_id	controllers.Export.downloadExhaustive(question_id: Long)
+
+POST	/prof/vote/csv/:seance_id	controllers.CSV.CSVdownload(seance_id: Long)
 
 #eleve
 GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)

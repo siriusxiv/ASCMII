@@ -1,3 +1,32 @@
+@****************************************************************************
+
+Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors
+  may be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************************@
+
 @(seance: Seance, listSerie: List[Serie])
 @main("ASCMII - Démarrer les séries"){
 
@@ -8,7 +37,11 @@
 	</form>
 	<h2 class="intituleDeLaSeance">@seance.intitule</h2>
 	<h2>Liste des questions pour la séance de @seance.matiere le @seance.date.format("dd/MM/yyyy à H") h</h2>
-	
+	@if(seance.IsAllLaunchable()){
+		<form action="/prof/lancer/0" method="POST">
+			<button type="submit">Lancer toutes les séries non lancées en un coup</button>
+		</form>
+	}else{<button type="submit" disabled>Lancer toutes les séries non lancées en un coup</button>}
 		<table class="liste">
 			<tr>
 			<th class="liste">Liste des séries</th><th class="liste">Actions</th>
@@ -18,12 +51,14 @@
 				<td class="liste">@serie.nom</td>
 				<td class="liste">
 					@if(serie.date_ouverte==null){
-						@if(serie.liens.isEmpty()){
+						@if(!serie.launchable()){
 						<button type="submit" disabled>Lancer la série</button>
+						Série non lançable*
 						}else{
 						<form action="/prof/lancer/@serie.id" method="POST" style="display:inline">
 							<button type="submit">Lancer la série</button>
 						</form>
+						Série non commencée
 						}
 					}else{
 						<form action="/prof/voir/@serie.id" method="GET" style="display:inline">
@@ -32,6 +67,11 @@
 						<form action="/prof/reset/@serie.id" method="POST" style="display:inline">
 							<button type="submit">Reset</button>
 						</form>
+						@if(serie.isNotFinished()){
+							Série en cours...
+						}else{
+							Série terminée
+						}
 					}
 				</td>
 			</tr>
@@ -54,17 +94,18 @@
 				-->*@
 	}
 	</table>
+	<form action="/prof/vote/csv/@seance.id" method="POST"><button>Télécharger le bilan</button></form>
 	<br>
 	@if(!listSerie.isEmpty()){
 		@if(seance.hasEmptySerie()){
-			<p class="explications">Des séries sont vides à l'intérieur de cette séance, veuillez soit la supprimer, soit y ajouter des questions.</p>
+			<p class="explications">*Des séries sont vides à l'intérieur de cette séance, veuillez soit les supprimer, soit y ajouter des questions.</p>
 		}else{
 			@if(listSerie.get(0).liens.isEmpty()){@*Pour vérifier si le mail a déjà été envoyé au non (dans ce cas, les liens sont générés)*@
 			<form action="/prof/vote/send/@seance.id" method="POST" style="padding:1px 0px 0px 150px;">
 				<button type="submit">Envoyer le mail</button>
 			</form>
 			}else{<form id="mail" action="/prof/vote/send/@seance.id" method="POST"></form><span style="padding:1px 0px 0px 150px;"><button onClick="sendMail()">Envoyer le mail</button></span>}
-			<p class="explications">Le bouton "Envoyer le mail" sert à envoyer le mail contenant les liens vers les questions à tous les élèves.<br>
+			<p class="explications">*Le bouton "Envoyer le mail" sert à envoyer le mail contenant les liens vers les questions à tous les élèves.<br>
 			Cependant, sachez que le mail sera envoyé automatiquement 15 minutes avant l'amphi. Le mail doit être envoyé pour pouvoir lancer la série.<br>
 			Une fois que le mail sera envoyé, vous ne pourrez plus modifier ni les séries, ni les questions.</p>
 		}

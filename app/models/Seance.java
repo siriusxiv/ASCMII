@@ -153,4 +153,19 @@ public class Seance extends Model {
 		}
 	}
 	
+	/**
+	 * Vérifie s'il y a au moins une série lançable dans la séance
+	 * Utile pour le bouton "Lancer toutes les séries d'un coup".
+	 * @return VRAI ou FAUX
+	 */
+	public boolean IsAllLaunchable(){
+		for(Serie serie : series){
+			if(serie.launchable()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 }

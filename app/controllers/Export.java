@@ -40,7 +40,6 @@ import java.util.Collections;
 
 import models.Image;
 import models.Lien;
-import models.Professeur;
 import models.Question;
 import models.Reponse;
 import models.Resultat;

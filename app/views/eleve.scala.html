@@ -1,10 +1,37 @@
+@****************************************************************************
+
+Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors
+  may be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************************@
+
 @(lien: Lien,message: String)
 @main("ASCMII - Réponse"){
-<html>
- <head>
-  <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
- </head>
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/jquery.countdown.css")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/countdown.css")">
  <body onLoad="testFin()">
  <h1>ASCMII</h1>
  <h2 class="avertissement">@message</h2>
@@ -13,6 +40,10 @@
  }else{
 	<p>M./Mme @lien.eleve.prenom @lien.eleve.nom, vous devez répondre aux questions suivantes :</p>
  }
+	@if(lien.serie.date_fermeture!=null){
+		<p>Vous noterez que votre temps est limité. La série se termine à @lien.serie.date_fermeture.format("hh:mm:ss"). Plus que :</p>
+		<div id="countdown" class="compteur"></div>
+	}
  <form action="/eleve/reponse/@lien.chemin" method="POST">
  <ol>@for(question <- lien.serie.questions){
 	<li><p>@Html(question.texte)</p></li>
@@ -36,8 +67,11 @@
  <p>NB : Une fois que vous aurez cliqué sur "OK", votre choix sera final</p>
  <button type="submit">OK</button><!-- Envoyer le chemin du lien pour connaître l'id des questions auxquelles l'élève repond. -->
 </form>
-@if(lien.serie.date_fermeture!=null){
+<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
+<script src="@routes.Assets.at("/javascripts/jquery.countdown.min.js")"></script>
+<script src="@routes.Assets.at("/javascripts/jquery.countdown-fr.js")"></script>
 <script>
+@if(lien.serie.date_fermeture!=null){
 	var tempsFin = @lien.serie.date_fermeture.getTime();
 	function termine(){
 		var now = new Date().getTime();
@@ -46,8 +80,6 @@
 		}
 	}
 }else{
-<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
-<script>
 	var tempsFin = "0";
 	function termine(){
 		//$('#date').load('/eleve/infoheure/@lien.serie.id');
@@ -67,9 +99,9 @@
 	}
 }
 	function testFin(){
+		@if(lien.serie.date_fermeture!=null){$('#countdown').countdown({until: new Date(@lien.serie.date_fermeture.getTime()), format: 'MS'});}
 		setInterval("termine();",500);
 	}
 </script>
 }
 </body>
-</html>

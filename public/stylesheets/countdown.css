@@ -1,0 +1,8 @@
+div.compteur{
+	background: rgb(238,238,238);
+	min-width: 50px;
+	position: left;
+	height: 50px;
+	width:100px;
+	padding:10px;
+}
