@@ -491,7 +491,6 @@ public class Application extends Controller {
 		question.save();
 		//On ajoute les réponses à la DB :
 		if(typeQ_id<=2){
-			List<Reponse> reponses = new ArrayList<Reponse>();
 			int i = 1;
 			Question questionQuiAppartientALaReponse = Question.find.ref(question.id);
 			while(info.get("reponse"+i)!=null){

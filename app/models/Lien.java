@@ -9,7 +9,6 @@ import javax.persistence.OneToOne;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 /**
  * Contient les liens unique entre chaque élève et chaque série.

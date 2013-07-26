@@ -9,7 +9,6 @@ import javax.persistence.Column;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
 
 /**
  * Contient les réponses d'un élève à une question de type 3 ou 4.

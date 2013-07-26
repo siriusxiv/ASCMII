@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package controllers;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
