@@ -82,7 +82,7 @@ public class Mail{
 		to=seance.professeur.mail;
 		recipient=seance.professeur.prenom+" "+seance.professeur.nom+" <"+to+">";
 		from="ASCMII <ascmii.test@gmail.com>";
-		contenu="<html>Bonjour,<br> concernant la séance de "+seance.matiere+" le "+df.format(seance.date)+", le mail contenant les liens pour répondre aux questions a été envoyé à tous les élèves suivant ce cours.<br>Bonne journée.<br><br><span style=\"font-size:75%;\">Ce mail est un message automatique, il ne sert à rien d'y répondre.</span></html>";
+		contenu="<html>Bonjour,<br>Concernant la séance de "+seance.matiere+" le "+df.format(seance.date)+", le mail contenant les liens pour répondre aux questions a été envoyé à tous les élèves suivant ce cours.<br>Bonne journée.<br><br><span style=\"font-size:75%;float:right;\">Ce mail est un message automatique, il ne sert à rien d'y répondre.</span></html>";
 	}
 	
 	/**
@@ -91,10 +91,10 @@ public class Mail{
 	public void sendMail(){
 			MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
 			mail.setSubject(sujet);
-			//mail.addRecipient("Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
-			mail.addRecipient(recipient,to);
+			mail.addRecipient("Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
+			//mail.addRecipient(recipient,to);
 			mail.addFrom(from);
-			//mail.sendHtml(contenu);
+			mail.sendHtml(contenu);
 			System.out.println(contenu);
 	}
 	

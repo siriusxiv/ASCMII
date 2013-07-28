@@ -94,7 +94,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				-->*@
 	}
 	</table>
-	<form action="/prof/vote/csv/@seance.id" method="POST"><button>Télécharger le bilan</button></form>
+	@if(seance.hasAnySerieFinished()){
+		<form action="/prof/vote/csv/@seance.id" method="POST"><button>Télécharger le bilan</button></form>
+	}else{
+		<button disabled>Télécharger le bilan</button>
+	}
 	<br>
 	@if(!listSerie.isEmpty()){
 		@if(seance.hasEmptySerie()){

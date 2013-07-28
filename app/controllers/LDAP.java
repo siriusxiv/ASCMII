@@ -79,7 +79,7 @@ class LDAP{
         	SearchControls sc = new SearchControls();
 		    sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
 		    String base = "ou=people, dc=ec-nantes, dc=fr";
-		    NamingEnumeration results = ctx.search(base, filter, sc);
+		    NamingEnumeration<SearchResult> results = ctx.search(base, filter, sc);
 		    while (results.hasMore()) {
                 SearchResult searchResult = (SearchResult) results.next();
                 Attributes attrs = searchResult.getAttributes();

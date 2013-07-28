@@ -10,6 +10,14 @@ tmp
 dist
 .cache
 
+#################
+## What I added myself (do not commit uploads and dowloads)
+#################
+
+*.csv
+*.seriexport
+*.seancexport
+public/uploads
 
 #################
 ## Eclipse

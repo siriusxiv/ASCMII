@@ -31,7 +31,9 @@ package models;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -167,5 +169,19 @@ public class Seance extends Model {
 		return false;
 	}
 	
+	/**
+	 * Vérifie si au moins une série a été terminée dans la séance
+	 * Utile pour le bouton "Télécharger le bilan".
+	 * @return VRAI ou FAUX
+	 */
+	public boolean hasAnySerieFinished(){
+		boolean result=false;
+		int i = 0;
+		while(!result && i<series.size()){
+			result=!series.get(i).isNotFinished();
+			i++;
+		}
+		return result;
+	}
 	
 }
