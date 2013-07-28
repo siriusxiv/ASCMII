@@ -22,51 +22,51 @@ GET		/tuto						controllers.Tuto.tutorial()
 #prof edition séances
 GET 	/prof/seances				controllers.Login.profSeancesListe(log: String ?="")
 
-POST	/prof/seances				controllers.Application.addSeance()
+POST	/prof/seances				controllers.SeancesListe.addSeance()
 
-POST	/prof/seances/suppr/:id		controllers.Application.removeSeance(id: Long)
+POST	/prof/seances/suppr/:id		controllers.SeancesListe.removeSeance(id: Long)
 
-POST	/prof/seances/dupl/:id		controllers.Application.dupliquerSeance(id: Long)
+POST	/prof/seances/dupl/:id		controllers.SeancesListe.dupliquerSeance(id: Long)
 
-POST	/prof/seances/edit/:id		controllers.Application.displayEditSeance(id: Long)
+POST	/prof/seances/edit/:id		controllers.SeancesListe.displayEditSeance(id: Long)
 
-POST	/prof/seances/edit/put/:id	controllers.Application.editSeance(id: Long)
+POST	/prof/seances/edit/put/:id	controllers.SeancesListe.editSeance(id: Long)
 
 POST	/prof/seances/export:seance_id	controllers.Export.downloadSeance(seance_id: Long)
 
 POST	/prof/seances/import		controllers.Export.uploadSeance()
 
-POST	/prof/gerer/:id				controllers.Application.gererSeance(id: Long)
-GET		/prof/gerer/:id				controllers.Application.gererSeance(id: Long)
+POST	/prof/gerer/:id				controllers.SeancesListe.gererSeance(id: Long)
+GET		/prof/gerer/:id				controllers.SeancesListe.gererSeance(id: Long)
 
 POST	/prof/vote/:id				controllers.Application.voteSeance(id: Long)
 GET		/prof/vote/:id				controllers.Application.voteSeance(id: Long)
 
 
 #prof édition des questions
-POST	/prof/gerer/add/:id			controllers.Application.addSerie(id: Long)
+POST	/prof/gerer/add/:id			controllers.SeanceGestion.addSerie(id: Long)
 
-POST	/prof/gerer/del/:id			controllers.Application.delSerie(id: Long)
+POST	/prof/gerer/del/:id			controllers.SeanceGestion.delSerie(id: Long)
 
-POST	/prof/gerer/addquestion/:id	controllers.Application.addQuestion(id: Long)
+POST	/prof/gerer/addquestion/:id	controllers.QuestionGestion.addQuestion(id: Long)
 
-POST	/prof/gerer/addq2/:id		controllers.Application.addQuestion2(id: Long)
+POST	/prof/gerer/addq2/:id		controllers.QuestionGestion.addQuestion2(id: Long)
 
-POST	/prof/gerer/addq3/:serie_id/:typeQ_id	controllers.Application.addQuestion3(serie_id: Long, typeQ_id: Long)
+POST	/prof/gerer/addq3/:serie_id/:typeQ_id	controllers.QuestionGestion.addQuestion3(serie_id: Long, typeQ_id: Long)
 
-POST	/prof/gerer/delquestion/:id	controllers.Application.delQuestion(id: Long)
+POST	/prof/gerer/delquestion/:id	controllers.SeanceGestion.delQuestion(id: Long)
 
-POST	/prof/gerer/up/:id			controllers.Application.monterSerie(id: Long)
+POST	/prof/gerer/up/:id			controllers.SeanceGestion.monterSerie(id: Long)
 
-POST	/prof/gerer/down/:id		controllers.Application.descendreSerie(id: Long)
+POST	/prof/gerer/down/:id		controllers.SeanceGestion.descendreSerie(id: Long)
 
-POST	/prof/gerer/upquestion/:id	controllers.Application.monterQuestion(id: Long)
+POST	/prof/gerer/upquestion/:id	controllers.SeanceGestion.monterQuestion(id: Long)
 
-POST	/prof/gerer/downquestion/:id	controllers.Application.descendreQuestion(id: Long)
+POST	/prof/gerer/downquestion/:id	controllers.SeanceGestion.descendreQuestion(id: Long)
 
-POST	/prof/gerer/editquestion/:id	controllers.Application.editQuestion(id: Long)
+POST	/prof/gerer/editquestion/:id	controllers.QuestionGestion.editQuestion(id: Long)
 
-POST	/prof/gerer/editquestion2/:id	controllers.Application.editQuestion2(id: Long)
+POST	/prof/gerer/editquestion2/:id	controllers.QuestionGestion.editQuestion2(id: Long)
 
 POST	/prof/export/:serie_id		controllers.Export.downloadSerie(serie_id: Long)
 
@@ -98,11 +98,11 @@ POST	/prof/downloads/:question_id	controllers.Export.downloadExhaustive(question
 POST	/prof/vote/csv/:seance_id	controllers.CSV.CSVdownload(seance_id: Long)
 
 #eleve
-GET		/eleve/:chemin				controllers.Application.eleveRepondre(chemin: String)
+GET		/eleve/:chemin				controllers.Eleves.eleveRepondre(chemin: String)
 
-POST	/eleve/reponse/:chemin		controllers.Application.donnerReponse(chemin: String)
+POST	/eleve/reponse/:chemin		controllers.Eleves.donnerReponse(chemin: String)
 
-GET		/eleve/reponse/:chemin		controllers.Application.eleveRepondre(chemin: String)
+GET		/eleve/reponse/:chemin		controllers.Eleves.eleveRepondre(chemin: String)
 
 #Routes AJAX
 #Cette route permet de savoir si la série est finie ou pas (quand le prof met fin à la série)

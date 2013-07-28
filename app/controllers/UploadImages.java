@@ -70,13 +70,13 @@ public class UploadImages extends Controller{
 		    try{
 		    	FileUtils.copyFile(image, destinationFile);
 		    	i.addImage(reponse);
-				return Application.gererSeanceLog(reponse.question.serie.seance.id,"Image uploadée avec succès !");
+				return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Image uploadée avec succès !");
 		    } catch (IOException e){
 		    	e.printStackTrace();
-		    	return Application.gererSeanceLog(reponse.question.serie.seance.id,"Impossible de copier l'image sur le serveur...");
+		    	return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Impossible de copier l'image sur le serveur...");
 		    }
 		}else{
-	    	return Application.gererSeanceLog(reponse.question.serie.seance.id,"Le fichier uploadé n'est pas image ou son format n'est pas supporté !");
+	    	return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Le fichier uploadé n'est pas image ou son format n'est pas supporté !");
 		}
 	}
 	
@@ -112,6 +112,6 @@ public class UploadImages extends Controller{
 		reponse.image=null;
 		reponse.save();
 		Image.removeImage(imgTemp.id);
-		return Application.gererSeanceLog(reponse.question.serie.seance.id,"L'image a été supprimée avec succès.");
+		return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"L'image a été supprimée avec succès.");
 	}
 }

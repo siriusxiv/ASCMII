@@ -137,7 +137,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	<div id="new_serie" style="display:none">
 		<h2>Création d'une nouvelle séance :</h2>
 		<p>Entrez le nom de la nouvelle série :</p>
-		<form action="@routes.Application.addSerie(seance.id)" method="POST">
+		<form action="/prof/gerer/add/@seance.id" method="POST">
 		<input type="text" name="nom" size="40">
 		<button type="submit">Valider</button>
 		</form>

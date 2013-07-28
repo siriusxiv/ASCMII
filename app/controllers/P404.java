@@ -71,7 +71,7 @@ public class P404 extends Controller{
 			if(session("seance")==null){
 				return redirect(routes.Login.profSeancesListe(""));
 			}else{
-				return redirect(routes.Application.gererSeance( Long.parseLong(session("seance")) ));
+				return redirect(routes.SeancesListe.gererSeance( Long.parseLong(session("seance")) ));
 			}
 		}
 		if(url.startsWith("prof/vote") || url.startsWith("prof/lancer") || url.startsWith("prof/fin") || url.startsWith("prof/reset") || url.startsWith("prof/download")){

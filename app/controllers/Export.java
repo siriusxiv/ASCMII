@@ -204,7 +204,7 @@ public class Export extends Controller{
 			String contentType = filePart.getContentType();
 			System.out.println(contentType);
 			if(readFileSerieExport(filePart.getFile(),seance_id)){
-				return Application.gererSeance(seance_id);
+				return SeancesListe.gererSeance(seance_id);
 			}else{
 				return ok(erreurUpload.render("Fichier non valide"));
 			}

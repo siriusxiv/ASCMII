@@ -54,24 +54,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 				<td class="liste">@seance.matiere</td>
 				<td class="liste">@seance.intitule</td>
 				<td class="liste right">
-						<form action="@routes.Application.displayEditSeance(seance.id)" method="POST" style="display:inline">
+						<form action="/prof/seances/edit/@seance.id" method="POST" style="display:inline">
 							<input type="image" src="/assets/images/edit-find-and-replace-2.png" title="Editer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Editer la séance')">
 						</form>
-						<form action="@routes.Application.gererSeance(seance.id)" method="POST" style="display:inline">
+						<form action="/prof/gerer/@seance.id" method="POST" style="display:inline">
 							<input type="image" src="/assets/images/view-list-text-2.png" title="Gérer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Gérer la séance')">
 						</form>
 						@if(!seance.series.isEmpty()){
-						<form action="@routes.Application.voteSeance(seance.id)" method="POST" style="display:inline">						
+						<form action="/prof/vote/@seance.id" method="POST" style="display:inline">						
 							<input type="image" src="/assets/images/view-pim-tasks.png" title="Vote et résultats" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Vote et résultats')">
 						</form>
 						}else{<img src="/assets/images/view-pim-tasks-grey.png" title="Vote et résultat">}
-						<form action="@routes.Application.dupliquerSeance(seance.id)" method="POST" style="display:inline">
+						<form action="/prof/seances/dupl/@seance.id" method="POST" style="display:inline">
 							<input type="image" src="/assets/images/view-presentation.png" title="Dupliquer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Dupliquer la séance')">
 						</form>
 						<form action="@routes.Export.downloadSeance(seance.id)" method="POST" style="display:inline">
 							<input type="image" src="/assets/images/download-3.png" title="Exporter la séance" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Exporter la séance')">
 						</form>
-						<form action="@routes.Application.removeSeance(seance.id)" method="POST" style="display:inline" id="f@seance.id"></form>
+						<form action="/prof/seances/suppr/@seance.id" method="POST" style="display:inline" id="f@seance.id"></form>
 						<img src="/assets/images/edit-delete-5.png" title="Supprimer" onClick="supprimer(@seance.id)" style="cursor:pointer;cursor:hand;" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Supprimer la séance')">
 						<span class="message" id="t@seance.id">Choisir une action</span>
 				</td>
