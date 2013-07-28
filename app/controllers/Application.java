@@ -53,67 +53,8 @@ public class Application extends Controller {
 	 * @return
 	 */
     public static Result index() {
-        return redirect(routes.Application.profLogin());
+        return redirect(routes.Login.profLogin());
     }
-    
-    /**
-     * Affiche la page de login sans aucun message, si l'utilisateur est déjà connecté,
-     * alors on passe directement à la liste des séances.
-     * @return
-     */
-    public static Result profLogin() {
-    	if(session("username")!=null){
-    		return redirect(routes.Application.profSeancesListe(""));
-    	}else{
-    		return ok(login.render("T"));
-    	}
-    }
-    
-    /**
-     * Affiche la liste des séances à condition que l'utilisateur soit authentifié
-     * @param log : un message que l'on fera apparaître dans la page qui montre la liste des séances.
-     * @return
-     */
-    @Security.Authenticated(Secured.class)
-    public static Result profSeancesListe(String log) {
-    	return ok(seancesListe.render(Seance.page(session()),log));
-    }
-    /**
-     * Vérifie que le professeur est bien authentifié. Si tel est le cas, renvoie la page affichant
-     * la liste des séances.
-     * @return
-     */
-	public static Result profAuthenticate()
-	{
-		DynamicForm info = Form.form().bindFromRequest();
-		String identifiant = info.get("login");
-		String passw = info.get("passw");
-		/*if(Professeur.find.byId(identifiant)==null){
-			session().clear();
-			return badRequest(login.render("F"));
-		}else{
-			session().clear();
-			session("username",identifiant);
-			return profSeancesListe("");
-		}*/
-		LDAP user = new LDAP();
-		if(user.check(identifiant, passw)){
-			session().clear();
-			session("username",identifiant);
-			return profSeancesListe("");
-		}else{
-			session().clear();
-			return badRequest(login.render("F"));
-		}
-	}
-	/**
-	 * Pour se déconnecter. On vide d'abord la session.
-	 * @return
-	 */
-	public static Result logOut(){
-		session().clear();
-		return redirect(routes.Application.profLogin());
-	}
 	
 	
 	//Gestion des séances :
@@ -149,17 +90,17 @@ public class Application extends Controller {
 				System.out.println("À l'heure");
 				newSeance.date=date;
 				newSeance.save();
-				return redirect(routes.Application.profSeancesListe("Séance ajoutée avec succès."));
+				return redirect(routes.Login.profSeancesListe("Séance ajoutée avec succès."));
 			}else{
 				try {
 					newSeance.date=df.parse("2038/01/19 03:14:08");
 				} catch (ParseException e) {
 				}
 				newSeance.save();
-				return redirect(routes.Application.profSeancesListe("La date que vous avez choisie se situe dans le passé, veuillez la corriger en cliquant sur le bouton \"Editer\"."));
+				return redirect(routes.Login.profSeancesListe("La date que vous avez choisie se situe dans le passé, veuillez la corriger en cliquant sur le bouton \"Editer\"."));
 			}
 		}
-		return redirect(routes.Application.profSeancesListe("Cette matière n'existe pas."));
+		return redirect(routes.Login.profSeancesListe("Cette matière n'existe pas."));
 	}
 	/**
 	 * Supprime une séance
@@ -168,7 +109,7 @@ public class Application extends Controller {
 	 */
 	public static Result removeSeance(Long id){
 		Seance.removeSeance(id);
-		return redirect(routes.Application.profSeancesListe("Séance supprimée."));
+		return redirect(routes.Login.profSeancesListe("Séance supprimée."));
 	}
 	/**
 	 * Affiche la page qui permet l'édition des infos d'une séance.
@@ -213,14 +154,14 @@ public class Application extends Controller {
 				System.out.println("À l'heure");
 				seance.date=date;
 				seance.save();
-				return redirect(routes.Application.profSeancesListe("Séance éditée."));
+				return redirect(routes.Login.profSeancesListe("Séance éditée."));
 			}else{
 				seance.save();
-				return redirect(routes.Application.profSeancesListe("Le changement de date n'a pas été enregistré, en effet, vous avez spécifié une date qui se situe dans le passé."));
+				return redirect(routes.Login.profSeancesListe("Le changement de date n'a pas été enregistré, en effet, vous avez spécifié une date qui se situe dans le passé."));
 			}
 			
 		}
-		return redirect(routes.Application.profSeancesListe("Erreur dans l'édition de la séance, cette matière n'existe pas."));
+		return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, cette matière n'existe pas."));
 	}
 	/**
 	 * Permet la duplication d'une séance.
@@ -273,7 +214,7 @@ public class Application extends Controller {
 					}
 				}
 		}
-		return redirect(routes.Application.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance en cliquant sur le bouton \"Editer\". La séance dupliquée se situe en première position dans la liste."));
+		return redirect(routes.Login.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance en cliquant sur le bouton \"Editer\". La séance dupliquée se situe en première position dans la liste."));
 	}
 	/**
 	 * Affiche la page qui permet la gestion d'une séance (ajout de questions et de séries)

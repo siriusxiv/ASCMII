@@ -1,6 +1,8 @@
 package models;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+
 
 /**
  * Définit un couple "Repond,Integer". Cela permet d'assigner à

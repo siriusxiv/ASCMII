@@ -10,17 +10,17 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
 #prof login
-GET		/prof/login					controllers.Application.profLogin()
+GET		/prof/login					controllers.Login.profLogin()
 
-POST	/prof/login					controllers.Application.profAuthenticate()
+POST	/prof/login					controllers.Login.profAuthenticate()
 
-POST	/prof/logout				controllers.Application.logOut()
+POST	/prof/logout				controllers.Login.logOut()
 
 #prof tuto
 GET		/tuto						controllers.Tuto.tutorial()
 
 #prof edition séances
-GET 	/prof/seances				controllers.Application.profSeancesListe(log: String ?="")
+GET 	/prof/seances				controllers.Login.profSeancesListe(log: String ?="")
 
 POST	/prof/seances				controllers.Application.addSeance()
 

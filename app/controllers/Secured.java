@@ -32,8 +32,8 @@ package controllers;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
+import views.html.login;
 
-import views.html.*;
 
 
 /**

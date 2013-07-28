@@ -28,13 +28,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************/
 
 package models;
-import java.util.*;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-import play.db.ebean.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import play.data.DynamicForm;
-import play.data.validation.Constraints.*;
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
 
 /**
  * Contient les réponses prédifinies par un professeur pour les questions
@@ -48,6 +55,7 @@ public class Reponse extends Model implements Comparator<Reponse>{
 	@Id
 	public Long id;
 	
+	@Required
 	@Column(columnDefinition = "TEXT")
 	public String texte;
 	@Required

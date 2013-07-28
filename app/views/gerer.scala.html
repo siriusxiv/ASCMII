@@ -31,7 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 @main("ASCMII - Liste des questions"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
 	<h1>ASCMII</h1>
-	<form action="@routes.Application.logOut()" method="POST" class="logout">
+	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
 	<p class="log">@message</p>

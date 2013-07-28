@@ -389,12 +389,12 @@ public class Export extends Controller{
 			String contentType = filePart.getContentType();
 			System.out.println(contentType);
 			if(readFileSeanceExport(filePart.getFile())){
-				return Application.profSeancesListe("Fichier uploadé avec succès. La nouvelle séance a été ajoutée, commencez par éditer la date à votre convenance.");
+				return Login.profSeancesListe("Fichier uploadé avec succès. La nouvelle séance a été ajoutée, commencez par éditer la date à votre convenance.");
 			}else{
-				return Application.profSeancesListe("Fichier non valide");
+				return Login.profSeancesListe("Fichier non valide");
 			}
 		}else{
-			return Application.profSeancesListe("filePart est null");
+			return Login.profSeancesListe("filePart est null");
 		}
 	}
 	

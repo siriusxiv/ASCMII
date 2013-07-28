@@ -42,7 +42,7 @@ public class LancerSerie extends Controller{
 		if(serie_id==0){
 			String seance = session("vote");
 			if(seance==null){
-				return Application.profSeancesListe("Vous avez été redirigé ici car vous venez certainement de remettre à 0 vos cookies.");
+				return Login.profSeancesListe("Vous avez été redirigé ici car vous venez certainement de remettre à 0 vos cookies.");
 			}else{
 				return lancerToutesLesSeries(Long.parseLong(seance),"");
 			}
@@ -61,7 +61,7 @@ public class LancerSerie extends Controller{
 		if(serie_id==0){
 			String seance = session("vote");
 			if(seance==null){
-				return Application.profSeancesListe("Vous avez été redirigé ici car vous venez certainement de remettre à 0 vos cookies.");
+				return Login.profSeancesListe("Vous avez été redirigé ici car vous venez certainement de remettre à 0 vos cookies.");
 			}else{
 				return lancerToutesLesSeries(Long.parseLong(seance),"La durée spécifiée doit être entière !");
 			}

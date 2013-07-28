@@ -29,15 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @(resultats : List[Resultat], serie : Serie, serieSuivante : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
 @main("ASCMII - Résultats de la série"){
-<html>
- <head>
-  <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/resultats.css")">
-  <link rel="icon"  type="image/png" href="@routes.Assets.at("images/favicon.png")" />
- </head>
- <body>
 	<h1>ASCMII</h1>
-	<form action="@routes.Application.logOut()" method="POST" class="logout">
+	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
 	<p>La série @serie.nom est terminée.<br></p>
@@ -140,6 +134,4 @@ $(function() {
 		});
 	});
 </script>
- </body>
-</html>
 }

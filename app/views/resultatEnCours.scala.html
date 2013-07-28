@@ -29,13 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @(resultats : List[Resultat], serie : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
 @main("ASCMII - La série est en cours..."){
-<html>
- <head>
-  <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/resultats.css")">
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/jquery.countdown.css")">
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/countdown.css")">
- </head>
  <body onLoad="rafraichir(5000)">
 	<h1>ASCMII</h1>
 	<p>La série @serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
@@ -118,5 +114,4 @@ function changeValue(){
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery-ui.css")" />
 <script src="@routes.Assets.at("/javascripts/jquery-ui.js")"></script>
  </body>
-</html>
 }

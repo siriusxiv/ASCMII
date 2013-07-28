@@ -28,10 +28,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************/
 
 package models;
-import java.util.*;
-import javax.persistence.*;
-import play.db.ebean.*;
-import play.data.validation.Constraints.*;
+
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+
 
 /**
  * Contient les professeurs

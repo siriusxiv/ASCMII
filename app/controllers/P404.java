@@ -31,8 +31,8 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.error404;
 
-import views.html.*;
 
 /**
  * Pour faire une page 404, mais aussi pour rediriger les professeurs si jamais ils font des
@@ -69,14 +69,14 @@ public class P404 extends Controller{
 		System.out.println(url);
 		if(url.startsWith("prof/gerer") || url.startsWith("prof/export") || url.startsWith("prof/upload") ){
 			if(session("seance")==null){
-				return redirect(routes.Application.profSeancesListe(""));
+				return redirect(routes.Login.profSeancesListe(""));
 			}else{
 				return redirect(routes.Application.gererSeance( Long.parseLong(session("seance")) ));
 			}
 		}
 		if(url.startsWith("prof/vote") || url.startsWith("prof/lancer") || url.startsWith("prof/fin") || url.startsWith("prof/reset") || url.startsWith("prof/download")){
 			if(session("vote")==null){
-				return redirect(routes.Application.profSeancesListe(""));
+				return redirect(routes.Login.profSeancesListe(""));
 			}else{
 				return redirect(routes.Application.voteSeance( Long.parseLong(session("vote")) ));
 			}
@@ -84,6 +84,6 @@ public class P404 extends Controller{
 		if(url.startsWith("tuto")){
 			return redirect(routes.Tuto.tutorial());
 		}
-		return redirect(routes.Application.profSeancesListe(""));
+		return redirect(routes.Login.profSeancesListe(""));
 	}
 }

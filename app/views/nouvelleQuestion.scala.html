@@ -30,19 +30,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 @(serie_id: Long,seance_id:Long,listeTypes: List[TypeQuestion])
 @main("ASCMII - Création d'une nouvelle question - Etape 1/2"){
 
-<!DOCTYPE html>
-
-<script>
-
-</script>
-
-<html>
- <head>
-  <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
- </head>
 	<h1>ASCMII</h1>
-	<form action="@routes.Application.logOut()" method="POST" class="logout">
+	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
 	<h2>Quel type de question voulez-vous créer ?</h2>
@@ -56,5 +46,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	<div style="display:inline;padding:0px 0px 0px 200px"><button type="submit">Suivant</button></div>
 	</form>
 	<form action="/prof/gerer/@seance_id" method="POST" style="display:inline"><button type="submit">Retour</button></form>
-</html>
 }

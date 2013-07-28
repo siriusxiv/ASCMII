@@ -29,11 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 @(lien: Lien)
 @main("ASCMII - Réponse"){
-<html>
- <head>
-  <title>ASCMII</title>
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
- </head>
  <h1>ASCMII</h1>
  <p>La série est terminée. C'est trop tard.</p>
  <ol>@for(question <- lien.serie.questions){
@@ -55,5 +51,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		<input type="text" name="nombreRepondu@question.id" style="padding:0px 0px 0px 50px" size="20px" disabled><br>
 	}
  }</ol>
-</html>
 }

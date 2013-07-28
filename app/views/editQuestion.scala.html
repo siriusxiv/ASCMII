@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
  <body class="yui-skin-sam" onLoad="editor()">
 	<h1>ASCMII</h1>
-	<form action="@routes.Application.logOut()" method="POST" class="logout">
+	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>
 	<p>Création d'une nouvelle question de type "@question.typeQ.typeQ"</p>
