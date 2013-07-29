@@ -72,8 +72,17 @@ public class Serie extends Model implements Comparator<Serie>{
 			return (s1.position<s2.position ? -1 : (s1.position==s2.position ? 0 : 1));
 	}
 	
+	/**
+	 * Pour rétrocompatibilité
+	 */
 	public Serie(){}
 	
+	/**
+	 * Copie la série telle quelle en la liant à la séance en argument.
+	 * (utilisée dans dupliquerSeance)
+	 * @param reponse
+	 * @param _question
+	 */
 	public Serie(Serie serie, Seance _seance){
 		position=serie.position;
 		nom=serie.nom;

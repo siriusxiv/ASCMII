@@ -62,14 +62,29 @@ public class Reponse extends Model implements Comparator<Reponse>{
 	@ManyToOne
 	public Image image;
 	
+	/**
+	 * Pour rétrocompatibilité
+	 */
 	public Reponse(){}
 	
+	/**
+	 * Crée la réponse en y insérant les arguments uniquement.
+	 * @param _texte
+	 * @param _question
+	 * @param _position
+	 */
 	public Reponse(String _texte,Question _question,int _position){
 		texte=_texte;
 		question=_question;
 		position=_position;
 	}
 	
+	/**
+	 * Copie la réponse telle quelle en la liant à la question en argument.
+	 * (utilisée dans dupliquerSeance)
+	 * @param reponse
+	 * @param _question
+	 */
 	public Reponse(Reponse reponse, Question _question){
 		texte=reponse.texte;
 		question=_question;

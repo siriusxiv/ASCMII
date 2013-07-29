@@ -79,8 +79,17 @@ public class Question extends Model implements Comparator<Question>{
 		se.save();
 	}
 	
+	/**
+	 * Pour rétrocompatibilité
+	 */
 	public Question(){}
 	
+	/**
+	 * Copie la question telle quelle en la liant à la série en argument.
+	 * (utilisée dans dupliquerSeance)
+	 * @param reponse
+	 * @param _question
+	 */
 	public Question(Question question, Serie _serie){
 		texte=question.texte;
 		titre=question.titre;

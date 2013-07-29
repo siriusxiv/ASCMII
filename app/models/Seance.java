@@ -105,7 +105,7 @@ public class Seance extends Model {
 	}
 	
 	/**
-	 * Définir le finder pour cette table
+	 * Définit le finder pour cette table
 	 */
 	public static Finder<Long,Seance> find = new Finder<Long,Seance>(Long.class, Seance.class);
 
