@@ -1,0 +1,101 @@
+@****************************************************************************
+
+Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors
+  may be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************************@
+
+@(seance: Seance)
+
+<html>
+ <head>
+  <title>ASCMII - Editer la séance</title>
+  <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/options.png")">
+  <link rel="icon" type="image/png" href="@routes.Assets.at("images/options.png")">
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
+ </head>
+ <body>
+ 	<h1>ASCMII</h1>
+	<form action="/prof/seances/edit/put/@seance.id" method="POST">
+		<h2>Edition de @seance.intitule</h2>
+		<table>
+			<tbody>
+			<tr>
+				<td>Matière :</td>
+				<td><input type="text" size="20" name="matiere" value="@seance.matiere"></td>
+			</tr>
+			<tr>
+				<td>Intitulé de séance :</td>
+				<td><input type="text" size="20" name="intitule" value="@seance.intitule"></td>
+			</tr>
+			</tr>
+			</tbody>
+		</table>
+			<table>
+			<tr>
+				<td>Date et heure :</td>
+				<td><select name="day">
+					@for(i: Int <- 1 to 31){
+					<option value="@i" @if(i==Integer.parseInt(seance.date.format("d"))){ selected="selected"}>@i</option>
+				}
+				</td>
+				<td><select name="month">
+				@for(i: Int <- 1 to 12){
+					<option value="@i" @if(i==Integer.parseInt(seance.date.format("M"))){ selected="selected"}>
+					@{i match {
+						case 1 => "Janvier"
+						case 2 => "Février"
+						case 3 => "Mars"
+						case 4 => "Avril"
+						case 5 => "Mai"
+						case 6 => "Juin"
+						case 7 => "Juillet"
+						case 8 => "Août"
+						case 9 => "Septembre"
+						case 10 => "Octobre"
+						case 11 => "Novembre"
+						case 12 => "Décembre"
+					}}
+					</option>
+				}
+				</td>
+				<td><select name="year">
+					@for(i: Int <- 2013 to 2019){
+						<option value="@i" @if(i==Integer.parseInt(seance.date.format("yyyy"))){ selected="selected"}>@i</option>
+					}
+				</td>
+				<td>à</td>
+				<td><select name="hour">
+					@for(i: Int <- 8 to 18){
+						<option value="@i" @if(i==Integer.parseInt(seance.date.format("H"))){ selected="selected"}>@{i+"h"}</option>
+					}
+				</td>
+			</tr>
+			</table>
+		<br>
+		<button type="submit">Valider</button>
+	</form>
+ </body>
+</html>

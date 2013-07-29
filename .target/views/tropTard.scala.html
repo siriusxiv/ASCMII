@@ -1,0 +1,54 @@
+@****************************************************************************
+
+Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of the copyright holder nor the names of its contributors
+  may be used to endorse or promote products derived from this software
+  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************************@
+
+@(lien: Lien)
+@main("ASCMII - Réponse"){
+  <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
+ <h1>ASCMII</h1>
+ <p>La série est terminée. C'est trop tard.</p>
+ <ol>@for(question <- lien.serie.questions){
+	<li><p>@Html(question.texte)</p></li>
+	@if(question.typeQ.id==1){
+		@for(reponse <- question.reponses){
+			<input type="radio" name="choixReponse@question.id" value="@reponse.position" disabled> @if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="35px">} @reponse.texte<br>
+		}
+	}
+	@if(question.typeQ.id==2){
+		@for(reponse <- question.reponses){
+			<input id="question@question.id" type="checkbox" name="choixReponse@question.id.@reponse.position" value="@reponse.position" style="padding:0px 0px 0px 50px" disabled> @if(reponse.image!=null){<img src="/assets/uploads/@reponse.image.fileName" height="35px">} @reponse.texte<br>
+		}
+	}
+	@if(question.typeQ.id==3){
+		<input type="text" name="texteRepondu@question.id" style="padding:0px 0px 0px 50px" size="60px" disabled><br>
+	}
+	@if(question.typeQ.id==4){
+		<input type="text" name="nombreRepondu@question.id" style="padding:0px 0px 0px 50px" size="20px" disabled><br>
+	}
+ }</ol>
+}
