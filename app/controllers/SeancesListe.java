@@ -1,41 +1,31 @@
 /****************************************************************************
 
-Copyright (c) 2013, Boussejra Malik Olivier from the Ecole Centrale de Nantes
-All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+	ASCMII is a web application developped for the Ecole Centrale de Nantes
+	aiming to organize quizzes during courses or lectures.
+    Copyright (C) 2013  Malik Olivier Boussejra
 
-* Redistributions of source code must retain the above copyright
-  notice, this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright
-  notice, this list of conditions and the following disclaimer in the
-  documentation and/or other materials provided with the distribution.
-* Neither the name of the copyright holder nor the names of its contributors
-  may be used to endorse or promote products derived from this software
-  without specific prior written permission.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ******************************************************************************/
 
 package controllers;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import functions.ParseDate;
 
 import models.Professeur;
 import models.Question;
@@ -77,12 +67,7 @@ public class SeancesListe extends Controller{
 			}
 			newSeance.matiere=info.get("matiere");
 			newSeance.professeur=Professeur.find.ref(session("username"));
-			Date date = null;
-			DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			try{
-				date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
-			} catch(ParseException e){
-			}
+			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
 			now.add(Calendar.MINUTE, 15);
 			if(now.getTime().before(date)){//C'est bon, on est à l'heure.
@@ -91,10 +76,7 @@ public class SeancesListe extends Controller{
 				newSeance.save();
 				return redirect(routes.Login.profSeancesListe("Séance ajoutée avec succès."));
 			}else{
-				try {
-					newSeance.date=df.parse("2038/01/19 03:14:08");
-				} catch (ParseException e) {
-				}
+				date = ParseDate.lastDate();
 				newSeance.save();
 				return redirect(routes.Login.profSeancesListe("La date que vous avez choisie se situe dans le passé, veuillez la corriger en cliquant sur le bouton \"Editer\"."));
 			}
@@ -141,12 +123,7 @@ public class SeancesListe extends Controller{
 			}
 			seance.matiere=fullInfos.get("matiere");
 			seance.professeur=Professeur.find.ref(session("username"));
-			Date date = null;
-			try{
-				DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-				date = df.parse(year + "/" + month + "/" + day + " " + hour +":00:00");
-			} catch(ParseException e){
-			}
+			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
 			now.add(Calendar.MINUTE, 15);
 			if(now.getTime().before(date)){//C'est bon, on est à l'heure.
@@ -170,48 +147,21 @@ public class SeancesListe extends Controller{
 	 */
 	public static Result dupliquerSeance(Long id){
 		Seance seanceADupliquer = Seance.find.ref(id);
-		Seance newSeance = new Seance();
-		newSeance.intitule=seanceADupliquer.intitule;
-		newSeance.matiere=seanceADupliquer.matiere;
-		newSeance.professeur=seanceADupliquer.professeur;
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		try{
-			newSeance.date=df.parse("2038/01/19 03:14:08");
-		} catch(ParseException e){
-		}
-		newSeance.series = new ArrayList<Serie>();
-		//On choisit l'ID de la prochaine nouvelle Séance
-		newSeance.id=Seance.idNonUtilisee();
+		Seance newSeance = new Seance(seanceADupliquer);
 		newSeance.save();
 		//On rajoute les séries :
 		List<Serie> series = Serie.find.where().eq("seance",seanceADupliquer).findList();
 		for(Serie s : series){
-				Serie newSerie = new Serie();
-				newSerie.position=s.position;
-				newSerie.nom=s.nom;
-				newSerie.questions=new ArrayList<Question>();
-				newSerie.seance=Seance.find.ref(newSeance.id);
-				newSerie.id=Serie.idNonUtilisee();
-				newSerie.save();
-				for(Question q : s.questions){
-					Question newQuestion = new Question();
-					newQuestion.reponses=new ArrayList<Reponse>();
-					newQuestion.texte=q.texte;
-					newQuestion.titre=q.titre;
-					newQuestion.typeQ=q.typeQ;
-					newQuestion.serie=Serie.find.ref(newSerie.id);
-					newQuestion.position=q.position;
-					newQuestion.id=Question.idNonUtilisee();
-					newQuestion.save();
-					for(Reponse r : q.reponses){
-						Reponse newReponse = new Reponse();
-						newReponse.texte=r.texte;
-						newReponse.question=Question.find.ref(newQuestion.id);
-						newReponse.position=r.position;
-						newReponse.image=r.image;
-						newReponse.save();
-					}
+			Serie newSerie = new Serie(s,newSeance);
+			newSerie.save();
+			for(Question q : s.questions){
+				Question newQuestion = new Question(q,newSerie);
+				newQuestion.save();
+				for(Reponse r : q.reponses){
+					Reponse newReponse = new Reponse(r,newQuestion);
+					newReponse.save();
 				}
+			}
 		}
 		return redirect(routes.Login.profSeancesListe("Séance dupliqué avec succès. N'oubliez pas de changer la date de la nouvelle séance en cliquant sur le bouton \"Editer\". La séance dupliquée se situe en première position dans la liste."));
 	}

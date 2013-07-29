@@ -9,6 +9,7 @@ target
 tmp
 dist
 .cache
+.target
 
 #################
 ## What I added myself (do not commit uploads and dowloads)
