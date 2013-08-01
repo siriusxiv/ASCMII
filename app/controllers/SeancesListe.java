@@ -76,7 +76,7 @@ public class SeancesListe extends Controller{
 				newSeance.save();
 				return redirect(routes.Login.profSeancesListe("Séance ajoutée avec succès."));
 			}else{
-				date = ParseDate.lastDate();
+				newSeance.date = ParseDate.lastDate();
 				newSeance.save();
 				return redirect(routes.Login.profSeancesListe("La date que vous avez choisie se situe dans le passé, veuillez la corriger en cliquant sur le bouton \"Editer\"."));
 			}
