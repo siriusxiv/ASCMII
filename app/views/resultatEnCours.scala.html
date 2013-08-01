@@ -60,9 +60,9 @@
 		<p>La série se termine à @serie.date_fermeture.format("hh:mm:ss"). Plus que :</p>
 		<div id="countdown" class="compteur"></div>
 	}
-<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
-<script src="@routes.Assets.at("/javascripts/jquery.countdown.min.js")"></script>
-<script src="@routes.Assets.at("/javascripts/jquery.countdown-fr.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.countdown.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.countdown-fr.js")"></script>
 <script>
 function rafraichir(duree){
 	$(function() {
@@ -104,6 +104,6 @@ function changeValue(){
 }
 </script>
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery-ui.css")" />
-<script src="@routes.Assets.at("/javascripts/jquery-ui.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery-ui.js")"></script>
  </body>
 }

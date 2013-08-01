@@ -59,9 +59,9 @@
  <p>NB : Une fois que vous aurez cliqué sur "OK", votre choix sera final</p>
  <button type="submit">OK</button><!-- Envoyer le chemin du lien pour connaître l'id des questions auxquelles l'élève repond. -->
 </form>
-<script src="@routes.Assets.at("/javascripts/jquery-1.10.2.min.js")"></script>
-<script src="@routes.Assets.at("/javascripts/jquery.countdown.min.js")"></script>
-<script src="@routes.Assets.at("/javascripts/jquery.countdown-fr.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.countdown.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery.countdown-fr.js")"></script>
 <script>
 @if(lien.serie.date_fermeture!=null){
 	var tempsFin = @lien.serie.date_fermeture.getTime();
