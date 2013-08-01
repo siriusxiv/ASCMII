@@ -33,10 +33,15 @@ import com.typesafe.plugin.*;
  * Cette classe contient les infos relatives à l'envoie d'un mail.
  * Attention ! On ne peut pas envoyer de mails si on utilise le réseau Wifi de Centrale, il faut
  * être branché en Ethernet !
+ * On doit bien régler le nom du domaine avant de déployer l'application et décommenter la ligne
+ * mail.addRecipient(recipient,to); de la fonction sendMail() (après avoir mis en commentaire la
+ * ligne juste au-dessus).
  * @author Admin
  *
  */
 public class Mail{
+	String domain_name = "http://ascmii.hd.free.fr";
+	
 	String sujet;
 	String contenu;
 	String to;
@@ -60,7 +65,7 @@ public class Mail{
 		int i=1;
 		for(Serie s : seance.series){
 			Lien lien = Lien.find.where().eq("serie", s).eq("eleve",eleve).findUnique();
-			contenu+="Série "+i+" : http://localhost:9000/eleve/"+lien.chemin+"<br>";
+			contenu+="Série "+i+" : "+domain_name+"/eleve/"+lien.chemin+"<br>";
 			i++;
 		}
 		contenu+="</html>";
