@@ -21,7 +21,6 @@
 
 package controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import models.Question;
@@ -46,12 +45,7 @@ public class SeanceGestion extends Controller{
 		if(nom.equals("")){
 			nom="Série "+(seance.series.size()+1);
 		}
-		Serie serie = new Serie();
-		serie.nom = nom;
-		serie.seance = seance;
-		serie.questions = new ArrayList<Question>();
-		//on trouve la position max et on le met à la fin
-		serie.position=Serie.positionMax()+1;
+		Serie serie = new Serie(nom,seance);
 		Serie.addSerie(serie);
 		return SeancesListe.gererSeance(id);
 	}

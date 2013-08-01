@@ -372,7 +372,6 @@ public class Export extends Controller{
 	/**
 	 * Cette fonction appelée par une route permet de charger un fichier
 	 * depuis son ordinateur.
-	 * @param seance_id
 	 * @return affiche la page de gestion des séries de questions ou bien
 	 * un message d'erreur si le fichier est invalide
 	 */

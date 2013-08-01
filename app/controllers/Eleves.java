@@ -79,7 +79,7 @@ public class Eleves extends Controller {
 	/**
 	 * Affiche la page où l'élève peut répondre à la question avec un petit message qui s'affiche sur la page.
 	 * @param chemin : lien unique qui lie l'élève à la série de question
-	 * @param log : message d'erreur
+	 * @param message : message d'erreur
 	 * @return
 	 */
 	public static Result eleveRepondreLog(String chemin,String message){

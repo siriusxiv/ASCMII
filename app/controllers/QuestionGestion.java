@@ -21,7 +21,6 @@
 
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -99,24 +98,14 @@ public class QuestionGestion extends Controller {
 			}
 		}
 		//On ajoute la question à la DB :
-		Question question = new Question();
-		question.titre=titre;
-		question.texte=texte;
-		question.position=Question.positionMax()+1;
-		question.typeQ=TypeQuestion.find.ref(typeQ_id);
-		question.serie=serie;
-		question.reponses = new ArrayList<Reponse>();
-		question.id=Question.idNonUtilisee();
+		Question question = new Question(titre,texte,typeQ_id,serie);
 		question.save();
 		//On ajoute les réponses à la DB :
 		if(typeQ_id<=2){
 			int i = 1;
 			Question questionQuiAppartientALaReponse = Question.find.ref(question.id);
 			while(info.get("reponse"+i)!=null){
-				Reponse reponse = new Reponse();
-				reponse.texte = info.get("reponse"+i);
-				reponse.question=questionQuiAppartientALaReponse;
-				reponse.position=i;
+				Reponse reponse = new Reponse(info.get("reponse"+i),questionQuiAppartientALaReponse,i);
 				reponse.save();
 				i++;
 			}

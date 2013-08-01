@@ -80,14 +80,28 @@ public class Serie extends Model implements Comparator<Serie>{
 	/**
 	 * Copie la série telle quelle en la liant à la séance en argument.
 	 * (utilisée dans dupliquerSeance)
-	 * @param reponse
-	 * @param _question
+	 * @param serie : série à copier
+	 * @param _seance
 	 */
 	public Serie(Serie serie, Seance _seance){
 		position=serie.position;
 		nom=serie.nom;
 		seance=_seance;
 		id=Serie.idNonUtilisee();
+	}
+	
+	/**
+	 * Pour ajouter des nouvelles questions dans la base de donnée. (Attention, cette
+	 * méthode ne fait qu'instancier l'objet, elle ne le stocke pas dans la base ! Vous
+	 * devez faire question.save() pour l'y sauvegarder).
+	 * @param _nom
+	 * @param _seance
+	 */
+	public Serie(String _nom, Seance _seance){
+		nom=_nom;
+		seance=_seance;
+		//on trouve la position max et on le met à la fin
+		position=positionMax()+1;
 	}
 	
 	public static Finder<Long,Serie> find = new Finder<Long,Serie>(Long.class, Serie.class);

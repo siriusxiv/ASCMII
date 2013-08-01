@@ -37,11 +37,13 @@ import javax.naming.NamingEnumeration;
  * Requêtes LDAP
  * Attention ! On ne peut pas se connecter à LDAP si on utilise le réseau Wifi de Centrale, il faut
  * être branché en Ethernet !
+ * Editer la string serveur si vous voulez changer de serveur LDAP.
  * @author Admin
  *
  */
 public class LDAP{
-	//String dn;
+	String serveur = "ldap://rldap.ec-nantes.fr";
+	
 	String nom;
 	String prenom;
 	String mail;
@@ -59,7 +61,7 @@ public class LDAP{
 		}
 		Hashtable<String,String> properties = new Hashtable<String,String>();
 		properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-		properties.put(Context.PROVIDER_URL, "ldap://rldap.ec-nantes.fr");
+		properties.put(Context.PROVIDER_URL, serveur);
 		properties.put(Context.SECURITY_AUTHENTICATION, "simple");
 		properties.put(Context.SECURITY_PRINCIPAL, "uid="+login+", ou=people, dc=ec-nantes, dc=fr");
 		properties.put(Context.SECURITY_CREDENTIALS, passw);
@@ -75,7 +77,6 @@ public class LDAP{
 		    while (results.hasMore()) {
                 SearchResult searchResult = (SearchResult) results.next();
                 Attributes attrs = searchResult.getAttributes();
-                //dn = (String) attrs.get("dn").get();
                 nom = (String) attrs.get("sn").get();
                 prenom = (String) attrs.get("givenname").get();
                 mail = (String) attrs.get("mail").get();

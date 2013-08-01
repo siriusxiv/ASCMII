@@ -102,6 +102,10 @@ public class Reponse extends Model implements Comparator<Reponse>{
 			return (r1.position<r2.position ? -1 : (r1.position==r2.position ? 0 : 1));
 	}
 	
+	/**
+	 * Convertit la réponse en en String sous la forme suivante :
+	 * <Position de la réponse>. <Texte de la réponse>
+	 */
 	@Override
 	public String toString(){
 		return position + ". "+texte;

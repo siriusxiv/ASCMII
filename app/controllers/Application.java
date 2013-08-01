@@ -189,6 +189,4 @@ public class Application extends Controller {
 		return ok(reponsesExhaustives.render(Resultat.exhaustive(question_id)));
 	}
 	
-	
-
 }

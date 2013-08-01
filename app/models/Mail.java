@@ -21,13 +21,11 @@
 
 package models;
 
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-
-
-import com.typesafe.plugin.*;
+import com.typesafe.plugin.MailerAPI;
+import com.typesafe.plugin.MailerPlugin;
 
 /**
  * Cette classe contient les infos relatives à l'envoie d'un mail.

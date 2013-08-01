@@ -87,8 +87,8 @@ public class Question extends Model implements Comparator<Question>{
 	/**
 	 * Copie la question telle quelle en la liant à la série en argument.
 	 * (utilisée dans dupliquerSeance)
-	 * @param reponse
-	 * @param _question
+	 * @param question : la question à copier
+	 * @param _serie
 	 */
 	public Question(Question question, Serie _serie){
 		texte=question.texte;
@@ -96,7 +96,25 @@ public class Question extends Model implements Comparator<Question>{
 		typeQ=question.typeQ;
 		serie=_serie;
 		position=question.position;
-		id=Question.idNonUtilisee();
+		id=idNonUtilisee();
+	}
+	
+	/**
+	 * Pour ajouter des nouvelles questions dans la base de donnée. (Attention, cette
+	 * méthode ne fait qu'instancier l'objet, elle ne le stocke pas dans la base ! Vous
+	 * devez faire question.save() pour l'y sauvegarder).
+	 * @param _titre
+	 * @param _texte
+	 * @param typeQ_id
+	 * @param _serie
+	 */
+	public Question(String _titre, String _texte, Long typeQ_id, Serie _serie){
+		titre=_titre;
+		texte=_texte;
+		position=Question.positionMax()+1;
+		typeQ=TypeQuestion.find.ref(typeQ_id);
+		serie=_serie;
+		id=idNonUtilisee();
 	}
 	
 	/**

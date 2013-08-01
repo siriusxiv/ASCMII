@@ -77,7 +77,7 @@ public class LancerSerie extends Controller{
 	/**
 	 * Affiche la page où l'on choisit la manière dont se finira la série juste avant de la lancer
 	 * avec un petit message d'erreur
-	 * @param id : id de la série
+	 * @param serie_id : id de la série
 	 * @param log : message d'erreur
 	 * @return
 	 */

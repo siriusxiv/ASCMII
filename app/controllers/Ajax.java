@@ -67,7 +67,7 @@ public class Ajax extends Controller{
 	}
 	/**
 	 * Permet de tester si oui où non la série a commencé dans serieNonCommencee.scala.html
-	 * @param serie_id
+	 * @param chemin
 	 * @return "0" si la série a commencé, "1" sinon
 	 */
 	public static Result hasSerieBegun(String chemin){
