@@ -23,6 +23,10 @@ package models;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import play.mvc.Http.RequestHeader;
 
 import com.typesafe.plugin.MailerAPI;
 import com.typesafe.plugin.MailerPlugin;
@@ -39,6 +43,7 @@ import com.typesafe.plugin.MailerPlugin;
  */
 public class Mail{
 	String domain_name = "http://ascmii.hd.free.fr";
+	String admin_mail = "Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>";
 	
 	String sujet;
 	String contenu;
@@ -83,13 +88,30 @@ public class Mail{
 	}
 	
 	/**
+	 * Message d'erreur retransmis par mail et envoyé directement.
+	 * @param arg0
+	 * @param t
+	 */
+	public Mail(RequestHeader arg0, Throwable t){
+		Date now = Calendar.getInstance().getTime();
+		sujet="ASCMII : Error occured on " + now;
+		from="ASCMII <ascmii.test@gmail.com>";
+		contenu="The following error occurred on "+now+":\rRequestHeader : "+arg0+"\rThrowable : "+t;
+		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
+		mail.setSubject(sujet);
+		mail.addRecipient(admin_mail);
+		mail.addFrom(from);
+		mail.send(contenu);
+	}
+	
+	/**
 	 * Envoie le mail
 	 */
 	public void sendMail(){
 			MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
 			mail.setSubject(sujet);
-			mail.addRecipient("Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
-			//mail.addRecipient(recipient,to);
+			mail.addRecipient(admin_mail);
+			//mail.addRecipient(recipient);
 			mail.addFrom(from);
 			mail.sendHtml(contenu);
 			System.out.println(contenu);

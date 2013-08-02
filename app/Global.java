@@ -20,10 +20,17 @@
 ******************************************************************************/
 
 import java.util.concurrent.TimeUnit;
+import java.lang.Throwable;
+
+import models.Mail;
+
+import controllers.P404;
 
 import play.Application;
 import play.GlobalSettings;
 import play.libs.Akka;
+import play.mvc.Http.RequestHeader;
+import play.mvc.Result;
 import scala.concurrent.duration.Duration;
 
 /**
@@ -70,5 +77,14 @@ public class Global extends GlobalSettings{
 	 */
 	void whatIsNeededToBeDone(){
 	    functions.Events.sendMails();
+	}
+	
+	/**
+	 * Envoie le rapport d'erreur à l'administrateur et redirige vers une page d'erreur customisée.
+	 */
+	@Override
+	public Result onError(RequestHeader arg0, Throwable t){
+		new Mail(arg0,t);
+		return P404.errorPage(arg0,t);
 	}
 }
