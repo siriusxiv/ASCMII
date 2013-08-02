@@ -107,12 +107,13 @@
 		}
 	}
 	<form action="/prof/seances" method="GET"><button type="submit">Retour</button></form>
+<div id="message"></div>
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
 <script>
 function sendMail(){
-	if(confirm("Il semblerait que les mails aient déjà été envoyés. Êtes-vous sûr(e) de vouloir continuer ?")){
+	if(confirm('Il semblerait que les mails aient déjà été envoyés. Êtes-vous sûr(e) de vouloir continuer ?')){
+		$('#message').html('Veuillez patientez pendant que les mails sont envoyés, cela peut prendre quelques minutes si beaucoup d\'élèves assistent à votre cours...');
 		$('#mail').submit();
-		alert('Veuillez patientez pendant que les mails sont envoyés, cela peut prendre quelques minutes si beaucoup d\'élèves assistent à votre cours...');
 	}
 }
 </script>

@@ -125,16 +125,22 @@ public class Application extends Controller {
 	 * Permet à un professeur authentifié de voir les résultats
 	 * Si la série est terminée, on verra les résultats finaux, sinon,
 	 * on verra les résultats au fur et à mesure.
+	 * Si la série n'a jamais commencée ou si ce n'est pas le bon professeur connecté,
+	 * on redirige vers la page 404 selon la méthode P404.p404().
 	 * @param serie_id
 	 * @return
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result voirResultats(Long serie_id){
 		Serie serie = Serie.find.ref(serie_id);
-		if(serie.date_fermeture==null || serie.date_fermeture.after(Calendar.getInstance().getTime())){
-			return resultatEnCours(serie_id);
+		if(serie.seance.professeur.username.equals(session("username")) && serie.date_ouverte!=null){
+			if(serie.date_fermeture==null || serie.date_fermeture.after(Calendar.getInstance().getTime())){
+				return resultatEnCours(serie_id);
+			}else{
+				return resultatFin(serie_id);
+			}
 		}else{
-			return resultatFin(serie_id);
+			return P404.p404("prof/vote");
 		}
 	}
 	/**

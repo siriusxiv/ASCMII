@@ -37,3 +37,14 @@ form.logout{
 p.explications{
 	font-size:80%;
 }
+
+#message{
+	position:fixed;
+    	z-index:0;
+	font-size:170%;
+	color:red;
+	background-color:#b0c4de;
+   	left:20%;
+	right:20%;
+    	top:30%;
+}
