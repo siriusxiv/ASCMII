@@ -22,7 +22,7 @@
 @(resultats : List[Resultat], serie : Serie, serieSuivante : Serie, nombreDeReponses : Int, nombreDeReponsesMAX : Int)
 @main("ASCMII - Résultats de la série"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/resultats.css")">
-	<h1>ASCMII</h1>
+	@title()
 	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>

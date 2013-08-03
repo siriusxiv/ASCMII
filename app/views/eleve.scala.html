@@ -25,7 +25,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/jquery.countdown.css")">
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/countdown.css")">
  <body onLoad="testFin()">
- <h1>ASCMII</h1>
+ @title()
  <h2 class="avertissement">@message</h2>
  @if(lien.serie.questions.length<=1){
 	<p>M./Mme @lien.eleve.prenom @lien.eleve.nom, vous devez répondre à la question suivante :</p>

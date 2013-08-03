@@ -22,7 +22,7 @@
 @(listSeance: List[Seance], log: String)
 @main("ASCMII - Les séances programmées"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
-	<h1>ASCMII</h1>
+	@title()
 	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>

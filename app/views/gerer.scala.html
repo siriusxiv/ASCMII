@@ -22,7 +22,7 @@
 @(seance: Seance, listSerie: List[Serie], message: String)
 @main("ASCMII - Liste des questions"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
-	<h1>ASCMII</h1>
+	@title()
 	<form action="/prof/logout" method="POST" class="logout">
 		<button type="submit">Se déconnecter</button>
 	</form>

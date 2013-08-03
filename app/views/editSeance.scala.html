@@ -20,7 +20,7 @@
 ******************************************************************************@
 
 @(seance: Seance)
-
+<!DOCTYPE html>
 <html>
  <head>
   <title>ASCMII - Editer la séance</title>
@@ -29,7 +29,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
  </head>
  <body>
- 	<h1>ASCMII</h1>
+ 	@title()
 	<form action="/prof/seances/edit/put/@seance.id" method="POST">
 		<h2>Edition de @seance.intitule</h2>
 		<table>

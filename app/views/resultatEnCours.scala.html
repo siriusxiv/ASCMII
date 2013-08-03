@@ -25,7 +25,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/jquery.countdown.css")">
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/countdown.css")">
  <body onLoad="rafraichir(5000)">
-	<h1>ASCMII</h1>
+	@title()
 	<p>La série @serie.nom a été lancée.<br>Les étudiants peuvent dès lors voter.</p>
 	<br>
 	<p id="pourcent" value="@{nombreDeReponses*100/nombreDeReponsesMAX}">@{nombreDeReponses*100/nombreDeReponsesMAX} % des gens ont répondu (@nombreDeReponses/@nombreDeReponsesMAX personnes)</p>

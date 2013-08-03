@@ -22,7 +22,7 @@
 @(lien: Lien)
 @main("ASCMII - Réponse"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/eleves.css")">
- <h1>ASCMII</h1>
+ @title()
  <p>La série est terminée. C'est trop tard.</p>
  <ol>@for(question <- lien.serie.questions){
 	<li><p>@Html(question.texte)</p></li>

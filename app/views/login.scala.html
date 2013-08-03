@@ -28,7 +28,7 @@
   <link rel="icon"  type="image/png" href="@routes.Assets.at("images/favicon.png")" />
  </head>
  <body>
- 	<h1>ASCMII</h1>
+ 	@title()
  	@if(authenticate=="F"){
  		<p class="avertissement">Mauvaise combinaison d'identifiant et mot de passe.</p>
  	}
