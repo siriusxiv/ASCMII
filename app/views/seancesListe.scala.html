@@ -42,7 +42,7 @@
 			</tr>
 		@for(seance <- listSeance){
 			<tr>
-				<td class="listeDate">@seance.date.format("dd/MM/yyyy à H") h</td>
+				<td class="listeDate">@if(seance.date==functions.ParseDate.lastDate()){Date non définie}else{@seance.date.format("dd/MM/yyyy à H") h}</td>
 				<td class="liste">@seance.matiere</td>
 				<td class="liste">@seance.intitule</td>
 				<td class="liste right">
