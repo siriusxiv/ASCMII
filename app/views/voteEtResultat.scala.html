@@ -34,6 +34,7 @@
 			<button type="submit">Lancer toutes les séries non lancées en un coup</button>
 		</form>
 	}else{<button type="submit" disabled>Lancer toutes les séries non lancées en un coup</button>}
+	@if(seance.hasAnySerieBegun()){<form action="/prof/fin/0" method="POST"><button>Mettre fin à toutes les séries en cours</button></form>}else{<button disabled>Mettre fin à toutes les séries en cours</button>}
 		<table class="liste">
 			<tr>
 			<th class="liste">Liste des séries</th><th class="liste">Actions</th>

@@ -152,15 +152,9 @@ public class LancerSerie extends Controller{
 		}
 		Date now = nowCal.getTime();
 		Date after = afterCal.getTime();
-		boolean seenSerie=false;
 		Collections.sort(seance.series,new Serie());
-		Long premiereSerieNonCommenceeID = null;
 		for(Serie serie : seance.series){
 			if(serie.date_ouverte==null){//Si la série est déjà ouverte, on ne doit rien faire (accessible avec le back du browser)
-				if(!seenSerie){
-					premiereSerieNonCommenceeID=serie.id;
-					seenSerie=true;
-				}
 				serie.date_ouverte=now;
 				if(automatique){
 					serie.date_fermeture = after;
@@ -168,7 +162,20 @@ public class LancerSerie extends Controller{
 				serie.save();
 			}
 		}
-		return redirect(routes.Application.voirResultats(premiereSerieNonCommenceeID));
+		return redirect(routes.Application.voteSeance(seance_id));
+	}
+	
+	/**
+	 * Met fin à toutes les séries non terminées dans la séance donnée
+	 * @param seance_id
+	 * @return affiche la page Vote et Résultats
+	 */
+	static Result fermerToutesLesSeries(Long seance_id){
+		Seance seance = Seance.find.ref(seance_id);
+		for(Serie s : seance.series){
+			s.mettreFin();
+		}
+		return redirect(routes.Application.voteSeance(seance_id));
 	}
 	
 }

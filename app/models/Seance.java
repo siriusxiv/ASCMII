@@ -171,6 +171,7 @@ public class Seance extends Model {
 		return false;
 	}
 	
+	
 	/**
 	 * Vérifie si au moins une série a été terminée dans la séance
 	 * Utile pour le bouton "Télécharger le bilan".
@@ -181,6 +182,20 @@ public class Seance extends Model {
 		int i = 0;
 		while(!result && i<series.size()){
 			result=!series.get(i).isNotFinished();
+			i++;
+		}
+		return result;
+	}
+	
+	/**
+	 * Vérifie si au moins une série est en cours
+	 * @return VRAI ou FAUX
+	 */
+	public boolean hasAnySerieBegun(){
+		boolean result=false;
+		int i = 0;
+		while(!result && i<series.size()){
+			result=(series.get(i).date_ouverte!=null)&&(series.get(i).isNotFinished());
 			i++;
 		}
 		return result;

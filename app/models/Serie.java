@@ -154,6 +154,14 @@ public class Serie extends Model implements Comparator<Serie>{
 	}
 	
 	/**
+	 * Met fin à la série
+	 */
+	public void mettreFin(){
+		date_fermeture=Calendar.getInstance().getTime();
+		save();
+	}
+	
+	/**
 	 * Renvoie la position maximale parmi la position de toutes les séries.
 	 * S'il n'y a aucune série dans la base de donnée, renvoie -1.
 	 * @return

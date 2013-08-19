@@ -145,13 +145,22 @@ public class Application extends Controller {
 	}
 	/**
 	 * Met fin manuellement à une série.
+	 * Si serie_id=0 alors on met fin à toutes les séries non terminées
+	 * dans la séance.
 	 * @param serie_id
 	 * @return
 	 */
 	public static Result finirSerie(Long serie_id){
+		if(serie_id==0){
+			String seance = session("vote");
+			if(seance!=null){
+				return LancerSerie.fermerToutesLesSeries(Long.parseLong(seance));
+			}else{
+				return badRequest("Une erreur inattendue s'est produite, veuillez vous reconnecter en vous assurant que vos cookies sont activés.");
+			}
+		}
 		Serie serie = Serie.find.ref(serie_id);
-		serie.date_fermeture=Calendar.getInstance().getTime();
-		serie.save();
+		serie.mettreFin();
 		return resultatFin(serie_id);
 	}
 	/**
