@@ -5,7 +5,7 @@
 
 INSERT INTO type_question(id,type_q) VALUES
 (1,'Question avec un seul choix de réponse possible'),
-(2,'Question avec plusieurs choix de réponse possible'),
+(2,'Question avec plusieurs choix de réponse possibles'),
 (3,'Question à réponse libre de type "texte"'),
 (4,'Question à réponse libre de type "nombre"')
 ;

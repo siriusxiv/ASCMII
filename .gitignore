@@ -20,9 +20,11 @@ dist
 *.seancexport
 public/uploads
 
-#gedit
+#gedit temp files
 *~
 
+#MS Word temp files
+~$*
 
 #################
 ## Eclipse
