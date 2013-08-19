@@ -65,6 +65,21 @@ play will choose port 9000. Pay attention that the selected port is not
 in use by another process.
 
 
+After the application is deployed, you must initialize the database.
+Open ascmii.sql with MySQL Workbench.
+Run the third line to create the database
+	CREATE DATABASE ascmii;
+
+Connect to http://localhost:PORT with your favorite web browser.
+Click on the button to update the database (this will run an SQL
+script that will create the tables and prepopulate the database).
+
+You can then run the last lines of the ascmii.sql file (it's just
+sample questions that couldn't be create automatically by play because
+their string was too long, so you must use MySQL Workbench to create
+them).
+
+
 
 Two ways to deploy a play application :
 There is a command :
