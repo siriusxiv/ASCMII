@@ -31,7 +31,7 @@
 	<p>Création d'une nouvelle question de type "@typeQ.typeQ"</p>
 	<p class="log">@log</p>
 	<form id="form" action="/prof/gerer/addq3/@serie_id/@typeQ.id" method="POST" enctype="multipart/form-data">
-		<p>Titre de la question : <input type="text" name="titre"></p>
+		<p>Titre de la question : <input type="text" name="titre" id="titre"></p>
 		<p>Entrez la question : </p>
 		<textarea name="texte" id="editorQuestion" cols="50" rows="3"></textarea>
 		@if(typeQ.id<=2){
@@ -139,24 +139,37 @@ editorQ = new YAHOO.widget.SimpleEditor('editorQuestion', {
 editorQ.render();
 }
 function send(){
-	@if(typeQ.id<=2){if(reponseVide()){
-		alert('Vous avez laisser un des champs de réponse vide ! Supprimez-le d\'abord si vous n\'en voulez pas.');
+	editorQ.saveHTML();
+	if(vide()){
+		alert('Vous avez laisser vide un des champs ! Si c\'est une réponse, supprimez-la ou bien mettez une image.');
 	}else{
-		editorQ.saveHTML();
 		$('#form').submit();
-	}}else{editorQ.saveHTML();
-	$('#form').submit();}
+	}
 }
-@if(typeQ.id<=2){function reponseVide() {
-	var i;
+function vide() {
 	var bool=false;
-	for(i=1;i<=nombreDeReponses;i++){
+	@if(typeQ.id<=2){var i;for(i=1;i<=nombreDeReponses;i++){
 		if($('#texte'+i).val()=='' && $('#image'+i).val()==''){
 			bool=true;
 		}
+	}}
+	if($('#editorQuestion').val()=='' || $('#titre').val()==''){
+		return true;
 	}
 	return bool;
-}}
+}
+@*Pour empêcher l'utilisateur de submit une form avec la touche ENTREE.
+Si l'utilisateur peut le faire, alors le onClick sur le bouton ne sert à rien
+et l'utilisateur pourrait poster des données incomplètes tout en faisant
+recharger la page*@
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
 </script>
 </body>
 }

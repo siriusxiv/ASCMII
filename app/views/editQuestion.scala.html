@@ -53,7 +53,7 @@
 	
 	<form action="/prof/gerer/@question.serie.seance.id" method="POST"><button type="submit">Retour</button></form>
 	<p class="explications">Notez que les élèves ne verront pas le titre de la question. Vous pouvez donc mettre ce que vous voulez.<br>
-							Vous pouvez intégrer des images (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur.</p>
+							Vous pouvez intégrer des images dans la question (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur. Pour éditer les images associées aux réponses, veuillez cliquez sur "Retour" et faites-le sur la page précédente.</p>
 	
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
 <script>
@@ -74,14 +74,6 @@
 			$('#reponse'+pos).remove();
 			pos++;
 			while(pos<=nombreDeReponses){ //On doit changer tous les attributs dans les questions qui suivent celle qu'on supprime
-				/*
-				$('#reponse'+pos).attr('id','reponse'+(pos-1));
-				$('#suppr'+pos).attr('onClick','removeReponse('+(pos-1)+')');
-				$('#suppr'+pos).attr('id','#suppr'+(pos-1));
-				$('#texte'+pos).attr('name','reponse'+(pos-1));
-				$('#texte'+pos).attr('id','texte'+(pos-1));
-				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
-				*/
 				$('#reponse'+pos).attr('id','reponse'+(pos-1));
 				$('#suppr'+pos).replaceWith('<a id="suppr'+(pos-1)+'" onClick="removeReponse('+(pos-1)+')">X</a>');
 				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
