@@ -1,2 +1,92 @@
+Here we'll explain how to deploy this web application on a server.
+
+I would advise you to use Ubuntu 12.04.2 LTS (that's what worked for me).
+
+First, install the following packages :
+
+-install JDK 1.7
+If you have another version of JRE or JDK beforehand, please uninstall it.
+$　sudo apt-get install openjdk-7-jdk
+
+/!\ You need to make absolutely sure that you are using JDK 1.7!
+Type javac -version and java -version in a terminal to check that
+there is no other version installed.
+
+-install MySQL Server
+$　sudo apt-get install mysql-server
+
+-install MySQL Workbench
+through Software Center
+
+-install git
+$　sudo apt-get install git
+
+
+Installing play :
+Download 2.1.1 version from play framework website
+extract the zip archive to your home folder and type the following
+commands in the terminal:
+$ sudo mv play-2.1.1 /opt
+$ sudo ln -s /opt/play-2.1.1 /opt/play
+$ sudo ln -s /opt/play/play /usr/local/bin/play
+
+(actually, moving play to the /opt folder is not compulsory, but you
+must make a shortcut to play in /usr/local/bin to be able to use the
+command "play" in the terminal)
+
+
+Now that play and the necessary packages are installed, download the
+sourcecode using git:
+$  git clone https://github.com/siriusxiv/ASCMII
+
+Then, you can launch the play application from the source.
+To do that :
+$  cd ASCMII
+$  play
+
+Then, you enter the play console, if everything proceeds as planned,
+then you should see :
+play! 2.1.1 (using Java 1.7.0_25 and Scala 2.10.0)
+(there must be Java 1.7 there, if not, remove any instance of another
+version of Java)
+
+You can use the "run" command in the play console to test the application.
+For example :
+$  run
+ or
+$  run 1034 (if you want to change the port, default port is 9000)
+
+There is two ways to deploy the application. Only one works for ASCMII
+(see the end of this file for a detailed explanation).
+Just enter the following command :
+$  start -Dhttp.port=80
+Where 80 is the port you'll use. If you don't specify the port, then
+play will choose port 9000. Pay attention that the selected port is not
+in use by another process.
+
+
+
+Two ways to deploy a play application :
+There is a command :
+$  dist
+Play will automatically create a zip file containing an executable file
+(named "start"). This executable file will create the server and does not
+need play to be installed on the computer in use. Though this method
+seems better for deployment, it has a major drawback (that I was unable
+to solve) :
+	- The project files are all compiled in .jar files. So you cannot
+add files after the app is deployed. I'll explain :
+When you write a file in the server, you must choose a path. To get the path of
+the folder in which the play application is stored, you must use the following
+method :
+	play.Play.application().path()
+But this method does not work when you dist your app. (I didn't find a
+roundabout way to avoid that)
+As a result I've chosen not to use dist.
+
+(This point is crucial for the upload of images)
+
+Sources:
+
 http://flummox-engineering.blogspot.fr/2012/11/how-to-install-play-framework-ubuntu.html
 http://git-scm.com/book/en/Git-Basics-Getting-a-Git-Repository
