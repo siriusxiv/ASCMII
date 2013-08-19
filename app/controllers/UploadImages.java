@@ -51,7 +51,20 @@ public class UploadImages extends Controller{
 	public static Result upload(Long reponse_id){
 		Reponse reponse = Reponse.find.ref(reponse_id);
 		MultipartFormData body = request().body().asMultipartFormData();
-		FilePart filePart = body.getFile("image");
+		if(upload(body.getFile("image"),reponse)){
+			return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Image uploadée avec succès !");
+		}else{
+	    	return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Le fichier uploadé n'est pas image ou son format n'est pas supporté !");
+		}
+	}
+	
+	/**
+	 * Upload une image sur le serveur
+	 * @param filePart : l'image à uploader
+	 * @param reponse : une réponse à laquelle appartient l'image qu'on uploade
+	 * @return VRAI si cela s'est déroulé avec succès, FAUX sinon
+	 */
+	static boolean upload(FilePart filePart,Reponse reponse){
 		if(isImage(filePart)){
 			File image = filePart.getFile();
 			String fileName = filePart.getFilename();
@@ -62,13 +75,16 @@ public class UploadImages extends Controller{
 		    try{
 		    	FileUtils.copyFile(image, destinationFile);
 		    	i.addImage(reponse);
-				return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Image uploadée avec succès !");
+		    	System.out.println("Image uploadée avec succès !");
+		    	return true;
 		    } catch (IOException e){
 		    	e.printStackTrace();
-		    	return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Impossible de copier l'image sur le serveur...");
+		    	System.out.println("Impossible de copier l'image sur le serveur...");
+		    	return false;
 		    }
 		}else{
-	    	return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"Le fichier uploadé n'est pas image ou son format n'est pas supporté !");
+			System.out.println("Le fichier uploadé n'est pas image ou son format n'est pas supporté !");
+			return false;
 		}
 	}
 	

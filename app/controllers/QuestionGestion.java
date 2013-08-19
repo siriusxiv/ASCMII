@@ -32,6 +32,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Http.MultipartFormData;
 import views.html.editQuestion;
 import views.html.nouvelleQuestion;
 import views.html.nouvelleQuestion2;
@@ -80,6 +81,7 @@ public class QuestionGestion extends Controller {
 	public static Result addQuestion3(Long serie_id, Long typeQ_id){
 		Serie serie = Serie.find.ref(serie_id);
 		DynamicForm info = Form.form().bindFromRequest();
+		MultipartFormData body = request().body().asMultipartFormData();
 		String titre = info.get("titre");
 		String texte = info.get("texte");
 		//D'abord, on vérifie toutes les infos rentrées :
@@ -92,11 +94,6 @@ public class QuestionGestion extends Controller {
 		if(texte.equals("")){
 			return addQuestionLog(serie_id,typeQ_id,"Veuillez entrez l'intitulé de la question.");
 		}
-		if(typeQ_id<=2){
-			if(info.get("reponse1").equals("") || info.get("reponse2").equals("")){
-				return addQuestionLog(serie_id,typeQ_id,"Vous devez entrer au moins deux réponses.");
-			}
-		}
 		//On ajoute la question à la DB :
 		Question question = new Question(titre,texte,typeQ_id,serie);
 		question.save();
@@ -107,6 +104,7 @@ public class QuestionGestion extends Controller {
 			while(info.get("reponse"+i)!=null){
 				Reponse reponse = new Reponse(info.get("reponse"+i),questionQuiAppartientALaReponse,i);
 				reponse.save();
+				UploadImages.upload(body.getFile("image"+i),reponse);
 				i++;
 			}
 		}

@@ -30,7 +30,7 @@
 	</form>
 	<p>Création d'une nouvelle question de type "@typeQ.typeQ"</p>
 	<p class="log">@log</p>
-	<form id="form" action="/prof/gerer/addq3/@serie_id/@typeQ.id" method="POST">
+	<form id="form" action="/prof/gerer/addq3/@serie_id/@typeQ.id" method="POST" enctype="multipart/form-data">
 		<p>Titre de la question : <input type="text" name="titre"></p>
 		<p>Entrez la question : </p>
 		<textarea name="texte" id="editorQuestion" cols="50" rows="3"></textarea>
@@ -41,33 +41,34 @@
 				<td class="suppr"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
 				<td id="numero1"> 1.</td>
 				<td><input type="text" id="texte1" name="reponse1" size="60px" value=""></td>
+				<td><input type="file" name="image1" id="image1"></td>
 			</tr>
 			<tr id="reponse2">
 				<td class="suppr"><a id="suppr2" onClick="removeReponse(2)">X</a></td>
 				<td id="numero2"> 2.</td>
 				<td><input type="text" id="texte2" name="reponse2" size="60px" value=""></td>
+				<td><input type="file" name="image2" id="image2"></td>
 			</tr>
 			</table>
-		}
-		<div style="display:inline;padding:0px 0px 0px 200px"></form><button onClick="send()">Terminer</button></div>
-	@if(typeQ.id<=2){
-		<button onClick="addReponse()" style="position:relative; top:-25px;">Ajouter une autre réponse</button>
-	}
+		}</form>@if(typeQ.id<=2){<button onClick="addReponse()">Ajouter une autre réponse</button>}
+		<button onClick="send()">Terminer</button>
+	
 	<form action="/prof/gerer/@seance_id" method="POST"><button type="submit">Retour</button></form>
 	<p class="explications">Notez que les élèves ne verront pas le titre de la question. Vous pouvez donc mettre ce que vous voulez.<br>
-							Vous pouvez intégrer des images (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur.<br>
-							Après avoir cliqué sur "Terminer", vous pourrez assigner une image à chaque réponse sur la page de gestion de la séance.</p>
+							Vous pouvez intégrer des images (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images dans la question à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur.<br>
+							Vous pouvez assignez des images à chaque réponse. À condition de mettre une image, vous pouvez laisser le champ de réponse vide.</p>
 	
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
-<script>
+@if(typeQ.id<=2){<script>
 	var nombreDeReponses = 2;
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);
 		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
 		var chaine2 = '<td id="numero'+(nombreDeReponses+1)+'"> '+(nombreDeReponses+1)+'.</td>';
-		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" size="60px" value=""></td></tr>';
-		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3);
+		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" size="60px" value=""></td>';
+		var chaine4 = '<td><input type="file" name="image'+(nombreDeReponses+1)+'" id="image'+(nombreDeReponses+1)+'"></td></tr>';
+		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3+chaine4);
 		nombreDeReponses++;
 	}
 	function removeReponse(pos){
@@ -82,13 +83,13 @@
 				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
 				var value = $('#texte'+pos).val();
 				$('#texte'+pos).replaceWith('<input type="text" id="texte'+(pos-1)+'" name="reponse'+(pos-1)+'" size="60px" value="'+value+'">');
-				
+				$('#image'+pos).replaceWith('<input type="file" name="image'+(pos-1)+'" id="image'+(pos-1)+'">');
 				pos++;
 			}
 			nombreDeReponses--;
 		}
 	}
-</script>
+</script>}
 <!-- Rich text editor -->
 <!-- Skin CSS file -->
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
@@ -138,11 +139,24 @@ editorQ = new YAHOO.widget.SimpleEditor('editorQuestion', {
 editorQ.render();
 }
 function send(){
-	editorQ.saveHTML();
-	$('#form').submit();
+	@if(typeQ.id<=2){if(reponseVide()){
+		alert('Vous avez laisser un des champs de réponse vide ! Supprimez-le d\'abord si vous n\'en voulez pas.');
+	}else{
+		editorQ.saveHTML();
+		$('#form').submit();
+	}}else{editorQ.saveHTML();
+	$('#form').submit();}
 }
+@if(typeQ.id<=2){function reponseVide() {
+	var i;
+	var bool=false;
+	for(i=1;i<=nombreDeReponses;i++){
+		if($('#texte'+i).val()=='' && $('#image'+i).val()==''){
+			bool=true;
+		}
+	}
+	return bool;
+}}
 </script>
-
-}
 </body>
-</html>
+}

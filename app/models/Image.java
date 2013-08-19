@@ -21,9 +21,6 @@
 
 package models;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -54,7 +51,16 @@ public class Image extends Model{
 	 */
 	public Image(String filename){
 		id=idNonUtilisee();
-		fileName=id+"_"+filename;
+		fileName=id+"_"+noSpace(filename);
+	}
+	
+	/**
+	 * Supprime les espaces.
+	 * @param str
+	 * @return la chaîne str sans espaces
+	 */
+	private static String noSpace(String str){
+		return str.replace(' ', '_');
 	}
 	
 	public static Finder<Long,Image> find = new Finder<Long,Image>(Long.class, Image.class);
@@ -62,22 +68,26 @@ public class Image extends Model{
 	/**
 	 * Supprime la référence de l'image dans la base de donnée et le fichier en lui-même
 	 * stocké dans "/public/uploads" si celui-ci n'est pas utilisée par autre réponse.
-	 * Attention, la référence à l'image dans la table "Reponse" n'est pas supprimée par cette fonction !
+	 * Attention, la référence à l'image dans la table "Reponse" n'est pas supprimée par
+	 * cette fonction !
 	 * Il faut la supprimer au préalable. 
+	 * 
+	 * J'ai fait le choix de ne jamais supprimer une image de la base de donnée. Donc, j'ai
+	 * tour mis en commenantaire.
 	 * @param id
 	 */
 	public static void removeImage(Long id){
-		Image i = Image.find.byId(id);
+		/*Image i = Image.find.byId(id);
 		if(i!=null){
 			if(Reponse.find.where().eq("image",i).findList().isEmpty()){
 				i.delete();
 				try {
-					Files.delete(Paths.get(play.Play.application().path().toString() + "//public//uploads//" + i.fileName));
-				} catch (IOException e) {
+					java.nio.file.Files.delete(java.nio.file.Paths.get(play.Play.application().path() + "//public//uploads//" + i.fileName));
+				} catch (java.io.IOException e) {
 					e.printStackTrace();
 				}
 			}
-		}
+		}*/
 	}
 	
 	/**
