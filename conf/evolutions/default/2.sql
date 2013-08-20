@@ -56,15 +56,7 @@ INSERT INTO reponse(position,texte,question_id) VALUES
 ;
 
 INSERT INTO eleve(ine,mail,prenom,nom) VALUES
-('00000000Q','yue.ling@eleves.ec-nantes.fr','User','2'),
 ('05018883P','malik.boussejra@eleves.ec-nantes.fr','User','1'),
-('12DFG200Q','zhe.yang@eleves.ec-nantes.fr','User','3'),
-('01018883P','clement.marechal@eleves.ec-nantes.fr','User','4'),
-('12123300Q','paul-yves.lucas@eleves.ec-nantes.fr','User','5'),
-('12D33300U','mario.jothy@eleves.ec-nantes.fr','User','6'),
-('99DFG200Q','jules.party@eleves.ec-nantes.fr','User','7'),
-('05415642I','gabrielle.evain@hotmail.fr','User','8'),
-('66415642I','arthur.regnault@eleves.ec-nantes.fr','User','9'),
 ('15018883P','malik.boussejra@eleves.ec-nantes.fr','User','10'),
 ('25018883P','malik.boussejra@eleves.ec-nantes.fr','User','11'),
 ('35018883P','malik.boussejra@eleves.ec-nantes.fr','User','12'),

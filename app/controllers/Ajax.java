@@ -79,4 +79,14 @@ public class Ajax extends Controller{
 		}
 	}
 	
+	/**
+	 * Renomme une série.
+	 * @param serie_id
+	 */
+	public static Result renameSerie(Long serie_id,String newName){
+		Serie serie = Serie.find.ref(serie_id);
+		serie.nom=newName;
+		serie.save();
+		return ok("The serie "+serie_id+" has been renamed successfully to "+newName);
+	}
 }

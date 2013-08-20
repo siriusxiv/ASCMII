@@ -9,6 +9,7 @@ by a student in order to do interactive polls during courses.
 
 	ASCMII is a web application developped for the Ecole Centrale de Nantes
 	aiming to organize quizzes during courses or lectures.
+
     Copyright (C) 2013  Malik Olivier Boussejra
 
     This program is free software: you can redistribute it and/or modify
@@ -41,13 +42,12 @@ cet identifiant qu'on utilisera pour les tests.
 les mails. (L'envoie des mails est fonctionnel en cliquant sur "Envoyer le mail"
 dans la page "Vote et Résultat").
 	La méthode sendMail contient les deux lignes suivantes :
-		//mail.addRecipient("Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>","malik.boussejra@eleves.ec-nantes.fr");
-		mail.addRecipient(recipient,to);
+		//mail.addRecipient(admin_mail);
+		mail.addRecipient(recipient);
 	Si vous voulez faire des tests, mettez la deuxième en commentaire et décommentez
 la première, ainsi seul moi recevra les mails, cela évitera de spammer les étudiants
-de D02.
-	Dans la méthode Mail, (ligne 38 du fichier Mail.java) modifiez http://localhost:9000
-par le nom de domaine qui sera utilisé.
+de D02. (vous pouvez changez la valeur d'admin_mail)
+	Dans la classe Mail, modifiez domain_name par le nom de domaine qui sera utilisé.
 
 	Pour l'insertions des données dans la base, le script est écrit en MySQL dans
 le fichier "conf/evolutions/default/2.sql". Normalement, Play est censé lancer

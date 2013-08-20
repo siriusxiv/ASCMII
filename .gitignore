@@ -19,6 +19,8 @@ dist
 *.seriexport
 *.seancexport
 public/uploads
+#generated javadoc
+doc
 
 #gedit temp files
 *~

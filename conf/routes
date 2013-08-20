@@ -111,6 +111,7 @@ GET		/eleve/infoheure/:serie_id	controllers.Ajax.infoHeure(serie_id: Long)
 GET		/prof/propRepondant/:serie_id	controllers.Ajax.infoNReponses(serie_id: Long)
 #Pour savoir si une série a commencée ou pas
 GET		/eleve/hasSerieBegun/:chemin	controllers.Ajax.hasSerieBegun(chemin: String)
-
+#Pour renommer une série
+POST	/prof/renameSerie/:serie_id/:newName	controllers.Ajax.renameSerie(serie_id:Long, newName:String)
 #Attrappe-tout. Redirige vers un page que l'utilisateur veut sûrement regarder ou vers la page 404
 GET		/*nameUrl							controllers.P404.p404(nameUrl: String)

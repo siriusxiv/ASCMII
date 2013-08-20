@@ -38,10 +38,10 @@
 			<tr>
 				<td class="left serie">
 					<form id="s@serie.id" action="/prof/gerer/del/@serie.id" method="POST" style="display:inline"></form>
-						@if(serie.date_ouverte==null){<button onClick="supprimerSerie(@serie.id)" class="suppr">X</button>
+						@if(serie.date_ouverte==null){<button onClick="supprimerSerie(@serie.id)" class="suppr" onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Supprimer la série')">X</button>
 						}else{<button disabled class="suppr">X</button>}
 				</td>
-				<td class="serie">@serie.nom</td>
+				<td class="serie" id="serie_nom@serie.id">@serie.nom <input type="image" src="/assets/images/edit-seance.png" title="Renommer la série" onMouseOut="$('#t'+@serie.id).html('Gestion de la série')" onMouseOver="$('#t'+@serie.id).html('Renommer la série')" onClick="rename(@serie.id)"></td>
 				<td class="right serie">
 					@if(listSerie.length!=1){
 						<form action="/prof/gerer/down/@serie.id" method="POST" style="display:inline">
@@ -68,7 +68,7 @@
 					<tr>
 						<td class="left"></td>
 						<td class="question"><form id="q@question.id" action="/prof/gerer/delquestion/@question.id" method="POST" style="display:inline"></form>
-							@if(serie.date_ouverte==null){<button onClick="supprimerQuestion(@question.id)" class="suppr">X</button>}else{<button disabled class="suppr">X</button>} @question.titre
+							@if(serie.date_ouverte==null){<button onClick="supprimerQuestion(@question.id)" class="suppr" onMouseOut="$('#spanq'+@question.id).html('Gestion de la question')" onMouseOver="$('#spanq'+@question.id).html('Supprimer la question')">X</button>}else{<button disabled class="suppr">X</button>} @question.titre
 						</td>
 						<td class="right question">
 							@if(serie.date_ouverte==null){
@@ -165,6 +165,32 @@ function addImage(reponse_id){
 	} else {
 		document.getElementById('r'+reponse_id).style.display = 'none';
 	}
+}
+@*Tout ce qui suit ci-dessous permet de renommer une série de question, le tout de manière très fluide.
+On stocke d'abord dans une HashTable les noms des séries déjà présentes. Lorsqu'on renomme une série,
+on envoie la requête au serveur par Ajax et on revient à l'affichage original avec cancelRename en même temps.*@
+var serieNames = new Object();
+@for(i:Int <- 0 to (listSerie.size()-1) ){
+	serieNames['@listSerie.get(i).id']='@functions.ScalaStringUtil.addEscChar(listSerie.get(i).nom)';
+}
+function rename(serie_id){
+	var input = '<input type="text" id="rename'+serie_id+'" value="'+serieNames[serie_id.toString()]+'">';
+	var change = '<button onClick=saveNameChange('+serie_id+')>Changer le nom</button>';
+	var cancel = '<button onClick="cancelRename('+serie_id+')">Annuler</button>';
+	$('#serie_nom'+serie_id).html(input+change+cancel);
+}
+function cancelRename(serie_id){
+	var name = serieNames[serie_id.toString()];
+	var image = ' <input type="image" src="/assets/images/edit-seance.png" title="Renommer la série" onMouseOut="$(\'#t\'+'+serie_id+').html(\'Gestion de la série\')" onMouseOver="$(\'#t\'+'+serie_id+').html(\'Renommer la série\')" onClick="rename('+serie_id+')">';
+	$('#serie_nom'+serie_id).html(name+image);
+}
+function saveNameChange(serie_id){
+	serieNames[serie_id.toString()]=$('#rename'+serie_id).val();
+	$.ajax({
+            type : 'POST',
+            url : '/prof/renameSerie/'+serie_id+'/'+serieNames[serie_id.toString()]
+        });
+	cancelRename(serie_id);
 }
 </script>
 }
