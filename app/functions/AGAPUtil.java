@@ -3,7 +3,9 @@ package functions;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,7 +18,7 @@ public class AGAPUtil {
 	private static String dbPass;
 
 	public static List<String> listMatieres;
-	
+
 	/**
 	 * init data
 	 */
@@ -36,7 +38,7 @@ public class AGAPUtil {
 		} catch (Exception e) {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.INFO, null, e);
 		}
-		
+
 		getMatiereList();
 	}
 
@@ -50,8 +52,21 @@ public class AGAPUtil {
 		} catch (Exception e) {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.INFO, null, e);
 		}
-
 		return connection;
+	}
+
+	/**
+	 * Release connector to the database
+	 */
+	public static void releaseConnection(Connection connection) {
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -66,10 +81,13 @@ public class AGAPUtil {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
+	/**
+	 * Remplie la variable listMatieres avec la liste des matières dans AGAP
+	 */
 	private static void getMatiereList(){
 		listMatieres = new ArrayList<String>();
-		listMatieres.add("ALGPR");
+		/*listMatieres.add("ALGPR");
 		listMatieres.add("GEMAT");
 		listMatieres.add("SCUBE");
 		listMatieres.add("dSIBAD");
@@ -79,7 +97,26 @@ public class AGAPUtil {
 		listMatieres.add("AUTOM");
 		listMatieres.add("CONEN");
 		listMatieres.add("VIVRE");
-		listMatieres.add("MATIE");
+		listMatieres.add("MATIE");*/
+		String theQuery = listeCours();
+		Connection connection = getConnection();
+		if(connection!=null){
+			try {
+				Statement theStmt = connection.createStatement();
+				ResultSet theRS1 = theStmt.executeQuery(theQuery);
+				while (theRS1.next()) {
+					String libelle = theRS1.getString("ActionFormation_Libelle");
+					//int id = theRS1.getInt("ActionFormation_ID");
+					listMatieres.add(libelle);
+				}
+			} catch (SQLException ex) {
+				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
+			}
+			releaseConnection(connection);
+		}
+		else{
+			System.out.println("Impossible de se connecter à AGAP...");
+		}
 	}
 
 	/**
