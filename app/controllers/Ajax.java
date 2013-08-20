@@ -21,10 +21,16 @@
 
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import functions.AGAPUtil;
 import models.Lien;
 import models.Serie;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.matiereListeDynamique;
 
 /**
  * Contient les fonctions qui sont appelées par Ajax pour le rafraîchissement
@@ -88,5 +94,21 @@ public class Ajax extends Controller{
 		serie.nom=newName;
 		serie.save();
 		return ok("The serie "+serie_id+" has been renamed successfully to "+newName);
+	}
+	
+	/**
+	 * Renvoie la liste des matières qui contiennent le chaîne boutDeMatiere
+	 * @param boutDeMatiere
+	 * @return
+	 */
+	public static Result listeMatieres(String boutDeMatiere){
+		List<String> listeMatieres = new ArrayList<String>();
+		for(String s : AGAPUtil.listMatieres){
+			if(s.toUpperCase().contains(boutDeMatiere.toUpperCase())){
+				listeMatieres.add(s);
+			}
+		}
+		Collections.sort(listeMatieres);
+		return ok(matiereListeDynamique.render(listeMatieres));
 	}
 }

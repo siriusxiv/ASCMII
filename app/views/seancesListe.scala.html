@@ -21,6 +21,7 @@
 
 @(listSeance: List[Seance], log: String)
 @main("ASCMII - Les séances programmées"){
+<body onLoad="afficheListeMatieresInit()">
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
 	@title()
 	<form action="/prof/logout" method="POST" class="logout">
@@ -85,14 +86,14 @@
 			<tbody>
 			<tr>
 				<td>Matière :</td>
-				<td><input type="text" size="20" name="matiere" value=""></td>
+				<td><input type="text" size="20" name="matiere" value="" id="matiere"></td>
 			</tr>
 			<tr>
 				<td>Intitulé de séance :</td>
 				<td><input type="text" size="20" name="intitule" value=""></td>
 			</tr>
 			<tr>
-				<table>
+			<table>
 			<tr>
 				<td>Date et heure :</td>
 				<td><select name="day">
@@ -144,6 +145,7 @@
 			</tr>
 			</tbody>
 		</table>
+		<p id="matieres"></p>
 		<button type="submit">Valider</button>
 	</form>
 		<p>OU</p>
@@ -168,5 +170,18 @@ function addSeance(){
 		document.getElementById("new_seance").style.display = "none";
 	}
 }
+function afficheListeMatieresInit(){
+	setInterval("afficheListeMatieres();",1000);
+}
+function afficheListeMatieres(){
+	var inputMatiere = $('#matiere').val();
+	if(inputMatiere.length>=3){
+		$('#matieres').load('/prof/listeMatieres/'+inputMatiere);
+	}
+}
+function replaceMatiere(string){
+	$('#matiere').val(string);
+}
 </script>
+</body>
 }

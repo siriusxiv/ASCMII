@@ -39,7 +39,7 @@ import play.db.ebean.Model;
 @Entity
 public class Eleve extends Model {
 	@Id
-	public String ine;
+	public String uid;
 	
 	@Required
 	public String mail;
@@ -54,6 +54,21 @@ public class Eleve extends Model {
 	public List<Repond> repond;
 	@OneToMany(targetEntity = Choisit.class)
 	public List<Choisit> choisit;
+	
+	/**
+	 * Crée un nouvel élève et l'enregistre dans la base de donnée
+	 * @param uid_
+	 * @param mail_
+	 * @param prenom_
+	 * @param nom_
+	 */
+	public Eleve(String uid_,String mail_,String prenom_,String nom_){
+		uid=uid_;
+		mail=mail_;
+		prenom=prenom_;
+		nom=nom_;
+		save();
+	}
 	
 	public static Finder<String,Eleve> find = new Finder<String,Eleve>(String.class, Eleve.class);
 

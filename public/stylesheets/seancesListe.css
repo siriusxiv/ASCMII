@@ -57,6 +57,17 @@ form.logout{
 	padding:1px 0px 0px 400px;
 }
 
+#matieres{
+	position:relative;
+	top:-100px;
+	left:300px;
+}
+
+.matiere_selection{
+	cursor:pointer;
+	cursor:hand;
+}
+
 /* pour la page gérer :*/
 h2.intituleDeLaSeance{
 	padding:1px 0px 0px 300px;

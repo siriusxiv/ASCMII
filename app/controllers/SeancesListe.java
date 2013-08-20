@@ -25,8 +25,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import functions.AGAPUtil;
 import functions.ParseDate;
-
 import models.Professeur;
 import models.Question;
 import models.Reponse;
@@ -58,7 +58,7 @@ public class SeancesListe extends Controller{
 		String year = info.get("year");
 		String hour = info.get("hour");
 		
-		if(info.get("matiere")!=""){
+		if(AGAPUtil.listMatieres.contains(info.get("matiere"))){
 			Seance newSeance = new Seance();
 			if(info.get("intitule")==""){
 				newSeance.intitule="Intitulé";
@@ -107,21 +107,21 @@ public class SeancesListe extends Controller{
 	 * @return
 	 */
 	public static Result editSeance(Long id){
-		DynamicForm fullInfos = Form.form().bindFromRequest();
-		String day = fullInfos.get("day");
-		String month = fullInfos.get("month");
-		String year = fullInfos.get("year");
-		String hour = fullInfos.get("hour");
+		DynamicForm info = Form.form().bindFromRequest();
+		String day = info.get("day");
+		String month = info.get("month");
+		String year = info.get("year");
+		String hour = info.get("hour");
 		
-		if(fullInfos.get("matiere")!=""){
+		if(AGAPUtil.listMatieres.contains(info.get("matiere"))){
 			Seance seance = Seance.find.ref(id);
 			seance.id=id;
-			if(fullInfos.get("intitule")==""){
+			if(info.get("intitule")==""){
 				seance.intitule="Intitulé";
 			}else{
-				seance.intitule=fullInfos.get("intitule");
+				seance.intitule=info.get("intitule");
 			}
-			seance.matiere=fullInfos.get("matiere");
+			seance.matiere=info.get("matiere");
 			seance.professeur=Professeur.find.ref(session("username"));
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();

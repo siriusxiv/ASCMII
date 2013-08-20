@@ -51,6 +51,21 @@ public class Professeur extends Model {
 	public String nom;
 	
 	
+	/**
+	 * Crée un nouveau professeur et l'enregistre dans la base de donnée
+	 * @param uid_
+	 * @param mail_
+	 * @param prenom_
+	 * @param nom_
+	 */
+	public Professeur(String uid_,String mail_,String prenom_,String nom_){
+		username=uid_;
+		mail=mail_;
+		prenom=prenom_;
+		nom=nom_;
+		save();
+	}
+	
 	public static Finder<String,Professeur> find = new Finder<String,Professeur>(String.class, Professeur.class);
 
 

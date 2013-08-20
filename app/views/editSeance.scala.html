@@ -28,7 +28,7 @@
   <link rel="icon" type="image/png" href="@routes.Assets.at("images/options.png")">
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/seancesListe.css")">
  </head>
- <body>
+ <body onLoad="afficheListeMatieresInit()">
  	@title()
 	<form action="/prof/seances/edit/put/@seance.id" method="POST">
 		<h2>Edition de @seance.intitule</h2>
@@ -36,7 +36,7 @@
 			<tbody>
 			<tr>
 				<td>Matière :</td>
-				<td><input type="text" size="20" name="matiere" value="@seance.matiere"></td>
+				<td><input type="text" size="20" name="matiere" value="@seance.matiere" id="matiere"></td>
 			</tr>
 			<tr>
 				<td>Intitulé de séance :</td>
@@ -86,8 +86,24 @@
 				</td>
 			</tr>
 			</table>
+			<p id="matieres"></p>
 		<br>
 		<button type="submit">Valider</button>
 	</form>
+<script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
+<script>
+function afficheListeMatieresInit(){
+	setInterval("afficheListeMatieres();",1000);
+}
+function afficheListeMatieres(){
+	var inputMatiere = $('#matiere').val();
+	if(inputMatiere.length>=3){
+		$('#matieres').load('/prof/listeMatieres/'+inputMatiere);
+	}
+}
+function replaceMatiere(string){
+	$('#matiere').val(string);
+}
+</script>
  </body>
 </html>

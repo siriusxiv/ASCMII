@@ -55,7 +55,7 @@ INSERT INTO reponse(position,texte,question_id) VALUES
 (7,'Pardon ?',5)
 ;
 
-INSERT INTO eleve(ine,mail,prenom,nom) VALUES
+INSERT INTO eleve(uid,mail,prenom,nom) VALUES
 ('05018883P','malik.boussejra@eleves.ec-nantes.fr','User','1'),
 ('15018883P','malik.boussejra@eleves.ec-nantes.fr','User','10'),
 ('25018883P','malik.boussejra@eleves.ec-nantes.fr','User','11'),

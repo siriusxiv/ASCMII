@@ -31,6 +31,9 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.NamingEnumeration;
 
+import models.Eleve;
+import models.Professeur;
+
 // http://www.javaworld.com/javaworld/jw-06-2007/jw-06-springldap.html?page=1
 
 /**
@@ -94,7 +97,44 @@ public class LDAP{
 	 * Vérifie si l'utilisateur est un élève ou pas.
 	 * @return VRAI si c'est un professeur, FAUX sinon.
 	 */
-	boolean isProfessor(){
+	private boolean isProfessor(){
 		return !mail.contains("@eleves");
+	}
+	
+	/**
+	 * Aspire les élèves du serveur LDAP
+	 */
+	public void aspireElevesEtProfesseurs(){
+		Hashtable<String,String> properties = new Hashtable<String,String>();
+		properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+		properties.put(Context.PROVIDER_URL, serveur);
+		properties.put(Context.SECURITY_AUTHENTICATION, "none");
+		properties.put(Context.SECURITY_PRINCIPAL, "ou=people, dc=ec-nantes, dc=fr");
+		try {
+        	System.out.println("try...");
+        	DirContext ctx = new InitialDirContext(properties);
+        	System.out.println("identified");
+        	String filter = "";
+        	SearchControls sc = new SearchControls();
+		    sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
+		    String base = "ou=people, dc=ec-nantes, dc=fr";
+		    NamingEnumeration<SearchResult> results = ctx.search(base, filter, sc);
+		    while (results.hasMore()) {
+                SearchResult searchResult = (SearchResult) results.next();
+                Attributes attrs = searchResult.getAttributes();
+                nom = (String) attrs.get("sn").get();
+                prenom = (String) attrs.get("givenname").get();
+                mail = (String) attrs.get("mail").get();
+                uid = (String) attrs.get("uid").get();
+                if(this.isProfessor()){
+                	new Professeur(uid,mail,prenom,nom);
+                }else{
+                	new Eleve(uid,mail,prenom,nom);
+                }
+            }
+            ctx.close();
+        } catch (NamingException e) {
+        	System.out.println(e.getMessage());
+        }
 	}
 }

@@ -7,16 +7,16 @@ create table choisit (
   id                        bigint auto_increment not null,
   date                      datetime,
   reponse_id                bigint,
-  eleve_ine                 varchar(255),
+  eleve_uid                 varchar(255),
   constraint pk_choisit primary key (id))
 ;
 
 create table eleve (
-  ine                       varchar(255) not null,
+  uid                       varchar(255) not null,
   mail                      varchar(255),
   prenom                    varchar(255),
   nom                       varchar(255),
-  constraint pk_eleve primary key (ine))
+  constraint pk_eleve primary key (uid))
 ;
 
 create table image (
@@ -29,7 +29,7 @@ create table lien (
   chemin                    varchar(255) not null,
   repondu                   tinyint(1) default 0,
   serie_id                  bigint,
-  eleve_ine                 varchar(255),
+  eleve_uid                 varchar(255),
   constraint pk_lien primary key (chemin))
 ;
 
@@ -56,7 +56,7 @@ create table repond (
   texte                     TEXT,
   date                      datetime,
   question_id               bigint,
-  eleve_ine                 varchar(255),
+  eleve_uid                 varchar(255),
   constraint pk_repond primary key (id))
 ;
 
@@ -96,20 +96,20 @@ create table type_question (
 
 alter table choisit add constraint fk_choisit_reponse_1 foreign key (reponse_id) references reponse (id) on delete restrict on update restrict;
 create index ix_choisit_reponse_1 on choisit (reponse_id);
-alter table choisit add constraint fk_choisit_eleve_2 foreign key (eleve_ine) references eleve (ine) on delete restrict on update restrict;
-create index ix_choisit_eleve_2 on choisit (eleve_ine);
+alter table choisit add constraint fk_choisit_eleve_2 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
+create index ix_choisit_eleve_2 on choisit (eleve_uid);
 alter table lien add constraint fk_lien_serie_3 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
 create index ix_lien_serie_3 on lien (serie_id);
-alter table lien add constraint fk_lien_eleve_4 foreign key (eleve_ine) references eleve (ine) on delete restrict on update restrict;
-create index ix_lien_eleve_4 on lien (eleve_ine);
+alter table lien add constraint fk_lien_eleve_4 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
+create index ix_lien_eleve_4 on lien (eleve_uid);
 alter table question add constraint fk_question_typeQ_5 foreign key (type_q_id) references type_question (id) on delete restrict on update restrict;
 create index ix_question_typeQ_5 on question (type_q_id);
 alter table question add constraint fk_question_serie_6 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
 create index ix_question_serie_6 on question (serie_id);
 alter table repond add constraint fk_repond_question_7 foreign key (question_id) references question (id) on delete restrict on update restrict;
 create index ix_repond_question_7 on repond (question_id);
-alter table repond add constraint fk_repond_eleve_8 foreign key (eleve_ine) references eleve (ine) on delete restrict on update restrict;
-create index ix_repond_eleve_8 on repond (eleve_ine);
+alter table repond add constraint fk_repond_eleve_8 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
+create index ix_repond_eleve_8 on repond (eleve_uid);
 alter table reponse add constraint fk_reponse_question_9 foreign key (question_id) references question (id) on delete restrict on update restrict;
 create index ix_reponse_question_9 on reponse (question_id);
 alter table reponse add constraint fk_reponse_image_10 foreign key (image_id) references image (id) on delete restrict on update restrict;

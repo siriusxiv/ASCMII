@@ -26,6 +26,7 @@ import models.Mail;
 
 import controllers.P404;
 import functions.AGAPUtil;
+import functions.LDAP;
 
 import play.Application;
 import play.GlobalSettings;
@@ -49,6 +50,7 @@ public class Global extends GlobalSettings{
 	public void onStart(Application app) {
 		scheduler(6);
 		AGAPUtil.init();
+		new LDAP().aspireElevesEtProfesseurs();
 	} 
 	
 	/**
