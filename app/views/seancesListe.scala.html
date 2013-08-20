@@ -87,20 +87,23 @@
 			<tr>
 				<td>Matière :</td>
 				<td><input type="text" size="20" name="matiere" value="" id="matiere"></td>
+				<td id="matieres">&nbsp;</td>
 			</tr>
 			<tr>
 				<td>Intitulé de séance :</td>
 				<td><input type="text" size="20" name="intitule" value=""></td>
+				<td>&nbsp;</td>
 			</tr>
-			<tr>
-			<table>
+			</tbody>
+		</table>
+		<table>
 			<tr>
 				<td>Date et heure :</td>
 				<td><select name="day">
 				@for(i: Int <- 1 to 31){
 					<option value="@i" @if(i==Integer.parseInt(Calendar.getInstance().getTime().format("d"))){ selected="selected"}>@i</option>
 				}
-				</td>
+				</select></td>
 				<td><select name="month">
 				@for(i: Int <- 1 to 12){
 					<option value="@i" @if(i==Integer.parseInt(Calendar.getInstance().getTime().format("M"))){ selected="selected"}>
@@ -120,12 +123,12 @@
 					}}
 					</option>
 				}
-				</td>
+				</select></td>
 				<td><select name="year">
 					@for(i: Int <- 2013 to 2019){
 						<option value="@i" @if(i==Integer.parseInt(Calendar.getInstance().getTime().format("yyyy"))){ selected="selected"}>@i</option>
 					}
-				</td>
+				</select></td>
 				<td>à</td>
 				<td><select name="hour">
 						<option value="08">8h</option>
@@ -139,13 +142,9 @@
 						<option value="16">16h</option>
 						<option value="17">17h</option>
 						<option value="18">18h</option>
-				</td>
+				</select></td>
 			</tr>
 			</table>
-			</tr>
-			</tbody>
-		</table>
-		<p id="matieres"></p>
 		<button type="submit">Valider</button>
 	</form>
 		<p>OU</p>

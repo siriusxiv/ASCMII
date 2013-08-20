@@ -87,7 +87,7 @@ public class AGAPUtil {
 	 */
 	private static void getMatiereList(){
 		listMatieres = new ArrayList<String>();
-		/*listMatieres.add("ALGPR");
+		listMatieres.add("ALGPR");
 		listMatieres.add("GEMAT");
 		listMatieres.add("SCUBE");
 		listMatieres.add("dSIBAD");
@@ -97,7 +97,7 @@ public class AGAPUtil {
 		listMatieres.add("AUTOM");
 		listMatieres.add("CONEN");
 		listMatieres.add("VIVRE");
-		listMatieres.add("MATIE");*/
+		listMatieres.add("MATIE");
 		String theQuery = listeCours();
 		Connection connection = getConnection();
 		if(connection!=null){

@@ -37,11 +37,12 @@
 			<tr>
 				<td>Matière :</td>
 				<td><input type="text" size="20" name="matiere" value="@seance.matiere" id="matiere"></td>
+				<td id="matieres">&nbsp;</td>
 			</tr>
 			<tr>
 				<td>Intitulé de séance :</td>
 				<td><input type="text" size="20" name="intitule" value="@seance.intitule"></td>
-			</tr>
+				<td>&nbsp;</td>
 			</tr>
 			</tbody>
 		</table>
@@ -52,6 +53,7 @@
 					@for(i: Int <- 1 to 31){
 					<option value="@i" @if(i==Integer.parseInt(seance.date.format("d"))){ selected="selected"}>@i</option>
 				}
+				</select>
 				</td>
 				<td><select name="month">
 				@for(i: Int <- 1 to 12){
@@ -72,21 +74,21 @@
 					}}
 					</option>
 				}
+				</select>
 				</td>
 				<td><select name="year">
 					@for(i: Int <- 2013 to 2019){
 						<option value="@i" @if(i==Integer.parseInt(seance.date.format("yyyy"))){ selected="selected"}>@i</option>
 					}
-				</td>
+				</select></td>
 				<td>à</td>
 				<td><select name="hour">
 					@for(i: Int <- 8 to 18){
 						<option value="@i" @if(i==Integer.parseInt(seance.date.format("H"))){ selected="selected"}>@{i+"h"}</option>
 					}
-				</td>
+				</select></td>
 			</tr>
 			</table>
-			<p id="matieres"></p>
 		<br>
 		<button type="submit">Valider</button>
 	</form>
