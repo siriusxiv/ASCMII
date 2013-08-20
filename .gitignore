@@ -28,6 +28,9 @@ doc
 #MS Word temp files
 ~$*
 
+#Files containing credentials
+*.properties
+
 #################
 ## Eclipse
 #################

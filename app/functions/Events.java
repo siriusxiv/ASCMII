@@ -99,7 +99,7 @@ public class Events {
 				sendMailAndCreateLinks(s);
 				System.out.println("Mail sent\n");
 			}else{
-				System.out.println("No need do send this.\n");
+				System.out.println("No need to send this.\n");
 			}
 		}
 		System.out.println("Finished.\n");

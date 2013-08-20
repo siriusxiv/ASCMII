@@ -25,6 +25,7 @@ import java.lang.Throwable;
 import models.Mail;
 
 import controllers.P404;
+import functions.AGAPUtil;
 
 import play.Application;
 import play.GlobalSettings;
@@ -42,11 +43,12 @@ import scala.concurrent.duration.Duration;
 public class Global extends GlobalSettings{
 
 	/**
-	 * Initialisation des timers
+	 * Initialisation des timers et du driver de la base de donnée postgres (AGAP)
 	 */
 	@Override
 	public void onStart(Application app) {
 		scheduler(6);
+		AGAPUtil.init();
 	} 
 	
 	/**
@@ -54,7 +56,7 @@ public class Global extends GlobalSettings{
 	 * X est déterminé par la variable "duree".
 	 * @param duree : indique la duree après laquelle l'action sera faite.
 	 */
-	void scheduler(final int duree){
+	private void scheduler(final int duree){
 		whatIsNeededToBeDone();
 		Akka.system().scheduler().scheduleOnce(
 				  Duration.create(duree, TimeUnit.MINUTES),
@@ -75,8 +77,16 @@ public class Global extends GlobalSettings{
 	/**
 	 * Liste de ce qui doit être fait périodiquement.
 	 */
-	void whatIsNeededToBeDone(){
+	private void whatIsNeededToBeDone(){
 	    functions.Events.sendMails();
+	}
+	
+	/**
+	 * Déchargement du driver postgres
+	 */
+	@Override
+	public void onStop(Application app){
+		AGAPUtil.release();
 	}
 	
 	/**
