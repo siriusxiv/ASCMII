@@ -35,8 +35,13 @@
 		<p>Entrez la question : </p>
 		<textarea name="texte" id="editorQuestion" cols="50" rows="3"></textarea>
 		@if(typeQ.id<=2){
-			<p>Réponses :</p>
 			<table>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Texte des réponse :</td>
+				<td>Uploadez une image :</td>
+			</tr>
 			<tr id="reponse1">
 				<td class="suppr"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
 				<td id="numero1"> 1.</td>
@@ -56,7 +61,7 @@
 	<form action="/prof/gerer/@seance_id" method="POST"><button type="submit">Retour</button></form>
 	<p class="explications">Notez que les élèves ne verront pas le titre de la question. Vous pouvez donc mettre ce que vous voulez.<br>
 							Vous pouvez intégrer des images (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images dans la question à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur.<br>
-							Vous pouvez assignez des images à chaque réponse. À condition de mettre une image, vous pouvez laisser le champ de réponse vide.</p>
+							Vous pouvez assigner des images à chaque réponse. À condition de mettre une image, vous pouvez laisser le champ de réponse vide.</p>
 	
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
 @if(typeQ.id<=2){<script>

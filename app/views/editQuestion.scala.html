@@ -34,8 +34,13 @@
 		<p>Entrez la question : </p>
 		<textarea name="texte" id="editorQuestion" cols="50" rows="3">@Html(question.texte)</textarea>
 		@if(question.typeQ.id<=2){
-			<p>Réponses :</p>
 			<table>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Texte des réponse :</td>
+				<td>Uploadez une image :</td>
+			</tr>
 			@for(reponse <- question.reponses){
 			<tr id="reponse@reponse.position">
 				<td class="suppr"><a id="suppr@reponse.position" onClick="removeReponse(@reponse.position)">X</a></td>
