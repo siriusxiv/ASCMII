@@ -62,9 +62,16 @@ Then, from line 70 onwards, please configure the domain name, mail, ldap
 and agap settings.
 admin.mail contains the mail adress to which error reports are sent.
 smtp.user contains the mail adress used to send mail through ASCMII.
+test.user and test.pass contain the username and the password of the
+account used to connect without LDAP (only used to test the application,
+if you want to disabled this test mode, set test.enabled=no, otherwise
+set test.enabled=yes). When test mode is on, mails are sent to admin.mail
+only, and not to the users.
 The other lines are self-explanatory.
 Please note that if you were to input a colon ":", you must enclose
 what you type in double quotes ".
+
+
 
 Now you can deploy the application :
 There are two ways to deploy the application. Only one works for ASCMII

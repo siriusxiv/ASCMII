@@ -104,12 +104,16 @@ public class Mail{
 	
 	/**
 	 * Envoie le mail
+	 * Si on est en mode de test, alors le mail est envoyé à l'admin et pas aux utilisateurs
 	 */
 	public void sendMail(){
 			MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
 			mail.setSubject(sujet);
-			//mail.addRecipient(admin_mail);
-			mail.addRecipient(recipient);
+			if(test.Mode.isEnabled()){
+				mail.addRecipient(admin_mail);
+			}else{
+				mail.addRecipient(recipient);
+			}
 			mail.addFrom(from);
 			mail.sendHtml(contenu);
 			System.out.println(contenu);

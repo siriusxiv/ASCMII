@@ -28,42 +28,4 @@ by a student in order to do interactive polls during courses.
 
 ==============================================================================
 
-
-====Notes d'usage :
-
-	LDAP : vous pourrez tester avec vos identifiants pour être sûr que cela
-fonctionne pour un professeur (malheureusement, je ne connais les mots de passe
-d'aucun professeur :( ).
-	Note importante : j'ai rajouté un identifiant qui marche, il s'agit de
-"mprofess", et celui n'a pas besoin de mot de passe pour se connecter. C'est
-cet identifiant qu'on utilisera pour les tests.
-
-	C'est dans Models.Mail que vous pouvez modifier les informations concernant
-les mails. (L'envoie des mails est fonctionnel en cliquant sur "Envoyer le mail"
-dans la page "Vote et Résultat").
-	La méthode sendMail contient les deux lignes suivantes :
-		//mail.addRecipient(admin_mail);
-		mail.addRecipient(recipient);
-	Si vous voulez faire des tests, mettez la deuxième en commentaire et décommentez
-la première, ainsi seul moi recevra les mails, cela évitera de spammer les étudiants
-de D02. (vous pouvez changez la valeur d'admin_mail)
-	Dans la classe Mail, modifiez domain_name par le nom de domaine qui sera utilisé.
-
-	Pour l'insertions des données dans la base, le script est écrit en MySQL dans
-le fichier "conf/evolutions/default/2.sql". Normalement, Play est censé lancer
-ce script à la première utilisation pour populer la base (qu'il faut déjà avec
-créée avec MySQL WorkBench, sous le nom de "ascmii"). Cependant, il y a un bug
-que je n'arrive pas à expliquer. Après avoir implémenté le texte riche (avec des
-images), j'ai regardé comment étaient stockées les images dans la base de donnée,
-et c'est sous forme d'une très longue chaîne de caractères. Play ne veut pas de
-cette chaîne dans son script SQL (il dit qu'il y a une erreur de syntaxe). Ce qui
-est bizarre, c'est que MySQL WorkBench lui est tout-à-fait d'accord avec ce script.
-Du coup, vous devrez aussi lancer un script SQL avec MySQL WorkBench pour ajouter
-les questions qui contiennent des images. Vous trouverez ce script déjà écrit dans
-le fichier "ascmii.sql" que vous trouverez à la racine du projet.
-	Les réglages relatifs à la base de donnée se font dans "conf/application.conf"
-aux lignes 44 à 47 :
-	db.default.driver=com.mysql.jdbc.Driver
-	db.default.url="jdbc:mysql://localhost/ascmii"
-	db.default.user=root
-	#db.default.password= (s'il n'y a pas de mot de passe, on met en commentaire cette ligne)
+See "play how to install" to see how to deploy the app.
