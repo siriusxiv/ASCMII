@@ -43,13 +43,13 @@
 				<td>Uploadez une image :</td>
 			</tr>
 			<tr id="reponse1">
-				<td class="suppr"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
+				<td class="suppr" title="Supprimer la réponse"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
 				<td id="numero1"> 1.</td>
 				<td><input type="text" id="texte1" name="reponse1" size="60px" value=""></td>
 				<td><input type="file" name="image1" id="image1"></td>
 			</tr>
 			<tr id="reponse2">
-				<td class="suppr"><a id="suppr2" onClick="removeReponse(2)">X</a></td>
+				<td class="suppr" title="Supprimer la réponse"><a id="suppr2" onClick="removeReponse(2)">X</a></td>
 				<td id="numero2"> 2.</td>
 				<td><input type="text" id="texte2" name="reponse2" size="60px" value=""></td>
 				<td><input type="file" name="image2" id="image2"></td>
@@ -69,7 +69,7 @@
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);
-		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
+		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr" title="Supprimer la réponse"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
 		var chaine2 = '<td id="numero'+(nombreDeReponses+1)+'"> '+(nombreDeReponses+1)+'.</td>';
 		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" size="60px" value=""></td>';
 		var chaine4 = '<td><input type="file" name="image'+(nombreDeReponses+1)+'" id="image'+(nombreDeReponses+1)+'"></td></tr>';

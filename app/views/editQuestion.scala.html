@@ -43,7 +43,7 @@
 			</tr>
 			@for(reponse <- question.reponses){
 			<tr id="reponse@reponse.position">
-				<td class="suppr"><a id="suppr@reponse.position" onClick="removeReponse(@reponse.position)">X</a></td>
+				<td class="suppr" title="Supprimer la réponse"><a id="suppr@reponse.position" onClick="removeReponse(@reponse.position)">X</a></td>
 				<td id="numero@reponse.position"> @reponse.position.</td>
 				<td><input type="text" id="texte@reponse.position" name="reponse@reponse.position" size="60px" value="@reponse.texte"></td>
 			</tr>
@@ -66,7 +66,7 @@
 	
 	function addReponse(){
 		var reponseNumero='reponse'+(nombreDeReponses+1);
-		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
+		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr" title="Supprimer la réponse"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
 		var chaine2 = '<td id="numero'+(nombreDeReponses+1)+'"> '+(nombreDeReponses+1)+'.</td>';
 		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" size="60px" value=""></td></tr>';
 		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3);
