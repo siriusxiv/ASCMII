@@ -50,7 +50,7 @@ public class Global extends GlobalSettings{
 	public void onStart(Application app) {
 		scheduler(6);
 		AGAPUtil.init();
-		new LDAP().aspireElevesEtProfesseurs();
+		//new LDAP().aspireElevesEtProfesseurs();
 	} 
 	
 	/**
