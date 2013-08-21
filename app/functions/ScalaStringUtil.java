@@ -38,4 +38,18 @@ public class ScalaStringUtil {
 	public static String addEscChar(String str){
 		return str.replace("'", "\'");
 	}
+	
+	/**
+	 * Renvoie la liste des matières sous la forme d'une string
+	 * exploitable par la fonction autocomplete de jQuery
+	 * (utilisé dans les templates seancesListe et editSeance).
+	 * @return une chaîne du type "'Matière1','Matière2'..."
+	 */
+	public static String listMatieres(){
+		String liste = "";
+		for(String s : AGAPUtil.listMatieres){
+			liste+="'"+s+"',";
+		}
+		return liste.substring(0, liste.length()-1);
+	}
 }
