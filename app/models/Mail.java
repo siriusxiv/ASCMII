@@ -42,14 +42,15 @@ import com.typesafe.plugin.MailerPlugin;
  *
  */
 public class Mail{
-	String domain_name = "http://ascmii.hd.free.fr";
-	String admin_mail = "Malik Boussejra <malik.boussejra@eleves.ec-nantes.fr>";
+	private static String domain_name = play.Play.application().configuration().getString("domain.url");
+	private static String admin_mail = play.Play.application().configuration().getString("admin.mail");
 	
-	String sujet;
-	String contenu;
-	String to;
-	String recipient;
-	String from;
+	private static String from = "ASCMII <"+play.Play.application().configuration().getString("smtp.user")+">";
+	
+	private String sujet;
+	private String contenu;
+	private String to;
+	private String recipient;
 	
 	/**
 	 * Permet de créer le mail qui sera envoyé à un élève donné pour une séance donnée.
@@ -62,7 +63,6 @@ public class Mail{
 		sujet="[ASCMII] Lien pour les questions concernant le cours de "+seance.matiere+" le "+df.format(seance.date);
 		to=eleve.mail;
 		recipient=eleve.prenom+" "+eleve.nom+" <"+to+">";
-		from="ASCMII <ascmii.test@gmail.com>";
 		contenu="<html>Bonjour,<br>"+eleve.prenom+" "+eleve.nom+", vous trouverez ci-dessous les séries de questions concernant le cours de "+
 				seance.matiere+" le "+df.format(seance.date)+" :<br><br>";
 		int i=1;
@@ -83,7 +83,6 @@ public class Mail{
 		sujet="[ASCMII] Confirmation de l'envoi du mail concernant le cours de "+seance.matiere+" le "+df.format(seance.date);
 		to=seance.professeur.mail;
 		recipient=seance.professeur.prenom+" "+seance.professeur.nom+" <"+to+">";
-		from="ASCMII <ascmii.test@gmail.com>";
 		contenu="<html>Bonjour,<br>Concernant la séance de "+seance.matiere+" le "+df.format(seance.date)+", le mail contenant les liens pour répondre aux questions a été envoyé à tous les élèves suivant ce cours.<br>Bonne journée.<br><br><span style=\"font-size:75%;float:right;\">Ce mail est un message automatique, il ne sert à rien d'y répondre.</span></html>";
 	}
 	
@@ -95,7 +94,6 @@ public class Mail{
 	public Mail(RequestHeader arg0, Throwable t){
 		Date now = Calendar.getInstance().getTime();
 		sujet="ASCMII : Error occured on " + now;
-		from="ASCMII <ascmii.test@gmail.com>";
 		contenu="The following error occurred on "+now+":\rRequestHeader : "+arg0+"\rThrowable : "+t;
 		MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
 		mail.setSubject(sujet);
@@ -110,8 +108,8 @@ public class Mail{
 	public void sendMail(){
 			MailerAPI mail = play.Play.application().plugin(MailerPlugin.class).email();
 			mail.setSubject(sujet);
-			mail.addRecipient(admin_mail);
-			//mail.addRecipient(recipient);
+			//mail.addRecipient(admin_mail);
+			mail.addRecipient(recipient);
 			mail.addFrom(from);
 			mail.sendHtml(contenu);
 			System.out.println(contenu);

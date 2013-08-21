@@ -45,7 +45,9 @@ import models.Professeur;
  *
  */
 public class LDAP{
-	String serveur = "ldap://rldap.ec-nantes.fr";
+	String serveur = play.Play.application().configuration().getString("ldap.protocol") + "://" + 
+				play.Play.application().configuration().getString("ldap.host") + ":" +
+				play.Play.application().configuration().getString("ldap.port");
 	
 	String nom;
 	String prenom;

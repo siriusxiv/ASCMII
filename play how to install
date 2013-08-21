@@ -56,7 +56,18 @@ $  run
  or
 $  run 1034 (if you want to change the port, default port is 9000)
 
-There is two ways to deploy the application. Only one works for ASCMII
+Now you must edit the conf/application.conf file.
+	Line 39 to 42 : configure default database
+Then, from line 70 onwards, please configure the domain name, mail, ldap
+and agap settings.
+admin.mail contains the mail adress to which error reports are sent.
+smtp.user contains the mail adress used to send mail through ASCMII.
+The other lines are self-explanatory.
+Please note that if you were to input a colon ":", you must enclose
+what you type in double quotes ".
+
+Now you can deploy the application :
+There are two ways to deploy the application. Only one works for ASCMII
 (see the end of this file for a detailed explanation).
 Just enter the following command :
 $  start -Dhttp.port=80

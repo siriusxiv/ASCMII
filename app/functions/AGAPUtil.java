@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * Contient les fonctions pour pouvoir se connecter à AGAP
+ * @author malik
+ *
+ */
 public class AGAPUtil {	
 	private static String dbURL;
 	private static String dbUser;
@@ -23,15 +27,15 @@ public class AGAPUtil {
 	 * init data
 	 */
 	public static void init() {
-		String dbDriver = "org.postgresql.Driver";
-		String dbProtocol = "jdbc:postgresql";
-		String dbHost = "agapbd.ec-nantes.fr";
-		String dbPort = "5432";
-		String dbName = "AGAP";
+		String dbDriver = play.Play.application().configuration().getString("agap.driver");
+		String dbProtocol = play.Play.application().configuration().getString("agap.protocol");
+		String dbHost = play.Play.application().configuration().getString("agap.host");
+		String dbPort = play.Play.application().configuration().getString("agap.port");
+		String dbName = play.Play.application().configuration().getString("agap.dbName");
 
 		dbURL = dbProtocol + "://" + dbHost + ":" + dbPort + "/" + dbName;
-		dbUser = "ascmii";
-		dbPass = "secret";
+		dbUser = play.Play.application().configuration().getString("agap.user");
+		dbPass = play.Play.application().configuration().getString("agap.passw");
 		try {
 			// try with the main server
 			Class.forName(dbDriver);
