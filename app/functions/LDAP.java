@@ -112,33 +112,43 @@ public class LDAP{
 		Hashtable<String,String> properties = new Hashtable<String,String>();
 		properties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 		properties.put(Context.PROVIDER_URL, serveur);
-		properties.put(Context.SECURITY_AUTHENTICATION, "none");
-		properties.put(Context.SECURITY_PRINCIPAL, "ou=people, dc=ec-nantes, dc=fr");
 		try {
         	System.out.println("trying to connect de LDAP...");
         	DirContext ctx = new InitialDirContext(properties);
         	System.out.println("connected");
-        	String filter = "";
+        	String filter = "(mail=*)";
         	SearchControls sc = new SearchControls();
 		    sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
 		    String base = "ou=people, dc=ec-nantes, dc=fr";
 		    NamingEnumeration<SearchResult> results = ctx.search(base, filter, sc);
+		    System.out.println("Adding people to the database... This can take some time...");
 		    while (results.hasMore()) {
                 SearchResult searchResult = (SearchResult) results.next();
                 Attributes attrs = searchResult.getAttributes();
                 nom = (String) attrs.get("sn").get();
                 prenom = (String) attrs.get("givenname").get();
                 mail = (String) attrs.get("mail").get();
-                uid = (String) attrs.get("uid").get();
+                uid = getUID(searchResult);
                 if(this.isProfessor()){
                 	new Professeur(uid,mail,prenom,nom);
                 }else{
                 	new Eleve(uid,mail,prenom,nom);
                 }
             }
+            System.out.println("Success! All students and professors have been aspirated.");
             ctx.close();
         } catch (NamingException e) {
         	System.out.println(e.getMessage());
         }
+	}
+	
+	/**
+	 * Renvoie l'uid d'un SearchResult
+	 * @param sr : SearchResult
+	 * @return String : uid du SearchResult
+	 */
+	private static String getUID(SearchResult sr){
+		String results = sr.toString();
+		return results.substring(4,results.indexOf(':'));
 	}
 }

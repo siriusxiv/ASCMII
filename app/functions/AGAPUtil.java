@@ -32,15 +32,18 @@ public class AGAPUtil {
 		String dbHost = play.Play.application().configuration().getString("agap.host");
 		String dbPort = play.Play.application().configuration().getString("agap.port");
 		String dbName = play.Play.application().configuration().getString("agap.dbName");
-
+		
 		dbURL = dbProtocol + "://" + dbHost + ":" + dbPort + "/" + dbName;
 		dbUser = play.Play.application().configuration().getString("agap.user");
 		dbPass = play.Play.application().configuration().getString("agap.passw");
 		try {
 			// try with the main server
+			System.out.println("Loading PostgreSQL driver...");
 			Class.forName(dbDriver);
-		} catch (Exception e) {
+			System.out.println("Loading PostgreSQL driver... LOADED");
+		} catch (ClassNotFoundException e) {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.INFO, null, e);
+			System.out.println("Loading PostgreSQL driver... Failed");
 		}
 
 		getMatiereList();
@@ -52,9 +55,12 @@ public class AGAPUtil {
 	public static Connection getConnection() {
 		Connection connection = null;
 		try {
+			System.out.println("Connecting to : " +dbURL+ " " + dbUser+" "+dbPass);
 			connection = DriverManager.getConnection(dbURL, dbUser, dbPass);
 		} catch (Exception e) {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.INFO, null, e);
+			e.printStackTrace();
+			
 		}
 		return connection;
 	}
@@ -91,7 +97,7 @@ public class AGAPUtil {
 	 */
 	private static void getMatiereList(){
 		listMatieres = new ArrayList<String>();
-		listMatieres.add("ALGPR");
+		/*listMatieres.add("ALGPR");
 		listMatieres.add("GEMAT");
 		listMatieres.add("SCUBE");
 		listMatieres.add("dSIBAD");
@@ -101,21 +107,24 @@ public class AGAPUtil {
 		listMatieres.add("AUTOM");
 		listMatieres.add("CONEN");
 		listMatieres.add("VIVRE");
-		listMatieres.add("MATIE");
+		listMatieres.add("MATIE");*/
 		String theQuery = listeCours();
 		System.out.println("Connecting to AGAP...");
 		Connection connection = getConnection();
 		if(connection!=null){
 			try {
+				System.out.println("Executing : " + theQuery);
 				Statement theStmt = connection.createStatement();
 				ResultSet theRS1 = theStmt.executeQuery(theQuery);
 				while (theRS1.next()) {
-					String libelle = theRS1.getString("ActionFormation_Libelle");
+					String libelle = theRS1.getString("actionformation_libellecourt");
 					//int id = theRS1.getInt("ActionFormation_ID");
+					System.out.println(libelle);
 					listMatieres.add(libelle);
 				}
 			} catch (SQLException ex) {
 				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
+				System.out.println("query error");
 			}
 			releaseConnection(connection);
 		} else{
@@ -128,9 +137,9 @@ public class AGAPUtil {
 	 * @return
 	 */
 	public static String listeCours(){
-		return "SELECT * FROM ActionFormation "
-				+ "NATURAL JOIN Cycle "
-				+ "WHERE Cycle_Courant=1";
+		return "SELECT * FROM actionformation "
+				+ "NATURAL JOIN cycle "
+				+ "WHERE cycle_defaut=1";
 	}
 
 	/**

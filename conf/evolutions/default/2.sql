@@ -11,7 +11,7 @@ INSERT INTO type_question(id,type_q) VALUES
 ;
 
 INSERT INTO professeur(username,mail,prenom,nom) VALUES
-('mprofess','malik.boussejra@eleves.ec-nantes.fr','Professeur','Numéro1');
+('mprofess','malik.boussejra@eleves.ec-nantes.fr','Professeur','TEST');
 
 INSERT INTO seance(id,date,matiere,intitule,professeur_username) VALUES
 (1,'2014/01/31 08:00:00','ASCMII','Test ASCMII','mprofess'),
@@ -55,13 +55,6 @@ INSERT INTO reponse(position,texte,question_id) VALUES
 (7,'Pardon ?',5)
 ;
 
-INSERT INTO eleve(uid,mail,prenom,nom) VALUES
-('05018883P','malik.boussejra@eleves.ec-nantes.fr','User','1'),
-('15018883P','malik.boussejra@eleves.ec-nantes.fr','User','10'),
-('25018883P','malik.boussejra@eleves.ec-nantes.fr','User','11'),
-('35018883P','malik.boussejra@eleves.ec-nantes.fr','User','12'),
-('45018883P','malik.boussejra@eleves.ec-nantes.fr','User','13')
-;
 
 # --- !Downs
 
@@ -73,7 +66,6 @@ DELETE FROM seance;
 DELETE FROM serie;
 DELETE FROM question;
 DELETE FROM reponse;
-DELETE FROM eleve;
 
 SET FOREIGN_KEY_CHECKS=1;
 

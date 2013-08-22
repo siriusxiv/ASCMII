@@ -67,6 +67,10 @@ account used to connect without LDAP (only used to test the application,
 if you want to disabled this test mode, set test.enabled=no, otherwise
 set test.enabled=yes). When test mode is on, mails are sent to admin.mail
 only, and not to the users.
+ldap.aspire lets you choose if you want to get all students and professors
+from LDAP inside the database. I advise you to set it to no. Set it to yes
+only the first time you run the application.
+
 The other lines are self-explanatory.
 Please note that if you were to input a colon ":", you must enclose
 what you type in double quotes ".

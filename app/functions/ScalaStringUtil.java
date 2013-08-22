@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 
 package functions;
 
@@ -38,7 +38,7 @@ public class ScalaStringUtil {
 	public static String addEscChar(String str){
 		return str.replace("'", "\'");
 	}
-	
+
 	/**
 	 * Renvoie la liste des matières sous la forme d'une string
 	 * exploitable par la fonction autocomplete de jQuery
@@ -47,9 +47,14 @@ public class ScalaStringUtil {
 	 */
 	public static String listMatieres(){
 		String liste = "";
-		for(String s : AGAPUtil.listMatieres){
-			liste+="'"+s+"',";
+		if(AGAPUtil.listMatieres.isEmpty()){
+			return liste;
+		}else{
+			for(String s : AGAPUtil.listMatieres){
+				liste+="'"+s+"',";
+			}
+			return liste.substring(0, liste.length()-1);
+
 		}
-		return liste.substring(0, liste.length()-1);
 	}
 }

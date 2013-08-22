@@ -84,8 +84,8 @@ public class Eleve extends Model {
 	 * On doit supprimer d'autres éléments en cascade si on supprime un élève/
 	 * @param ine
 	 */
-	public static void removeEleve(String ine){
-		Eleve el = Eleve.find.byId(ine);
+	public static void removeEleve(String uid){
+		Eleve el = Eleve.find.byId(uid);
 		if(el != null){
 			List<Lien> ls = Lien.find.where().eq("eleve", el).findList();
 			for(Lien l : ls){
