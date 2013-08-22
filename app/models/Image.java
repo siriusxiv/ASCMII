@@ -82,7 +82,7 @@ public class Image extends Model{
 			if(Reponse.find.where().eq("image",i).findList().isEmpty()){
 				i.delete();
 				try {
-					java.nio.file.Files.delete(java.nio.file.Paths.get(play.Play.application().path() + "//public//uploads//" + i.fileName));
+					java.nio.file.Files.delete(java.nio.file.Paths.get(play.Play.application().path().getAbsolutePath() + "/public/uploads/" + i.fileName));
 				} catch (java.io.IOException e) {
 					e.printStackTrace();
 				}

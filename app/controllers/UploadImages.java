@@ -69,8 +69,8 @@ public class UploadImages extends Controller{
 			File image = filePart.getFile();
 			String fileName = filePart.getFilename();
 	    	Image i = new Image(fileName);
-			File destinationFile = new File(play.Play.application().path() + "//public//uploads//" + i.fileName);
-		    System.out.println(play.Play.application().path());
+			File destinationFile = new File(play.Play.application().path().getAbsolutePath() + "/public/uploads/" + i.fileName);
+		    System.out.println(play.Play.application().path().getAbsolutePath());
 		    System.out.println(image.getAbsolutePath());
 		    try{
 		    	FileUtils.copyFile(image, destinationFile);
