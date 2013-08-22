@@ -103,6 +103,7 @@ public class AGAPUtil {
 		listMatieres.add("VIVRE");
 		listMatieres.add("MATIE");
 		String theQuery = listeCours();
+		System.out.println("Connecting to AGAP...");
 		Connection connection = getConnection();
 		if(connection!=null){
 			try {
@@ -117,8 +118,7 @@ public class AGAPUtil {
 				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
 			}
 			releaseConnection(connection);
-		}
-		else{
+		} else{
 			System.out.println("Impossible de se connecter à AGAP...");
 		}
 	}

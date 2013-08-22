@@ -73,7 +73,7 @@ public class LDAP{
 		properties.put(Context.SECURITY_PRINCIPAL, "uid="+login+", ou=people, dc=ec-nantes, dc=fr");
 		properties.put(Context.SECURITY_CREDENTIALS, passw);
         try {
-        	System.out.println("try...");
+        	System.out.println("trying to get identified...");
         	DirContext ctx = new InitialDirContext(properties);
         	System.out.println("identified");
         	String filter = "(uid="+login+")";
@@ -115,9 +115,9 @@ public class LDAP{
 		properties.put(Context.SECURITY_AUTHENTICATION, "none");
 		properties.put(Context.SECURITY_PRINCIPAL, "ou=people, dc=ec-nantes, dc=fr");
 		try {
-        	System.out.println("try...");
+        	System.out.println("trying to connect de LDAP...");
         	DirContext ctx = new InitialDirContext(properties);
-        	System.out.println("identified");
+        	System.out.println("connected");
         	String filter = "";
         	SearchControls sc = new SearchControls();
 		    sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
