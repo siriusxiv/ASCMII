@@ -76,6 +76,9 @@ POST	/prof/uploadimage/:reponse_id	controllers.UploadImages.upload(reponse_id: L
 
 POST	/prof/upload/del/:reponse_id	controllers.UploadImages.deleteImage(reponse_id: Long)
 
+#Pour accéder aux images uploadées
+GET		/images/:filename			controllers.UploadImages.view(filename: String)
+
 #prof voteEtRésultats
 POST	/prof/vote/send/:id			controllers.LancerSerie.creerLiens(id: Long)
 

@@ -69,7 +69,7 @@ public class UploadImages extends Controller{
 			File image = filePart.getFile();
 			String fileName = filePart.getFilename();
 	    	Image i = new Image(fileName);
-			File destinationFile = new File(play.Play.application().path().getAbsolutePath() + "/public/uploads/" + i.fileName);
+			File destinationFile = new File(play.Play.application().path().getAbsolutePath() + "/img/" + i.fileName);
 		    System.out.println(play.Play.application().path().getAbsolutePath());
 		    System.out.println(image.getAbsolutePath());
 		    try{
@@ -121,5 +121,15 @@ public class UploadImages extends Controller{
 		reponse.save();
 		Image.removeImage(imgTemp.id);
 		return SeancesListe.gererSeanceLog(reponse.question.serie.seance.id,"L'image a été supprimée avec succès.");
+	}
+	
+	/**
+	 * Pour accéder aux images uploadées
+	 * @param filename
+	 * @return l'image
+	 */
+	public static Result view(String filename) {
+	    File file  = new File(play.Play.application().path().getAbsolutePath() + "/img/" + filename);
+	    return ok(file);
 	}
 }

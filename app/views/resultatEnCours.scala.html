@@ -37,7 +37,7 @@
 			@for(reponse <- resultat.question.reponses){
 				<tr>
 					<td class="reponsesNombre">@reponse.position. </td>
-					<td class="img">@if(reponse.image!=null){<img class="reponses" src="/assets/uploads/@reponse.image.fileName" height="40px">}</td>
+					<td class="img">@if(reponse.image!=null){<img class="reponses" src="/img/@reponse.image.fileName" height="40px">}</td>
 					<td class="reponses">@reponse.texte</td><td class="reponsesNombre">@resultat.reponsesChoisies.get(reponse.position-1)</td><td class="reponsesPourcent">@{resultat.reponsesChoisies.get(reponse.position-1)*100/nombreDeReponsesMAX} %</td>
 				</tr>}
 			</table>

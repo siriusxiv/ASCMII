@@ -94,7 +94,7 @@
 					</tr>
 					@for(reponse <- question.reponses){
 						<tr>
-							<td class="left">@if(reponse.image!=null){<img class="reponse" src="/assets/uploads/@reponse.image.fileName">}</td>
+							<td class="left">@if(reponse.image!=null){<img class="reponse" src="/images/@reponse.image.fileName">}</td>
 							<td class="reponseText reponse">@reponse.texte</td>
 							<td class="right reponse">@if(reponse.image==null){
 								<img class="insertImage" src="/assets/images/insert-image-3.png" title="Ajouter une image à la réponse" onClick="addImage(@reponse.id)">

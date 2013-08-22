@@ -18,7 +18,7 @@ dist
 *.csv
 *.seriexport
 *.seancexport
-public/uploads
+img
 #generated javadoc
 doc
 
