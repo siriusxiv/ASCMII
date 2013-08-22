@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 
 import java.util.concurrent.TimeUnit;
 import java.lang.Throwable;
@@ -52,7 +52,7 @@ public class Global extends GlobalSettings{
 		AGAPUtil.init();
 		new LDAP().aspireElevesEtProfesseurs();
 	} 
-	
+
 	/**
 	 * Exécute les actions de whatIsNeededToBeDone toutes les X minutes, ou
 	 * X est déterminé par la variable "duree".
@@ -61,28 +61,28 @@ public class Global extends GlobalSettings{
 	private void scheduler(final int duree){
 		whatIsNeededToBeDone();
 		Akka.system().scheduler().scheduleOnce(
-				  Duration.create(duree, TimeUnit.MINUTES),
-				  new Runnable() {
-				    public void run() {
+				Duration.create(duree, TimeUnit.MINUTES),
+				new Runnable() {
+					public void run() {
 						whatIsNeededToBeDone();
 						/*if(Calendar.HOUR_OF_DAY>=20 || Calendar.HOUR_OF_DAY<7){
 							scheduler(660);
 						}else{*/
-							scheduler(duree);
+						scheduler(duree);
 						//}
-				    }
-				  },
-				  Akka.system().dispatcher()
+					}
+				},
+				Akka.system().dispatcher()
 				); 
 	}
-	
+
 	/**
 	 * Liste de ce qui doit être fait périodiquement.
 	 */
 	private void whatIsNeededToBeDone(){
-	    functions.Events.sendMails();
+		functions.Events.sendMails();
 	}
-	
+
 	/**
 	 * Déchargement du driver postgres
 	 */
@@ -90,13 +90,15 @@ public class Global extends GlobalSettings{
 	public void onStop(Application app){
 		AGAPUtil.release();
 	}
-	
+
 	/**
 	 * Envoie le rapport d'erreur à l'administrateur et redirige vers une page d'erreur customisée.
 	 */
 	@Override
 	public Result onError(RequestHeader arg0, Throwable t){
-		new Mail(arg0,t);
+		if(!test.Mode.isEnabled()){
+			new Mail(arg0,t);
+		}
 		return P404.errorPage(arg0,t);
 	}
 }
