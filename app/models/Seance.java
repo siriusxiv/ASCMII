@@ -56,6 +56,9 @@ public class Seance extends Model {
 	@Required
 	public String intitule;
 	
+	//groupe ne sert à rien pour l'instant
+	public String groupe;
+	
 	@ManyToOne
 	public Professeur professeur;
 	

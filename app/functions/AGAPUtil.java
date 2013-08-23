@@ -150,7 +150,7 @@ public class AGAPUtil {
 	}
 
 	/**
-	 * Trouve les élèves suivant le cours au libellé indiqué
+	 * Trouve les élèves suivant le cours ayant l'id donnée
 	 * @param libellecourt
 	 * @return
 	 */
@@ -189,7 +189,7 @@ public class AGAPUtil {
 	 * @return
 	 */
 	private static String listeInscrits(Integer ActionFormation_ID){
-		return "SELECT * FROM InscriptionAction "
+		return "SELECT personne_uid FROM InscriptionAction "
 				+ "NATURAL JOIN Inscription "
 				+ "NATURAL JOIN CursusPrepare "
 				+ "NATURAL JOIN DossierScolaire "
@@ -199,13 +199,48 @@ public class AGAPUtil {
 	}
 
 	/**
+	 * Trouve les élèves dans le groupe donné suivant le cours ayant l'id donnée.
+	 * @param mat_id
+	 * @param groupe_nom
+	 * @return
+	 */
+	public static List<Eleve> getInscritsParGroupe(Integer mat_id, String groupe_nom){
+		List<Eleve> eleves = new ArrayList<Eleve>();
+		String theQuery = listeInscritsGroupe(mat_id, groupe_nom);
+		System.out.println("Connecting to AGAP...");
+		Connection connection = getConnection();
+		if(connection!=null){
+			try {
+				System.out.println("Executing : " + theQuery);
+				Statement theStmt = connection.createStatement();
+				ResultSet theRS1 = theStmt.executeQuery(theQuery);
+				while (theRS1.next()) {
+					String uid = theRS1.getString("personne_uid");
+					Eleve eleve = Eleve.find.byId(uid);
+					if(eleve==null){
+						System.out.println("uid not found : " + uid);
+					}else{
+						eleves.add(eleve);
+					}
+				}
+			} catch (SQLException ex) {
+				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
+			}
+			releaseConnection(connection);
+		} else{
+			System.out.println("Impossible de se connecter à AGAP...");
+		}
+		return eleves;
+	}
+	
+	
+	/**
 	 * Requête pour avoir la liste des inscrits
-	 * /!\ ascmii n'a pour l'instant pas les droits pour accéder à GroupeStructure... 
 	 * @param ActionFormation_ID
 	 * @return
 	 */
-	public static String listeInscritsGroupe(Integer ActionFormation_ID){
-		return "SELECT * FROM InscriptionAction "
+	private static String listeInscritsGroupe(Integer ActionFormation_ID, String groupe_nom){
+		return "SELECT personne_uid FROM InscriptionAction "
 				+ "NATURAL JOIN Inscription "
 				+ "NATURAL JOIN CursusPrepare "
 				+ "NATURAL JOIN DossierScolaire "
@@ -215,6 +250,7 @@ public class AGAPUtil {
 				+ "NATURAL JOIN Groupe "
 				+ "NATURAL JOIN GroupeStructure "
 				+ "NATURAL JOIN Structures "
-				+ "WHERE ActionFormation_ID="+ActionFormation_ID;
+				+ "WHERE ActionFormation_ID="+ActionFormation_ID+" "
+				+ "AND groupe_nom='"+groupe_nom+"'";
 	}
 }

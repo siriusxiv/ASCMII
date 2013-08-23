@@ -63,7 +63,7 @@ public class Events {
 	 * @param seance
 	 * @return la liste des élèves concernés
 	 */
-	static List<Eleve> find(Seance seance){
+	private static List<Eleve> find(Seance seance){
 		return AGAPUtil.getInscrits(seance.matiere_id);
 	}
 	
@@ -74,7 +74,7 @@ public class Events {
 	 * @param seance
 	 * @return VRAI ou FAUX
 	 */
-	static boolean checkIfNeedToBeSend(Seance seance){
+	private static boolean checkIfNeedToBeSend(Seance seance){
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.MINUTE, 15);
 		return !seance.series.isEmpty()
@@ -89,7 +89,7 @@ public class Events {
 	 * Envoie tous les mails qu'il faut envoyer.
 	 * Cette fonction s'exécute toutes les 5 minutes grâces à la fonction sendMails.
 	 */
-	static void checkAllAndSend(){
+	private static void checkAllAndSend(){
 		System.out.println("Starting to check if there are mails to send...\n");
 		List<Seance> seances = Seance.find.all();
 		for(Seance s : seances){
