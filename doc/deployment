@@ -78,13 +78,19 @@ what you type in double quotes ".
 
 
 Now you can deploy the application :
-There are two ways to deploy the application. Only one works for ASCMII
-(see the end of this file for a detailed explanation).
+There are two ways to deploy the application.
 Just enter the following command :
 $  start -Dhttp.port=80
 Where 80 is the port you'll use. If you don't specify the port, then
 play will choose port 9000. Pay attention that the selected port is not
 in use by another process.
+
+Other way to deploy a play application :
+There is a command :
+$  dist
+Play will automatically create a zip file containing an executable file
+(named "start"). This executable file will create the server and does not
+need play to be installed on the computer in use.
 
 
 After the application is deployed, you must initialize the database.
@@ -95,33 +101,15 @@ Run the third line to create the database
 Connect to http://localhost:PORT with your favorite web browser.
 Click on the button to update the database (this will run an SQL
 script that will create the tables and prepopulate the database).
+The script that prepopulates the database can be found in
+conf/evolutions/default/2.sql
+(1.sql is automatically generated so there is no need to edit it)
 
 You can then run the last lines of the ascmii.sql file (it's just
 sample questions that couldn't be create automatically by play because
 their string was too long, so you must use MySQL Workbench to create
 them).
 
-
-
-Two ways to deploy a play application :
-There is a command :
-$  dist
-Play will automatically create a zip file containing an executable file
-(named "start"). This executable file will create the server and does not
-need play to be installed on the computer in use. Though this method
-seems better for deployment, it has a major drawback (that I was unable
-to solve) :
-	- The project files are all compiled in .jar files. So you cannot
-add files after the app is deployed. I'll explain :
-When you write a file in the server, you must choose a path. To get the path of
-the folder in which the play application is stored, you must use the following
-method :
-	play.Play.application().path()
-But this method does not work when you dist your app. (I didn't find a
-roundabout way to avoid that)
-As a result I've chosen not to use dist.
-
-(This point is crucial for the upload of images)
 
 Sources:
 
