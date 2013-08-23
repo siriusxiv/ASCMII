@@ -13,6 +13,9 @@ INSERT INTO type_question(id,type_q) VALUES
 INSERT INTO professeur(username,mail,prenom,nom) VALUES
 ('mprofess','malik.boussejra@eleves.ec-nantes.fr','Professeur','TEST');
 
+INSERT INTO eleve(uid,mail,prenom,nom) VALUES
+('mboussej','malik.boussejra@eleves.ec-nantes.fr','User','1');
+
 INSERT INTO seance(id,date,matiere,matiere_id,intitule,professeur_username) VALUES
 (1,'2014/01/31 08:00:00','ASCMII',0,'Test ASCMII','mprofess'),
 (2,'2014/02/02 10:00:00','MATHS',0,'Formules mathématiques : piqûre de rappel','mprofess');
@@ -62,6 +65,7 @@ SET FOREIGN_KEY_CHECKS=0;
 
 DELETE FROM type_question;
 DELETE FROM professeur;
+DELETE FROM eleve;
 DELETE FROM seance;
 DELETE FROM serie;
 DELETE FROM question;

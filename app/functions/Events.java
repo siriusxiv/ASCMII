@@ -60,8 +60,6 @@ public class Events {
 	
 	/**
 	 * Cette fonction trouve les élèves concernés par telle séance.
-	 * Pour l'instant, on va supposer que tous les élèves doivent répondre
-	 * à la série de question
 	 * @param seance
 	 * @return la liste des élèves concernés
 	 */

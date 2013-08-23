@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import functions.AGAPUtil;
 import functions.ParseDate;
 import functions.agap.Matiere;
 import models.Professeur;
@@ -59,7 +58,7 @@ public class SeancesListe extends Controller{
 		String year = info.get("year");
 		String hour = info.get("hour");
 		
-		if(AGAPUtil.listMatieres.contains(info.get("matiere"))){
+		if(Matiere.exists(info.get("matiere"))){
 			Seance newSeance = new Seance();
 			if(info.get("intitule")==""){
 				newSeance.intitule="Intitulé";
@@ -115,7 +114,7 @@ public class SeancesListe extends Controller{
 		String year = info.get("year");
 		String hour = info.get("hour");
 		
-		if(AGAPUtil.listMatieres.contains(info.get("matiere"))){
+		if(Matiere.exists(info.get("matiere"))){
 			Seance seance = Seance.find.ref(id);
 			seance.id=id;
 			if(info.get("intitule")==""){

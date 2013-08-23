@@ -200,6 +200,7 @@ public class AGAPUtil {
 
 	/**
 	 * Requête pour avoir la liste des inscrits
+	 * /!\ ascmii n'a pour l'instant pas les droits pour accéder à GroupeStructure... 
 	 * @param ActionFormation_ID
 	 * @return
 	 */
