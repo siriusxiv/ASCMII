@@ -27,6 +27,7 @@ import java.util.List;
 
 import functions.AGAPUtil;
 import functions.ParseDate;
+import functions.agap.Matiere;
 import models.Professeur;
 import models.Question;
 import models.Reponse;
@@ -66,6 +67,7 @@ public class SeancesListe extends Controller{
 				newSeance.intitule=info.get("intitule");
 			}
 			newSeance.matiere=info.get("matiere");
+			newSeance.matiere_id=Matiere.getID(newSeance.matiere);
 			newSeance.professeur=Professeur.find.ref(session("username"));
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
@@ -122,6 +124,7 @@ public class SeancesListe extends Controller{
 				seance.intitule=info.get("intitule");
 			}
 			seance.matiere=info.get("matiere");
+			seance.matiere_id=Matiere.getID(seance.matiere);
 			seance.professeur=Professeur.find.ref(session("username"));
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();

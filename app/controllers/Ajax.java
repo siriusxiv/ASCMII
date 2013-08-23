@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import functions.AGAPUtil;
+import functions.agap.Matiere;
 import models.Lien;
 import models.Serie;
 import play.mvc.Controller;
@@ -103,9 +104,9 @@ public class Ajax extends Controller{
 	 */
 	public static Result listeMatieres(String boutDeMatiere){
 		List<String> listeMatieres = new ArrayList<String>();
-		for(String s : AGAPUtil.listMatieres){
-			if(s.toUpperCase().contains(boutDeMatiere.toUpperCase())){
-				listeMatieres.add(s);
+		for(Matiere mat : AGAPUtil.listMatieres){
+			if((mat.libellecourt+mat.semestre).toUpperCase().contains(boutDeMatiere.toUpperCase())){
+				listeMatieres.add(mat.libellecourt+mat.semestre);
 			}
 		}
 		Collections.sort(listeMatieres);

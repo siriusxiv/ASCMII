@@ -73,6 +73,7 @@ create table seance (
   id                        bigint auto_increment not null,
   date                      datetime,
   matiere                   varchar(255),
+  matiere_id                integer,
   intitule                  varchar(255),
   professeur_username       varchar(255),
   constraint pk_seance primary key (id))

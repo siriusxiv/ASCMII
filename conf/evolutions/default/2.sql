@@ -13,9 +13,9 @@ INSERT INTO type_question(id,type_q) VALUES
 INSERT INTO professeur(username,mail,prenom,nom) VALUES
 ('mprofess','malik.boussejra@eleves.ec-nantes.fr','Professeur','TEST');
 
-INSERT INTO seance(id,date,matiere,intitule,professeur_username) VALUES
-(1,'2014/01/31 08:00:00','ASCMII','Test ASCMII','mprofess'),
-(2,'2014/02/02 10:00:00','MATHS','Formules mathématiques : piqûre de rappel','mprofess');
+INSERT INTO seance(id,date,matiere,matiere_id,intitule,professeur_username) VALUES
+(1,'2014/01/31 08:00:00','ASCMII',0,'Test ASCMII','mprofess'),
+(2,'2014/02/02 10:00:00','MATHS',0,'Formules mathématiques : piqûre de rappel','mprofess');
 
 INSERT INTO serie(id,nom,position,seance_id) VALUES
 (1,'Nains, WINNT, Diff',0,1),

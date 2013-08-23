@@ -21,6 +21,8 @@
 
 package functions;
 
+import functions.agap.Matiere;
+
 /**
  * Un ensemble de fonction utiles pour gérer les strings dans les
  * templates.
@@ -50,8 +52,8 @@ public class ScalaStringUtil {
 		if(AGAPUtil.listMatieres.isEmpty()){
 			return liste;
 		}else{
-			for(String s : AGAPUtil.listMatieres){
-				liste+="'"+s+"',";
+			for(Matiere mat : AGAPUtil.listMatieres){
+				liste+="'"+mat.libellecourt+mat.semestre+"',";
 			}
 			return liste.substring(0, liste.length()-1);
 

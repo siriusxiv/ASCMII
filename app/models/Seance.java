@@ -52,6 +52,8 @@ public class Seance extends Model {
 	@Required
 	public String matiere;
 	@Required
+	public Integer matiere_id;
+	@Required
 	public String intitule;
 	
 	@ManyToOne
@@ -87,6 +89,7 @@ public class Seance extends Model {
 	public Seance(Seance seanceADupliquer){
 		intitule=seanceADupliquer.intitule;
 		matiere=seanceADupliquer.matiere;
+		matiere_id=seanceADupliquer.matiere_id;
 		professeur=seanceADupliquer.professeur;
 		date=ParseDate.lastDate();
 		//On choisit l'ID de la prochaine nouvelle Séance

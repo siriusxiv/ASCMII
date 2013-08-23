@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import models.Eleve;
+import functions.agap.AGAPStringUtil;
+import functions.agap.Matiere;
+
 /**
  * Contient les fonctions pour pouvoir se connecter à AGAP
  * @author malik
@@ -21,7 +25,7 @@ public class AGAPUtil {
 	private static String dbUser;
 	private static String dbPass;
 
-	public static List<String> listMatieres;
+	public static List<Matiere> listMatieres;
 
 	/**
 	 * init data
@@ -84,9 +88,11 @@ public class AGAPUtil {
 	 */
 	public static void release() {
 		try {
+			System.out.println("Discharging PostgreSQL driver...");
 			Driver theDriver = DriverManager.getDriver(dbURL);
 			DriverManager.deregisterDriver(theDriver);
 			dbURL = null;
+			System.out.println("Discharging PostgreSQL driver... DISCHARGED");
 		} catch (SQLException ex) {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -96,7 +102,7 @@ public class AGAPUtil {
 	 * Remplie la variable listMatieres avec la liste des matières dans AGAP
 	 */
 	private static void getMatiereList(){
-		listMatieres = new ArrayList<String>();
+		listMatieres = new ArrayList<Matiere>();
 		/*listMatieres.add("ALGPR");
 		listMatieres.add("GEMAT");
 		listMatieres.add("SCUBE");
@@ -117,37 +123,72 @@ public class AGAPUtil {
 				Statement theStmt = connection.createStatement();
 				ResultSet theRS1 = theStmt.executeQuery(theQuery);
 				while (theRS1.next()) {
-					String libelle = theRS1.getString("actionformation_libellecourt");
-					//int id = theRS1.getInt("ActionFormation_ID");
-					System.out.println(libelle);
-					listMatieres.add(libelle);
+					Integer id = theRS1.getInt("ActionFormation_ID");
+					String semestre = AGAPStringUtil.getSemestre(theRS1.getInt("ActionFormation_ID"),connection);
+					listMatieres.add(new Matiere(theRS1.getString("actionformation_libellecourt"),
+							theRS1.getString("actionformation_libellecourt"),semestre,
+							id
+							));
 				}
 			} catch (SQLException ex) {
 				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
-				System.out.println("query error");
 			}
 			releaseConnection(connection);
 		} else{
 			System.out.println("Impossible de se connecter à AGAP...");
 		}
 	}
-
+	
 	/**
 	 * Requête pour avoir la liste des cours
 	 * @return
 	 */
-	public static String listeCours(){
+	private static String listeCours(){
 		return "SELECT * FROM actionformation "
 				+ "NATURAL JOIN cycle "
 				+ "WHERE cycle_defaut=1";
 	}
 
 	/**
+	 * Trouve les élèves suivant le cours au libellé indiqué
+	 * @param libellecourt
+	 * @return
+	 */
+	public static List<Eleve> getInscrits(Integer mat_id){
+		List<Eleve> eleves = new ArrayList<Eleve>();
+		String theQuery = listeInscrits(mat_id);
+		System.out.println("Connecting to AGAP...");
+		Connection connection = getConnection();
+		if(connection!=null){
+			try {
+				System.out.println("Executing : " + theQuery);
+				Statement theStmt = connection.createStatement();
+				ResultSet theRS1 = theStmt.executeQuery(theQuery);
+				while (theRS1.next()) {
+					String uid = theRS1.getString("personne_uid");
+					Eleve eleve = Eleve.find.byId(uid);
+					if(eleve==null){
+						System.out.println("uid not found : " + uid);
+					}else{
+						eleves.add(eleve);
+					}
+				}
+			} catch (SQLException ex) {
+				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
+			}
+			releaseConnection(connection);
+		} else{
+			System.out.println("Impossible de se connecter à AGAP...");
+		}
+		return eleves;
+	}
+	
+	/**
 	 * Requête pour avoir la liste des inscrits
 	 * @param ActionFormation_ID
 	 * @return
 	 */
-	public static String listeInscrits(String ActionFormation_ID){
+	private static String listeInscrits(Integer ActionFormation_ID){
 		return "SELECT * FROM InscriptionAction "
 				+ "NATURAL JOIN Inscription "
 				+ "NATURAL JOIN CursusPrepare "
@@ -162,7 +203,7 @@ public class AGAPUtil {
 	 * @param ActionFormation_ID
 	 * @return
 	 */
-	public static String listeInscritsGroupe(String ActionFormation_ID){
+	public static String listeInscritsGroupe(Integer ActionFormation_ID){
 		return "SELECT * FROM InscriptionAction "
 				+ "NATURAL JOIN Inscription "
 				+ "NATURAL JOIN CursusPrepare "

@@ -66,7 +66,7 @@ public class Events {
 	 * @return la liste des élèves concernés
 	 */
 	static List<Eleve> find(Seance seance){
-		return Eleve.find.all();
+		return AGAPUtil.getInscrits(seance.matiere_id);
 	}
 	
 	

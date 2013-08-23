@@ -71,10 +71,6 @@ public class Eleve extends Model {
 	}
 	
 	public static Finder<String,Eleve> find = new Finder<String,Eleve>(String.class, Eleve.class);
-
-	public static List<Eleve> page(){
-		return find.all();
-	}
 	
 	public static void addEleve(Eleve el){
 		el.save();
