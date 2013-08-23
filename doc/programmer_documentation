@@ -1,0 +1,45 @@
+How ASCMII works : (you can generate javadoc for more details)
+
+See the file named "deployment" to learn how to used the configuration file
+conf/application.conf
+
+ASCMII has the following packages :
+	- (default package)
+Contains only Global.java. Only used to override some play methods.
+Allow the programmer to choose what the app does when starting for example.
+Here, timers are started at the beginning, PostgreSQL drivers are loaded, etc.
+
+	- controllers
+Default Play package that contains everything related to sending data to
+the connected host.
+I tried to roughly create a class per displayed web page.
+There are as well classes devoted to allow the user to download or upload files
+(CSV or UploadImages for example)
+P404 is a class that manages what the servers must do if the user types a wrong
+GET request.
+Ajax is a class that manages Ajax request only.
+
+	- functions
+Contains helping class for tasks managed by class in the package controller.
+You can for example find AGAPUtil or LDAP, used to connect to PostgreSQL or LDAP
+remote servers.
+Events contains things related to time. For the time being, the only thing is there
+is the methods that send mails to students (every 15 minutes, the server checks if
+mails are to be sent)
+
+	- functions.agap
+Contains classes to assist AGAPUtil
+
+	- models
+Contains entities for ebean (ebean manages the default database)
+Each class represents a table in the database.
+But the class CoupleRI, Resultat and Mail are exceptions. I wanted to move them out
+of this package but to no avail. I don't understand why, but play won't compile if I
+change their package...
+
+	- test
+Only one class with only one method.
+The aim is to check whether test mode is activated or not.
+
+	- views
+Contains html pages.

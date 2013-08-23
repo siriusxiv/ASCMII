@@ -28,4 +28,5 @@ by a student in order to do interactive polls during courses.
 
 ==============================================================================
 
-See "play how to install" to see how to deploy the app.
+See detailed explanations in doc folder
+See doc/deployment to see how to deploy the app.

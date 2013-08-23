@@ -19,8 +19,6 @@ dist
 *.seriexport
 *.seancexport
 img
-#generated javadoc
-doc
 
 #gedit temp files
 *~
