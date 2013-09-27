@@ -24,16 +24,19 @@ import java.lang.Throwable;
 
 import models.Mail;
 
-import controllers.P404;
 import functions.AGAPUtil;
 import functions.LDAP;
 
 import play.Application;
 import play.GlobalSettings;
 import play.libs.Akka;
+import play.libs.F.Promise;
 import play.mvc.Http.RequestHeader;
-import play.mvc.Result;
+import play.mvc.SimpleResult;
 import scala.concurrent.duration.Duration;
+
+//To import internalServerError
+import static play.mvc.Results.*;
 
 /**
  * Pour planifier ce que fait le serveur au démarrage, notamment le déclenchement
@@ -95,12 +98,17 @@ public class Global extends GlobalSettings{
 
 	/**
 	 * Envoie le rapport d'erreur à l'administrateur et redirige vers une page d'erreur customisée.
+	 * @param arg0 : path où a eu lieu l'erreur
+	 * @param t : throw lancé par l'erreur
+	 * @return affiche la page d'erreur
 	 */
 	@Override
-	public Result onError(RequestHeader arg0, Throwable t){
+	public Promise<SimpleResult> onError(RequestHeader arg0, Throwable t){
 		if(!test.Mode.isEnabled()){
 			new Mail(arg0,t);
 		}
-		return P404.errorPage(arg0,t);
+		return Promise.<SimpleResult>pure(internalServerError(
+					views.html.errorPage.render(t)
+				));
 	}
 }

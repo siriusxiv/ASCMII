@@ -75,6 +75,7 @@ create table seance (
   matiere                   varchar(255),
   matiere_id                integer,
   intitule                  varchar(255),
+  groupe                    varchar(255),
   professeur_username       varchar(255),
   constraint pk_seance primary key (id))
 ;

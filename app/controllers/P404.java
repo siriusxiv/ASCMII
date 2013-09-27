@@ -23,9 +23,7 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Http.RequestHeader;
 import views.html.error404;
-import views.html.errorPage;
 
 
 /**
@@ -81,13 +79,4 @@ public class P404 extends Controller{
 		return redirect(routes.Login.profSeancesListe(""));
 	}
 	
-	/**
-	 * Affiche la page d'erreur à l'utilisateur lambda
-	 * @param arg0 : path où a eu lieu l'erreur
-	 * @param t : throw lancé par l'erreur
-	 * @return affiche la page d'erreur
-	 */
-	public static Result errorPage(RequestHeader arg0, Throwable t){
-		return internalServerError(errorPage.render(t));
-	}
 }
