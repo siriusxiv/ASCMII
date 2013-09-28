@@ -99,7 +99,7 @@ public class Resultat implements Comparator<Resultat>{
 	/**
 	 * Cette fonction permet de générer les pages "resultatFin.scala.html" et "resultatEnCours.scala.html".
 	 * À partir d'une série, on fait la liste de toutes ses questions, pour chaque question :
-	 * 		- si la question est de type 1 ou 2 : reponsesChoisies contient la nombre de réponses pour
+	 * 		- si la question est de type 1 ou 2 : reponsesChoisies contient le nombre de réponses pour
 	 * chaque réponse en comptant tous les votants.
 	 * 		- si la question est de type 3 ou 4 : listRepond (celui qui sera stocké dans les résultats)
 	 * contiendra les 10 réponses les plus fréquentes. reponsesChoisies contiendra le nombre de répondants.
@@ -160,7 +160,7 @@ public class Resultat implements Comparator<Resultat>{
 	}
 	
 	/**
-	 * Comme la fonction ci-dessus mais est renvoie un résultat exhaustif pour les questions de type 3 ou 4
+	 * Comme la fonction ci-dessus mais renvoie un résultat exhaustif pour les questions de type 3 ou 4
 	 * @param serie
 	 * @return Renvoie la liste des résultats de manière exhaustive
 	 */
