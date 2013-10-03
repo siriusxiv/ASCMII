@@ -28,6 +28,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import functions.Numbers;
+
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -58,6 +60,31 @@ public class Lien extends Model {
 	}
 	
 	/**
+	 * Utilisé pour les tests unitaires dans Tests.java, ne l'utilisez pas ailleurs !
+	 */
+	public Lien(Serie serie_, Eleve eleve_){
+		chemin = Integer.toHexString(Numbers.randomInt());
+		while(find.byId(chemin)!=null){
+			chemin=Integer.toHexString(Numbers.randomInt());
+		}
+		serie=serie_;
+		eleve=eleve_;
+		repondu=false;
+	}
+	
+	/**
+	 * Constructeur standard
+	 * @param chemin_ : fin de l'url d'accès
+	 * @param s : série
+	 * @param e : élève
+	 */
+	private Lien(String chemin_, Serie s, Eleve e){
+		chemin=chemin_;
+		serie=s;
+		eleve=e;
+		repondu=false;
+	}
+	/**
 	 * Ajoute un lien dans la base de donnée à partir d'un élève et d'une série.
 	 * Le chemin du lien doit avoir l'être aléatoire. On génère ce chemin avec les
 	 * hashCode des classes Eleve et Serie convertis en chaîne hexadécimale.
@@ -66,19 +93,11 @@ public class Lien extends Model {
 	 */
 	public static void addLien(Eleve eleve, Serie serie){
 		if(Lien.find.where().eq("eleve",eleve).eq("serie",serie).findList().isEmpty()){//Si un tel lien exist déjà, pas besoin de le rajouter
-			int a = eleve.hashCode();
-			int b = serie.hashCode();
-			int c = a*b;
-			String chemin = Integer.toHexString(c);
+			String chemin = Integer.toHexString(Numbers.randomInt());
 			while(find.byId(chemin)!=null){
-				c*=2;
-				chemin=Integer.toHexString(c);
+				chemin=Integer.toHexString(Numbers.randomInt());
 			}
-			Lien lien = new Lien();
-			lien.chemin = chemin;
-			lien.serie=serie;
-			lien.eleve=eleve;
-			lien.repondu=false;
+			Lien lien = new Lien(chemin,serie,eleve);
 			lien.save();
 		}
 	}

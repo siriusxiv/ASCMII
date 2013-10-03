@@ -85,5 +85,15 @@ public class Numbers{
 			return false;
 		}
 	}
+	
+	/**
+	 * Returns a random int
+	 * Useful in Lien to generate the chemin.
+	 * @return
+	 */
+	public static int randomInt(){
+		double a = Math.random();
+		return (int) (a*2147483647);
+	}
 
 }

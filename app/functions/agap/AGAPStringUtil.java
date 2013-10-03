@@ -48,7 +48,7 @@ public class AGAPStringUtil {
 	 * @param connection : Connection à la base de donnée
 	 * @return String : S5, S6 ou S7, etc.
 	 */
-	public static String getSemestre(Integer actionformation_id,Connection connection){
+	public static String getSemestre(Integer actionformation_id,Connection connection, String actionformation_libellecourt){
 		String semestre = "";
 		String theQuery = "SELECT structures_id,typestructure_id "
 				+ "FROM actionstructure "
@@ -84,7 +84,7 @@ public class AGAPStringUtil {
 				ResultSet theRS = theStmt.executeQuery(theQuery);
 				while(theRS.next()){
 					String sem = theRS.getString("structures_libelle");
-					semestre = toLibelleSemestreCourt(sem);
+					semestre = toLibelleSemestreCourt(sem,actionformation_libellecourt);
 					System.out.println(semestre);
 				}
 			}
@@ -96,14 +96,26 @@ public class AGAPStringUtil {
 	}
 	
 	/**
-	 * Convertit la string du semestre stocké dans AGAP à la forme voulue
-	 * (S5,S6,S7,etc...)
+	 * Renvoie la string du semestre stocké dans AGAP à la forme voulue
+	 * (S5,S6,S7,etc...) si cette chaîne n'est pas déjà dans le libellé court
+	 * de la matière.
 	 * @param sem : semestre stocké dans AGAP sous forme de string
+	 * @param libelle : libelle de la matière
 	 * @return String : S5, S6 ou S7, etc.
 	 */
-	private static String toLibelleSemestreCourt(String sem){
+	private static String toLibelleSemestreCourt(String sem,String libelle){
 		if(sem.startsWith("Semestre ")){
-			return "S"+sem.substring(9);
+			if(libelle.endsWith("_S5")){
+				return "";
+			}else if(libelle.endsWith("_S6")){
+				return "";
+			}else if(libelle.endsWith("_S7")){
+				return "";
+			}else if(libelle.endsWith("_S8")){
+				return "";
+			}else{
+				return "S"+sem.substring(9);
+			}
 		}else{
 			return "";
 		}

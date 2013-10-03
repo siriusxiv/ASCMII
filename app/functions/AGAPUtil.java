@@ -145,7 +145,7 @@ public class AGAPUtil {
 				ResultSet theRS1 = theStmt.executeQuery(theQuery);
 				while (theRS1.next()) {
 					Integer id = theRS1.getInt("ActionFormation_ID");
-					String semestre = AGAPStringUtil.getSemestre(theRS1.getInt("ActionFormation_ID"),connection);
+					String semestre = AGAPStringUtil.getSemestre(theRS1.getInt("ActionFormation_ID"),connection,theRS1.getString("actionformation_libellecourt"));
 					listMatieres.add(new Matiere(theRS1.getString("actionformation_libellecourt"),
 							theRS1.getString("actionformation_libellecourt"),semestre,
 							id

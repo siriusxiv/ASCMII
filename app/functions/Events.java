@@ -60,11 +60,14 @@ public class Events {
 	
 	/**
 	 * Cette fonction trouve les élèves concernés par telle séance.
+	 * Si on est en mode de test, on renvoie tous les élèves. En effet,
+	 * cela peut être utile pour faire des tests de charge.
 	 * @param seance
 	 * @return la liste des élèves concernés
 	 */
 	private static List<Eleve> find(Seance seance){
-		return AGAPUtil.getInscrits(seance.matiere_id);
+		if(test.Mode.isEnabled())	return Eleve.find.all();
+		else						return AGAPUtil.getInscrits(seance.matiere_id);
 	}
 	
 	

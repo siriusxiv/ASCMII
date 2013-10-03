@@ -29,12 +29,10 @@ import java.util.List;
 
 import alea.Alea;
 
-import play.data.DynamicForm;
-import play.data.Form;
-
 import functions.Numbers;
 
 import models.Choisit;
+import models.Eleve;
 import models.Lien;
 import models.Question;
 import models.Repond;
@@ -61,8 +59,23 @@ public class Tests {
 		}
     }
     
+    /**
+     * Test de charge pour vérifier que le serveur tient le coup même si 100
+     * élèves répondent au même instant.
+     */
     public static void hundredAnswerTest(){
     	Serie serie = Serie.find.byId(1L);
+    	//On ajoute plein de liens pour faire tourner la boucle for très longtemps
+    	int lienSize = Lien.find.all().size();
+    	if(lienSize<101){
+    		for(int i = 0;i<100;i++){
+    			new Lien(serie,Eleve.find.byId("mboussej")).save();
+    		}
+    		lienSize+=100;
+    	}
+    	//starting test
+    	System.out.println("Starting test with "+lienSize+" liens...");
+    	Calendar nowBegin = Calendar.getInstance();
     	for(Lien lien : Lien.find.where().eq("serie",serie).findList()){
     		HashMap<String,String> info = new HashMap<String,String>();
     		for(Question qu : lien.serie.questions){
@@ -79,14 +92,20 @@ public class Tests {
     				}
     				break;
     			case 3:
+    				value=qu.id+" "+lien.eleve.uid;
+    				info.put("texteRepondu"+qu.id, value);
     				break;
     			case 4:
+    				value=qu.id.toString();
+    				info.put("nombreRepondu"+qu.id, value);
     				break;
     			default:
     			}
     		}
     		donneReponse(lien.chemin,info);
     	}
+    	Calendar nowEnd = Calendar.getInstance();
+    	System.out.println("Test successfully finished. It took "+nowEnd.compareTo(nowBegin)+"ms.");
     }
     
     private static boolean donneReponse(String chemin, HashMap<String,String> info){

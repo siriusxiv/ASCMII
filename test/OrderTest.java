@@ -26,8 +26,6 @@ import static play.test.Helpers.testServer;
 
 import org.junit.Test;
 
-import alea.Alea;
-
 import play.libs.F.Callback;
 import play.test.TestBrowser;
 import tests.Tests;
@@ -40,15 +38,5 @@ public class OrderTest {
 				Tests.hundredAnswerTest();
 			}
 		});
-	}
-	
-	/**
-	 * Random number generation tests
-	 */
-	@Test
-	public void randomInts(){
-		for(int i = 0;i<100;i++){
-			System.out.println(Alea.randomIntBetween(1,4));
-		}
 	}
 }
