@@ -43,3 +43,13 @@ The aim is to check whether test mode is activated or not.
 
 	- views
 Contains html pages.
+
+Notes about templates :
+	- main
+		Contains headers for nearly all pages. Allows you not to copy/paste the same code
+	-title
+		Contains the logo.
+		Note: I changed the logo from ASCII-art to a png image because I couldn't find a
+	universal font (Lucida Console exists only on Windows, Courier New exists for
+	Linux/MAC OS X/Windows but not on all smartphones). If you ever found a universal font
+	(which I doubt) just uncomment the ASCMII-art part on this template.
