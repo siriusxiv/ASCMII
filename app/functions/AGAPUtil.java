@@ -46,7 +46,7 @@ public class AGAPUtil {
 	private static String dbUser;
 	private static String dbPass;
 
-	public static List<Matiere> listMatieres;
+	public static List<Matiere> listMatieres = new ArrayList<Matiere>();
 
 	/**
 	 * init data
@@ -123,18 +123,6 @@ public class AGAPUtil {
 	 * Remplie la variable listMatieres avec la liste des matières dans AGAP
 	 */
 	private static void getMatiereList(){
-		listMatieres = new ArrayList<Matiere>();
-		/*listMatieres.add("ALGPR");
-		listMatieres.add("GEMAT");
-		listMatieres.add("SCUBE");
-		listMatieres.add("dSIBAD");
-		listMatieres.add("PEINS");
-		listMatieres.add("CHEPA");
-		listMatieres.add("GAGAG");
-		listMatieres.add("AUTOM");
-		listMatieres.add("CONEN");
-		listMatieres.add("VIVRE");
-		listMatieres.add("MATIE");*/
 		String theQuery = listeCours();
 		System.out.println("Connecting to AGAP...");
 		Connection connection = getConnection();
