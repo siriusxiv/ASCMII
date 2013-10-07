@@ -78,7 +78,7 @@ public class Eleve extends Model {
 	
 	/**
 	 * On doit supprimer d'autres éléments en cascade si on supprime un élève/
-	 * @param ine
+	 * @param uid
 	 */
 	public static void removeEleve(String uid){
 		Eleve el = Eleve.find.byId(uid);
@@ -97,6 +97,14 @@ public class Eleve extends Model {
 			}
 			el.delete();
 		}
+	}
+	
+	/**
+	 * Overrides toString method
+	 */
+	@Override
+	public String toString(){
+		return prenom+" "+nom;
 	}
 	
 }
