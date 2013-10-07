@@ -39,4 +39,12 @@ public class Mode {
 	public static boolean isEnabled(){
 		return play.Play.application().configuration().getString("test.enabled").equals("yes");
 	}
+	
+	/**
+	 * Détermine si oui ou non on envoie les mails.
+	 * @return VRAI ou FAUX
+	 */
+	public static boolean mailEnabled(){
+		return play.Play.application().configuration().getString("mail.enabled").equals("yes");
+	}
 }

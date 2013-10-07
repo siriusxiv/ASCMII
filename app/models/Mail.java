@@ -115,7 +115,7 @@ public class Mail{
 				mail.addRecipient(recipient);
 			}
 			mail.addFrom(from);
-			mail.sendHtml(contenu);
+			if(test.Mode.mailEnabled())	mail.sendHtml(contenu);
 			System.out.println(contenu);
 	}
 	
