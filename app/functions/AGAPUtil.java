@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 
 package functions;
 
@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import models.Eleve;
-import functions.agap.AGAPStringUtil;
+//import functions.agap.AGAPStringUtil;
 import functions.agap.Matiere;
 
 /**
@@ -57,7 +57,7 @@ public class AGAPUtil {
 		String dbHost = play.Play.application().configuration().getString("agap.host");
 		String dbPort = play.Play.application().configuration().getString("agap.port");
 		String dbName = play.Play.application().configuration().getString("agap.dbName");
-		
+
 		dbURL = dbProtocol + "://" + dbHost + ":" + dbPort + "/" + dbName;
 		dbUser = play.Play.application().configuration().getString("agap.user");
 		dbPass = play.Play.application().configuration().getString("agap.passw");
@@ -85,7 +85,7 @@ public class AGAPUtil {
 		} catch (Exception e) {
 			Logger.getLogger(AGAPUtil.class.getName()).log(Level.INFO, null, e);
 			e.printStackTrace();
-			
+
 		}
 		return connection;
 	}
@@ -133,7 +133,11 @@ public class AGAPUtil {
 				ResultSet theRS1 = theStmt.executeQuery(theQuery);
 				while (theRS1.next()) {
 					Integer id = theRS1.getInt("ActionFormation_ID");
-					String semestre = AGAPStringUtil.getSemestre(theRS1.getInt("ActionFormation_ID"),connection,theRS1.getString("actionformation_libellecourt"));
+					//String semestre = AGAPStringUtil.getSemestre(theRS1.getInt("ActionFormation_ID"),connection,theRS1.getString("actionformation_libellecourt"));
+					//On laisse le semestre tel quel (on garde le libelle_court qui est dans AGAP).
+					//Ce choix n'a pas été fait au départ car les libelle_court ne contenaient pas les
+					//semestres dans leur nom
+					String semestre = "";
 					listMatieres.add(new Matiere(theRS1.getString("actionformation_libellecourt"),
 							theRS1.getString("actionformation_libellecourt"),semestre,
 							id
@@ -147,7 +151,7 @@ public class AGAPUtil {
 			System.out.println("Impossible de se connecter à AGAP...");
 		}
 	}
-	
+
 	/**
 	 * Requête pour avoir la liste des cours
 	 * @return
@@ -175,12 +179,14 @@ public class AGAPUtil {
 				ResultSet theRS1 = theStmt.executeQuery(theQuery);
 				while (theRS1.next()) {
 					String uid = theRS1.getString("personne_uid");
-					Eleve eleve = Eleve.find.byId(uid);
-					if(eleve==null){
-						System.out.println("uid not found : " + uid);
-					}else{
-						eleves.add(eleve);
-					}
+					if(uid!=null){
+						Eleve eleve = Eleve.find.byId(uid);
+						if(eleve==null){
+							System.out.println("uid not found : " + uid);
+						}else{
+							eleves.add(eleve);
+						}
+					}else	System.out.println("Found a null uid");
 				}
 			} catch (SQLException ex) {
 				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
@@ -191,7 +197,7 @@ public class AGAPUtil {
 		}
 		return eleves;
 	}
-	
+
 	/**
 	 * Requête pour avoir la liste des inscrits
 	 * @param ActionFormation_ID
@@ -241,8 +247,8 @@ public class AGAPUtil {
 		}
 		return eleves;
 	}
-	
-	
+
+
 	/**
 	 * Requête pour avoir la liste des inscrits
 	 * @param ActionFormation_ID

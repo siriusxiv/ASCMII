@@ -66,7 +66,7 @@ public class Events {
 	 * @return la liste des élèves concernés
 	 */
 	public static List<Eleve> find(Seance seance){
-		if(test.Mode.isEnabled())	return Eleve.find.all();
+		if(test.Mode.findAllEnabled())	return Eleve.find.all();
 		else						return AGAPUtil.getInscrits(seance.matiere_id);
 	}
 	
