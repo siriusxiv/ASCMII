@@ -43,7 +43,7 @@ import play.mvc.Result;
 public class UploadImages extends Controller{
 
 	/**
-	 * Permet d'uploader une image. L'image est enregistrée dans le dossier "/public/uploads".
+	 * Permet d'uploader une image. L'image est enregistrée dans le dossier "/img/".
 	 * On stocke le nom du fichier de l'image dans la base de donnée et on le lie à une réponse.
 	 * @param reponse_id
 	 * @return Affiche la page de gestion d'une séance
@@ -131,5 +131,29 @@ public class UploadImages extends Controller{
 	public static Result view(String filename) {
 	    File file  = new File(play.Play.application().path().getAbsolutePath() + "/img/" + filename);
 	    return ok(file);
+	}
+	
+	/**
+	 * On uploade simplement une image sur le serveur.
+	 * Elle est enregistrée dans le dossier /img/
+	 * @return
+	 */
+	public static Result uploadOnly(){
+		MultipartFormData body = request().body().asMultipartFormData();
+		FilePart fp = body.getFile("questionImages");
+		if(isImage(fp)){
+			Image i = new Image(fp.getFilename());
+			File image = fp.getFile();
+			File destinationFile = new File(play.Play.application().path().getAbsolutePath() + "/img/" + i.fileName);
+		    try{
+		    	FileUtils.copyFile(image, destinationFile);
+		    	i.save();
+		    	return ok("<img class=\"image\" src=\"/images/"+i.fileName+"\">");
+		    } catch (IOException e){
+		    	e.printStackTrace();
+		    	System.out.println("Impossible de copier l'image sur le serveur...");
+		    	return internalServerError("Impossible de copier l'image sur le serveur...");
+		    }
+		}else return badRequest("Le fichier que vous avez sélectionné n'est pas reconnu comme une image.");
 	}
 }

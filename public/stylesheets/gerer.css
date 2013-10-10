@@ -159,3 +159,8 @@ div.compteur{
 	min-width: 200px;
 	width:400px;
 }
+
+/*images*/
+.image{
+	height:150px;
+}

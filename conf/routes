@@ -2,6 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#Contrairement à ce qu'indique play, toutes les routes sont utiles !
+#Aucune n'est pas reachable.
+#Si on enlève les routes que play indique comme unreachable, la redirection
+#ne fonctionnera plus correctement !
+
 # Home page
 GET     /                           controllers.Application.index()
 
@@ -75,6 +80,8 @@ POST	/prof/upload/:seance_id		controllers.Export.uploadSerie(seance_id: Long)
 POST	/prof/uploadimage/:reponse_id	controllers.UploadImages.upload(reponse_id: Long)
 
 POST	/prof/upload/del/:reponse_id	controllers.UploadImages.deleteImage(reponse_id: Long)
+#Upload d'image simple (utilisé pour les questions)
+POST	/prof/uploadimage				controllers.UploadImages.uploadOnly()
 
 #Pour accéder aux images uploadées
 GET		/images/:filename			controllers.UploadImages.view(filename: String)
