@@ -53,6 +53,18 @@ public class Matiere {
 	}
 	
 	/**
+	 * Constructeur simple pour tests
+	 * @param libelle_court
+	 * @param id_
+	 */
+	public Matiere(String libelle_court,int id_){
+		libelle=libelle_court;
+		libellecourt=libelle_court;
+		semestre="";
+		id=id_;
+	}
+	
+	/**
 	 * Obtient l'ID d'une matiere
 	 * @param libellecourt_
 	 * @return Si la marière existe, renvoie son id, sinon, renvoie -1
@@ -78,5 +90,15 @@ public class Matiere {
 			}
 		}
 		return false;
+	}
+	
+	public static void createList(){
+		AGAPUtil.listMatieres.add(new Matiere("ALGPR",0));
+		AGAPUtil.listMatieres.add(new Matiere("MELOG",1));
+		AGAPUtil.listMatieres.add(new Matiere("PRSTA",2));
+		AGAPUtil.listMatieres.add(new Matiere("TEST",3));
+		AGAPUtil.listMatieres.add(new Matiere("FLUID_S5",4));
+		AGAPUtil.listMatieres.add(new Matiere("FLUID_S6",5));
+		AGAPUtil.listMatieres.add(new Matiere("COES",6));
 	}
 }

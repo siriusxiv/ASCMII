@@ -148,6 +148,8 @@ public class AGAPUtil {
 			}
 			releaseConnection(connection);
 		} else{
+			//On ajoute des matières pour faire des tests, même sans être connecté à AGAP
+			Matiere.createList();
 			System.out.println("Impossible de se connecter à AGAP...");
 		}
 	}
