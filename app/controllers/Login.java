@@ -74,12 +74,16 @@ public class Login extends Controller{
 			return profSeancesListe("");
 		}*/
 		LDAP user = new LDAP();
+		session().clear();
+		if(identifiant.equals(play.Play.application().configuration().getString("admin.login"))
+			&& passw.equals(play.Play.application().configuration().getString("admin.pass"))){
+			session("admin","logged");
+			return admin.Display.main();
+		}
 		if(user.check(identifiant, passw)){
-			session().clear();
 			session("username",identifiant);
 			return profSeancesListe("");
 		}else{
-			session().clear();
 			return badRequest(login.render("F"));
 		}
 	}

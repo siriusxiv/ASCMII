@@ -103,8 +103,8 @@
 									<input type="file" name="image">
 								<button type="submit">Uploader</button>
 								</form>}else{
-								<img class="insertImage" src="/assets/images/insert-image-2.png" title="Ajouter une image à la réponse" onClick="addImage(@reponse.id)">
-								<form action="/prof/upload/del/@reponse.id" method="POST" style="display:inline">
+								<img class="insertImage" src="/assets/images/insert-image-2.png" title="Supprimer l'image" onClick="delImage(@reponse.id)">
+								<form action="/prof/upload/del/@reponse.id" method="POST" style="display:inline" id="delImage@reponse.id">
 									<button type="submit">Supprimer l'image</button>
 								</form>
 								}
@@ -165,6 +165,9 @@ function addImage(reponse_id){
 	} else {
 		document.getElementById('r'+reponse_id).style.display = 'none';
 	}
+}
+function delImage(reponse_id){
+	$('delImage'+reponse_id).submit();
 }
 @*Tout ce qui suit ci-dessous permet de renommer une série de question, le tout de manière très fluide.
 On stocke d'abord dans une HashTable les noms des séries déjà présentes. Lorsqu'on renomme une série,

@@ -93,7 +93,8 @@ public class Matiere {
 	}
 	
 	public static void createList(){
-		AGAPUtil.listMatieres.add(new Matiere("ALGPR",0));
+		AGAPUtil.listMatieres.add(new Matiere("ALGPR_S5",0));
+		AGAPUtil.listMatieres.add(new Matiere("ALGPR_S6",-1));
 		AGAPUtil.listMatieres.add(new Matiere("MELOG",1));
 		AGAPUtil.listMatieres.add(new Matiere("PRSTA",2));
 		AGAPUtil.listMatieres.add(new Matiere("TEST",3));
