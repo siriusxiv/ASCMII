@@ -21,6 +21,7 @@
 
 package functions;
 
+import functions.agap.Groupe;
 import functions.agap.Matiere;
 
 /**
@@ -54,6 +55,25 @@ public class ScalaStringUtil {
 		}else{
 			for(Matiere mat : AGAPUtil.listMatieres){
 				liste+="'"+mat.libellecourt+mat.semestre+"',";
+			}
+			return liste.substring(0, liste.length()-1);
+
+		}
+	}
+	
+	/**
+	 * Renvoie la liste des groupes sous la forme d'une string
+	 * exploitable par la fonction autocomplete de jQuery
+	 * (utilisé dans les templates seancesListe et editSeance).
+	 * @return une chaîne du type "'Groupe1','Groupe2'..."
+	 */
+	public static String listGroupes(){
+		String liste = "";
+		if(AGAPUtil.listGroupes.isEmpty()){
+			return liste;
+		}else{
+			for(Groupe g : AGAPUtil.listGroupes){
+				liste+="'"+g.getName()+"',";
 			}
 			return liste.substring(0, liste.length()-1);
 

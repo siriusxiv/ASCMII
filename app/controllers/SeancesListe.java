@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import functions.ParseDate;
+import functions.agap.Groupe;
 import functions.agap.Matiere;
 import models.Professeur;
 import models.Question;
@@ -68,6 +69,12 @@ public class SeancesListe extends Controller{
 			newSeance.matiere=info.get("matiere");
 			newSeance.matiere_id=Matiere.getID(newSeance.matiere);
 			newSeance.professeur=Professeur.find.ref(session("username"));
+			String groupe = info.get("groupe");
+			if(groupe=="")	newSeance.groupe=null;
+			else{
+				if(Groupe.exists(groupe))	newSeance.groupe=info.get("groupe");
+				else						return redirect(routes.Login.profSeancesListe("Ce groupe n'existe pas."));
+			}
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
 			now.add(Calendar.MINUTE, 15);
@@ -125,6 +132,12 @@ public class SeancesListe extends Controller{
 			seance.matiere=info.get("matiere");
 			seance.matiere_id=Matiere.getID(seance.matiere);
 			seance.professeur=Professeur.find.ref(session("username"));
+			String groupe = info.get("groupe");
+			if(groupe=="")	seance.groupe=null;
+			else{
+				if(Groupe.exists(groupe))	seance.groupe=info.get("groupe");
+				else						return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
+			}
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
 			now.add(Calendar.MINUTE, 15);

@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import models.Eleve;
+import functions.agap.Groupe;
 //import functions.agap.AGAPStringUtil;
 import functions.agap.Matiere;
 
@@ -47,7 +48,8 @@ public class AGAPUtil {
 	private static String dbPass;
 
 	public static List<Matiere> listMatieres = new ArrayList<Matiere>();
-
+	public static List<Groupe> listGroupes = new ArrayList<Groupe>();
+	
 	/**
 	 * init data
 	 */
@@ -72,6 +74,7 @@ public class AGAPUtil {
 		}
 
 		getMatiereList();
+		getGroupeList();
 	}
 
 	/**
@@ -165,6 +168,43 @@ public class AGAPUtil {
 	}
 
 	/**
+	 * Requête pour avoir la liste des groupes
+	 * @return
+	 */
+	private static String listeGroupes(){
+		return "SELECT * FROM groupe "
+				+ "NATURAL JOIN cycle "
+				+ "WHERE cycle_defaut=1";
+	}
+	
+	/**
+	 * Remplie la variable listGroupes avec la liste des groupes dans AGAP
+	 */
+	private static void getGroupeList(){
+		String theQuery = listeGroupes();
+		System.out.println("Connecting to AGAP...");
+		Connection connection = getConnection();
+		if(connection!=null){
+			try {
+				System.out.println("Executing : " + theQuery);
+				Statement theStmt = connection.createStatement();
+				ResultSet theRS1 = theStmt.executeQuery(theQuery);
+				while (theRS1.next()) {
+					listGroupes.add(new Groupe(theRS1.getInt("groupe_id"),theRS1.getString("groupe_nom")));
+				}
+			} catch (SQLException ex) {
+				Logger.getLogger(AGAPUtil.class.getName()).log(Level.SEVERE, "query error " + theQuery, ex);
+			}
+			releaseConnection(connection);
+		} else{
+			//On ajoute des matières pour faire des tests, même sans être connecté à AGAP
+			Groupe.createList();
+			System.out.println("Impossible de se connecter à AGAP...");
+		}
+	}
+	
+	
+	/**
 	 * Trouve les élèves suivant le cours ayant l'id donnée
 	 * @param libellecourt
 	 * @return
@@ -257,7 +297,7 @@ public class AGAPUtil {
 	 * @return
 	 */
 	private static String listeInscritsGroupe(Integer ActionFormation_ID, String groupe_nom){
-		return "SELECT personne_uid FROM InscriptionAction "
+		return "SELECT DISTINCT personne_uid FROM InscriptionAction "
 				+ "NATURAL JOIN Inscription "
 				+ "NATURAL JOIN CursusPrepare "
 				+ "NATURAL JOIN DossierScolaire "

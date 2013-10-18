@@ -38,6 +38,7 @@
 			<tr>
 				<th class="liste">Date</th>
 				<th class="liste">Matiere</th>
+				<th class="liste">Groupe</th>
 				<th class="liste">Intitulé</th>
 				<th class="liste">Action</th>
 			</tr>
@@ -45,6 +46,7 @@
 			<tr>
 				<td class="listeDate">@if(seance.date==functions.ParseDate.lastDate()){Date non définie}else{@seance.date.format("dd/MM/yyyy à H") h}</td>
 				<td class="liste">@seance.matiere</td>
+				<td class="liste">@if(seance.groupe!=null){@seance.groupe}else{Tous}</td>
 				<td class="liste">@seance.intitule</td>
 				<td class="liste right">
 						<form action="/prof/seances/edit/@seance.id" method="POST" style="display:inline">
@@ -88,6 +90,11 @@
 				<td>Matière :</td>
 				<td><input type="text" size="20" name="matiere" value="" id="matiere"></td>
 				<td id="matieres">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>Groupe* :</td>
+				<td><input type="text" size="20" name="groupe" value="" id="groupe"></td>
+				<td class="explications">*Si votre questionnaire ne concerne pas un groupe en particulier, mais tous les élèves suivant un cours, laissez ce champ vide.</td>
 			</tr>
 			<tr>
 				<td>Intitulé de séance :</td>
@@ -185,6 +192,9 @@ function replaceMatiere(string){
 }
 $('#matiere').autocomplete({	source : [@Html(functions.ScalaStringUtil.listMatieres())],
 				minLength: 2
+			});
+$('#groupe').autocomplete({	source : [@Html(functions.ScalaStringUtil.listGroupes())],
+				minLength: 0
 			});
 </script>
 </body>

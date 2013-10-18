@@ -92,6 +92,9 @@ public class Matiere {
 		return false;
 	}
 	
+	/**
+	 * Fonction utilisée pour tests seulement
+	 */
 	public static void createList(){
 		AGAPUtil.listMatieres.add(new Matiere("ALGPR_S5",0));
 		AGAPUtil.listMatieres.add(new Matiere("ALGPR_S6",-1));

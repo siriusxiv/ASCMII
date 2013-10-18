@@ -25,11 +25,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.List;
 
 import models.Eleve;
 import models.Seance;
-
 import functions.Events;
 
 /**
@@ -134,6 +134,7 @@ public class AGAPStringUtil {
 	 */
 	public static String getStudentList(Seance seance){
 		List<Eleve> eleves = Events.find(seance);
+		Collections.sort(eleves, new Eleve());
 		String r = "<select>";
 		for(Eleve e : eleves){
 			r+="<option>"+e+"</option>";

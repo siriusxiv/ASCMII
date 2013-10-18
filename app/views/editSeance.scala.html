@@ -40,6 +40,11 @@
 				<td id="matieres">&nbsp;</td>
 			</tr>
 			<tr>
+				<td>Groupe* :</td>
+				<td><input type="text" size="20" name="groupe" value="@seance.groupe" id="groupe"></td>
+				<td class="explications">*Si votre questionnaire ne concerne pas un groupe en particulier, mais tous les élèves suivant un cours, laissez ce champ vide.</td>
+			</tr>
+			<tr>
 				<td>Intitulé de séance :</td>
 				<td><input type="text" size="20" name="intitule" value="@seance.intitule"></td>
 				<td>&nbsp;</td>
@@ -92,6 +97,7 @@
 		<br>
 		<button type="submit">Valider</button>
 	</form>
+	<form action="/prof/seances"><button>Retour</button></form>
 @studentList(seance)
 <script src="/assets/javascripts/jquery-1.10.2.min.js")"></script>
 <script src="/assets/javascripts/jquery-ui.js"></script>
@@ -111,6 +117,9 @@ function replaceMatiere(string){
 }
 $('#matiere').autocomplete({	source : [@Html(functions.ScalaStringUtil.listMatieres())],
 				minLength: 2
+			});
+$('#groupe').autocomplete({	source : [@Html(functions.ScalaStringUtil.listGroupes())],
+				minLength: 0
 			});
 </script>
  </body>

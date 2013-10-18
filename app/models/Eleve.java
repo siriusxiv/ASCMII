@@ -21,6 +21,7 @@
 
 package models;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -37,7 +38,7 @@ import play.db.ebean.Model;
  */
 @SuppressWarnings("serial")
 @Entity
-public class Eleve extends Model {
+public class Eleve extends Model implements Comparator<Eleve>{
 	@Id
 	public String uid;
 	
@@ -69,8 +70,19 @@ public class Eleve extends Model {
 		nom=nom_;
 		save();
 	}
+	/**
+	 * Empty constructor for sorting
+	 */
+	public Eleve(){}
 	
 	public static Finder<String,Eleve> find = new Finder<String,Eleve>(String.class, Eleve.class);
+	
+	@Override
+	public int compare(Eleve e1,Eleve e2){
+		int c = e1.nom.compareTo(e2.nom);
+		if(c==0)	return e1.prenom.compareTo(e2.prenom);
+		else		return c;
+	}
 	
 	public static void addEleve(Eleve el){
 		el.save();
@@ -104,7 +116,7 @@ public class Eleve extends Model {
 	 */
 	@Override
 	public String toString(){
-		return prenom+" "+nom;
+		return nom+" "+prenom;
 	}
 	
 }

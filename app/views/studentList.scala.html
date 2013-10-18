@@ -1,2 +1,2 @@
 @(seance: Seance)
-<p>Liste des élèves inscrits à ce cours : <br> @Html(functions.agap.AGAPStringUtil.getStudentList(seance))</p>
+<p>Liste des élèves inscrits au cours de @seance.matiere : <br> @Html(functions.agap.AGAPStringUtil.getStudentList(seance))</p>
