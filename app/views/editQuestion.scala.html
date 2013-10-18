@@ -32,14 +32,19 @@
 	<form id="form" action="/prof/gerer/editquestion2/@question.id" method="POST">
 		<p>Titre de la question : <input type="text" name="titre" value="@question.titre"></p>
 		<p>Entrez la question : </p>
-		<textarea name="texte" id="editorQuestion" cols="50" rows="3">@Html(question.texte)</textarea>
+		<table>
+		<td><textarea name="texte" id="editorQuestion" cols="50" rows="3">@Html(question.texte)</textarea></td>
+		<td>Uploadez des images pour la question :<input type="file" name="questionImages" id="questionImages">
+			<button type="submit" id="btn">Upload Files!</button>@*Cette balise disparaît si le browser gère l'upload via Ajax*@
+			<div id="questionImagesDiv"></div>
+		</td>
+		</table>
 		@if(question.typeQ.id<=2){
 			<table>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>Texte des réponse :</td>
-				<td>Uploadez une image :</td>
 			</tr>
 			@for(reponse <- question.reponses){
 			<tr id="reponse@reponse.position">
@@ -58,7 +63,7 @@
 	
 	<form action="/prof/gerer/@question.serie.seance.id" method="POST"><button type="submit">Retour</button></form>
 	<p class="explications">Notez que les élèves ne verront pas le titre de la question. Vous pouvez donc mettre ce que vous voulez.<br>
-							Vous pouvez intégrer des images dans la question (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur. Pour éditer les images associées aux réponses, veuillez cliquez sur "Retour" et faites-le sur la page précédente.</p>
+							Vous pouvez intégrer des images dans la question (des formules par exemple) par simple glisser-déplacer. Pour cela, commencez par les uploader grâce au bouton à votre droite. Si vous voulez mettre une autre image, vous n'avez qu'à recommencer la même opération.</p>
 	
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
 <script>
@@ -159,5 +164,40 @@ function reponseVide() {
 	}
 	return bool;
 }
+
+@*******************
+Pour uploader les images via Ajax (pour les questions)
+********************@
+(function () {
+	var input = document.getElementById("questionImages"), 
+		formdata = false;
+
+	if (window.FormData) {
+  		formdata = new FormData();
+  		document.getElementById("btn").style.display = "none";
+	}
+	
+ 	input.addEventListener("change", function (evt) {
+ 		document.getElementById("questionImagesDiv").innerHTML = "Uploading . . ."
+ 		var i = 0, img, reader, file;
+			file = this.files[0];
+			if (formdata) {
+				formdata.append("questionImages", file);
+			}
+	
+		if (formdata) {
+			$.ajax({
+				url: "/prof/uploadimage",
+				type: "POST",
+				data: formdata,
+				processData: false,
+				contentType: false,
+				success: function (res) {
+					document.getElementById("questionImagesDiv").innerHTML = res; 
+				}
+			});
+		}
+	}, false);
+}());
 </script>
 }

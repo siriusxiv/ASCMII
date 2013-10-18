@@ -2,6 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#Contrairement à ce qu'indique play, toutes les routes sont utiles !
+#Aucune n'est pas reachable.
+#Si on enlève les routes que play indique comme unreachable, la redirection
+#ne fonctionnera plus correctement !
+
 # Home page
 GET     /                           controllers.Application.index()
 
@@ -75,6 +80,8 @@ POST	/prof/upload/:seance_id		controllers.Export.uploadSerie(seance_id: Long)
 POST	/prof/uploadimage/:reponse_id	controllers.UploadImages.upload(reponse_id: Long)
 
 POST	/prof/upload/del/:reponse_id	controllers.UploadImages.deleteImage(reponse_id: Long)
+#Upload d'image simple (utilisé pour les questions)
+POST	/prof/uploadimage				controllers.UploadImages.uploadOnly()
 
 #Pour accéder aux images uploadées
 GET		/images/:filename			controllers.UploadImages.view(filename: String)
@@ -119,5 +126,9 @@ POST	/prof/renameSerie/:serie_id/:newName	controllers.Ajax.renameSerie(serie_id:
 #Pour afficher dynamiquement la liste des matières
 GET		/prof/listeMatieres/:boutDeMatiere		controllers.Ajax.listeMatieres(boutDeMatiere:String)
 
+
+#Routes pour admin
+GET		/admin/clean						admin.Display.clean()
+GET		/admin/images						admin.Display.getImages()
 #Attrappe-tout. Redirige vers un page que l'utilisateur veut sûrement regarder ou vers la page 404
 GET		/*nameUrl							controllers.P404.p404(nameUrl: String)

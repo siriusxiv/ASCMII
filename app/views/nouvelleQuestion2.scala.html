@@ -33,7 +33,13 @@
 	<form id="form" action="/prof/gerer/addq3/@serie_id/@typeQ.id" method="POST" enctype="multipart/form-data">
 		<p>Titre de la question : <input type="text" name="titre" id="titre"></p>
 		<p>Entrez la question : </p>
-		<textarea name="texte" id="editorQuestion" cols="50" rows="3"></textarea>
+		<table>
+		<td><textarea name="texte" id="editorQuestion" cols="50" rows="3"></textarea></td>
+		<td>Uploadez des images pour la question :<input type="file" name="questionImages" id="questionImages">
+			<button type="submit" id="btn">Upload Files!</button>@*Cette balise disparaît si le browser gère l'upload via Ajax*@
+			<div id="questionImagesDiv"></div>
+		</td>
+		</table>
 		@if(typeQ.id<=2){
 			<table>
 			<tr>
@@ -60,7 +66,7 @@
 	
 	<form action="/prof/gerer/@seance_id" method="POST"><button type="submit">Retour</button></form>
 	<p class="explications">Notez que les élèves ne verront pas le titre de la question. Vous pouvez donc mettre ce que vous voulez.<br>
-							Vous pouvez intégrer des images (formules par exemple) par simple glisser-déplacer. Cependant, limitez la somme de la taille des images dans la question à quelque chose de l'ordre de 50 ko maximum si vous les faites parvenir depuis votre ordinateur.<br>
+							Vous pouvez intégrer des images dans la question (des formules par exemple) par simple glisser-déplacer. Pour cela, commencez par les uploader grâce au bouton à votre droite. Si vous voulez mettre une autre image, vous n'avez qu'à recommencer la même opération.<br>
 							Vous pouvez assigner des images à chaque réponse. À condition de mettre une image, vous pouvez laisser le champ de réponse vide.</p>
 	
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
@@ -175,6 +181,41 @@ $(document).ready(function() {
     }
   });
 });
+
+@*******************
+Pour uploader les images via Ajax (pour les questions)
+********************@
+(function () {
+	var input = document.getElementById("questionImages"), 
+		formdata = false;
+
+	if (window.FormData) {
+  		formdata = new FormData();
+  		document.getElementById("btn").style.display = "none";
+	}
+	
+ 	input.addEventListener("change", function (evt) {
+ 		document.getElementById("questionImagesDiv").innerHTML = "Uploading . . ."
+ 		var i = 0, img, reader, file;
+			file = this.files[0];
+			if (formdata) {
+				formdata.append("questionImages", file);
+			}
+	
+		if (formdata) {
+			$.ajax({
+				url: "/prof/uploadimage",
+				type: "POST",
+				data: formdata,
+				processData: false,
+				contentType: false,
+				success: function (res) {
+					document.getElementById("questionImagesDiv").innerHTML = res; 
+				}
+			});
+		}
+	}, false);
+}());
 </script>
 </body>
 }

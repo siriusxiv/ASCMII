@@ -18,7 +18,6 @@
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ******************************************************************************/
-
 package tests;
 
 import static org.fest.assertions.Assertions.assertThat;
