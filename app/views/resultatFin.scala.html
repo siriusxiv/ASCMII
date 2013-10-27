@@ -37,7 +37,7 @@
 			<td><div id="c@resultat.question.id" style="min-width: 200px; position: left; height: 400px; width:600px; padding:10px;"></div></td>
 			<td><div class="resultats">
 			<ol>@for(reponse <- resultat.question.reponses){
-				@if(reponse.image!=null){<li><img class="resultats" src="/img/@reponse.image.fileName" height="35px"></li>}
+				@if(reponse.image!=null){<li><img class="resultats" src="/images/@reponse.image.fileName"></li>}
 			}</ol>
 			</div></td>
 		</table>}

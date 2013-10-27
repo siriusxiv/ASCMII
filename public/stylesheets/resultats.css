@@ -96,6 +96,9 @@ td.reponses,td.img,table.reponses{
 td.reponses{
 	padding: 1px 5px 1px 5px;
 }
+td.img{
+	max-width:500px;
+}
 td.reponsesNombre{
 	border: 1px solid black;
 	padding: 1px 5px 1px 5px;
@@ -112,6 +115,7 @@ td.reponsesPourcent{
 img{
 	text-align:center;
     display:block;
+	max-width:500px;
 }
 
 /* Progress Bar */

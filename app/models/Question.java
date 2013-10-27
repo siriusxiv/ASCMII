@@ -153,4 +153,20 @@ public class Question extends Model implements Comparator<Question>{
 			return 1L;
 		}
 	}
+	
+	/**
+	 * Returns the specified integer depending on whether the question's
+	 * answers contain images, text, etc.
+	 * @return 0 : no image, 1 : no text, 2 : images and text
+	 */
+	public int doesContainImages(){
+		boolean seenImage=false, seenText=false;
+		for(Reponse r : reponses){
+			if(r.image!=null)	seenImage=true;
+			if(!r.texte.equals(""))	seenText=true;
+		}
+		if(seenImage && seenText)		return 2;
+		else if(seenImage && !seenText)	return 1;
+		else							return 0;
+	}
 }

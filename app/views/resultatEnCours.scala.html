@@ -34,12 +34,17 @@
 		<li>@Html(resultat.question.texte)</li>
 		@if(resultat.question.typeQ.id==1 || resultat.question.typeQ.id==2){
 			<table id="q@resultat.question.id" class="reponses">
-			@for(reponse <- resultat.question.reponses){
+			@defining(resultat.question.doesContainImages()){ contenuDeLaQuestion=>
+				@for(reponse <- resultat.question.reponses){
 				<tr>
 					<td class="reponsesNombre">@reponse.position. </td>
-					<td class="img">@if(reponse.image!=null){<img class="reponses" src="/img/@reponse.image.fileName" height="40px">}</td>
-					<td class="reponses">@reponse.texte</td><td class="reponsesNombre">@resultat.reponsesChoisies.get(reponse.position-1)</td><td class="reponsesPourcent">@{resultat.reponsesChoisies.get(reponse.position-1)*100/nombreDeReponsesMAX} %</td>
-				</tr>}
+					@if(contenuDeLaQuestion!=0){<td class="img">@if(reponse.image!=null){<img class="reponses" src="/images/@reponse.image.fileName">}</td>}
+					@if(contenuDeLaQuestion!=1){<td class="reponses">@reponse.texte</td>}
+					<td class="reponsesNombre">@resultat.reponsesChoisies.get(reponse.position-1)</td>
+					<td class="reponsesPourcent">@{resultat.reponsesChoisies.get(reponse.position-1)*100/nombreDeReponsesMAX} %</td>
+				</tr>
+				}
+			}
 			</table>
 		}
 		@if(resultat.question.typeQ.id==3 || resultat.question.typeQ.id==4){
