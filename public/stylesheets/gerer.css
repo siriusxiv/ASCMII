@@ -79,6 +79,9 @@ img.reponse{
 	position:relative;
 	left:37px;
 }
+img.reponseDansEditQuestion{
+	height:25px;
+}
 td.right{
 	width:330px;
 }
