@@ -94,7 +94,7 @@
 					</tr>
 					@for(reponse <- question.reponses){
 						<tr>
-							<td class="left">@if(reponse.image!=null){<img class="reponse" src="/images/@reponse.image.fileName">}</td>
+							<td class="left">@if(reponse.image!=null){<a class="reponse" href="/images/@reponse.image.fileName" data-lightbox="lightbox@reponse.image.id"><img class="reponse" src="/images/@reponse.image.fileName"></a>}</td>
 							<td class="reponseText reponse">@reponse.texte</td>
 							<td class="right reponse">@if(reponse.image==null){
 								<img class="insertImage" src="/assets/images/insert-image-3.png" title="Ajouter une image à la réponse" onClick="addImage(@reponse.id)">
@@ -196,4 +196,6 @@ function saveNameChange(serie_id){
 	cancelRename(serie_id);
 }
 </script>
+<link href="/assets/javascripts/lightbox/lightbox.css" rel="stylesheet" />
+<script src="/assets/javascripts/lightbox/lightbox-2.6.min.js"></script>
 }
