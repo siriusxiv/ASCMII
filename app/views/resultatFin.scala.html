@@ -36,9 +36,9 @@
 		<table>
 			<td><div id="c@resultat.question.id" style="min-width: 200px; position: left; height: 400px; width:600px; padding:10px;"></div></td>
 			<td><div class="resultats">
-			<ol>@for(reponse <- resultat.question.reponses){
-				@if(reponse.image!=null){<li><img class="resultats" src="/images/@reponse.image.fileName"></li>}
-			}</ol>
+			<table>@for(reponse <- resultat.question.reponses){
+				@if(reponse.image!=null){<tr><td>@reponse.position.</td><td><img class="resultats" src="/images/@reponse.image.fileName"></td></tr>}
+			}</table>
 			</div></td>
 		</table>}
 		@if(resultat.question.typeQ.id==3 || resultat.question.typeQ.id==4){
