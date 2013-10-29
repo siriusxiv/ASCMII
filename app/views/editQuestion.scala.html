@@ -54,7 +54,7 @@
 				<td id="numero@reponse.position"> @reponse.position.</td>
 				<td><input type="text" id="texte@reponse.position" name="reponse@reponse.position" size="60px" value="@reponse.texte"></td>
 				<td id="img@reponse.position">@if(reponse.image!=null){<a href="/images/@reponse.image.fileName" data-lightbox="lightbox@reponse.image.id"><img class="reponseDansEditQuestion" src="/images/@reponse.image.fileName"></a>}</td>
-				<td><input type="file" name="image@reponse.position" id="changeImg@reponse.position"></td>
+				<td><input type="file" id="changeImg@reponse.position"></td>
 			</tr>
 			}
 			</table>
@@ -179,9 +179,11 @@ Pour uploader les images via Ajax (pour les questions)
 	//images in responses:
 	var imageForms = new Array();
 	var imageInputs = new Array();
-	for(var i=0;i<nombreDeReponses;i++){
+	var i;
+	
+	for(i=1;i<=nombreDeReponses;i++){
 		imageForms.push(false);
-		imageInputs = document.getElementById("changeImg"+i);
+		imageInputs.push(document.getElementById("changeImg"+i));
 	}
 
 	if (window.FormData) {
@@ -189,19 +191,19 @@ Pour uploader les images via Ajax (pour les questions)
   		formdata = new FormData();
   		document.getElementById("btn").style.display = "none";
 		//images in responses:
-		for(var i=0;i<nombreDeReponses;i++){
-			imageForms[i]=new FormData();
+		for(var i=1;i<=nombreDeReponses;i++){
+			imageForms[i-1]=new FormData();
 		}
 	}
 	
 	//image in question:
  	input.addEventListener("change", function (evt) {
  		document.getElementById("questionImagesDiv").innerHTML = "Uploading . . ."
- 		var i = 0, img, reader, file;
-			file = this.files[0];
-			if (formdata) {
-				formdata.append("questionImages", file);
-			}
+ 		var file;
+		file = this.files[0];
+		if (formdata) {
+			formdata.append("questionImages", file);
+		}
 	
 		if (formdata) {
 			$.ajax({
@@ -217,23 +219,26 @@ Pour uploader les images via Ajax (pour les questions)
 		}
 	}, false);
 	//images in responses:
-	for(var i=0;i<nombreDeReponses;i++){
-		imageInputs[i].addEventListener("change", function(evt){
-			document.getElementById("img"+i).innerHTML = "Uploading...";
+	for(i=1;i<=nombreDeReponses;i++){
+		imageInputs[i-1].addEventListener("change", function(evt){
+			var j = parseInt(this.id.substring(9,this.id.length));
+			var a = document.getElementById("img"+j);
+			if(a!=null) a.innerHTML = "Uploading...";
+			else	alert("2 "+j+" "+nombreDeReponses);
 			var file;
 			file = this.files[0];
-			if(imageForms[i]){
-				imageForms[i].append("reponseImages", file);
-				imageForms[i].append("position", i);
-				imageForms[i].append("question", @question.id);
+			if(imageForms[j-1]){
+				imageForms[j-1].append("reponseImages", file);
+				imageForms[j-1].append("position", j);
+				imageForms[j-1].append("question", @question.id);
 				$.ajax({
 					url: "/prof/uploadimageToReponseAJAX",
 					type: "POST",
-					data: imageForms[i],
+					data: imageForms[j-1],
 					processData: false,
 					contentType: false,
 					success: function(res){
-						document.getElementById("img"+i).innerHTML = res;
+						document.getElementById("img"+j).innerHTML = res;
 					}
 				});
 			}

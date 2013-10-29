@@ -169,5 +169,5 @@ div.compteur{
 
 /*images*/
 .image{
-	height:150px;
+	max-height:150px;
 }
