@@ -28,10 +28,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 import models.Image;
-import models.Question;
 import models.Reponse;
-import play.data.DynamicForm;
-import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -151,31 +148,6 @@ public class UploadImages extends Controller{
 		    try{
 		    	FileUtils.copyFile(image, destinationFile);
 		    	i.save();
-		    	return ok("<img class=\"image\" src=\"/images/"+i.fileName+"\">");
-		    } catch (IOException e){
-		    	e.printStackTrace();
-		    	System.out.println("Impossible de copier l'image sur le serveur...");
-		    	return internalServerError("Impossible de copier l'image sur le serveur...");
-		    }
-		}else return badRequest("Le fichier que vous avez sélectionné n'est pas reconnu comme une image.");
-	}
-	
-	public static Result uploadForReponses(){
-		MultipartFormData body = request().body().asMultipartFormData();
-		DynamicForm info = Form.form().bindFromRequest();
-		FilePart fp = body.getFile("reponseImages");
-		int reponsePosition = Integer.parseInt(info.get("position"));
-		Long questionId = Long.parseLong(info.get("question"));
-		if(isImage(fp)){
-			Image i = new Image(fp.getFilename());
-			File image = fp.getFile();
-			File destinationFile = new File(play.Play.application().path().getAbsolutePath() + "/img/" + i.fileName);
-		    try{
-		    	FileUtils.copyFile(image, destinationFile);
-		    	i.save();
-				Question question = Question.find.byId(questionId);
-				question.reponses.get(reponsePosition).image=i;
-				question.save();
 		    	return ok("<img class=\"image\" src=\"/images/"+i.fileName+"\">");
 		    } catch (IOException e){
 		    	e.printStackTrace();
