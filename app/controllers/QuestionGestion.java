@@ -151,11 +151,6 @@ public class QuestionGestion extends Controller {
 		if(texte.equals("")){
 			return editQuestionLog(id,"Veuillez entrez l'intitulé de la question.");
 		}
-		if(question.typeQ.id<=2){
-			if(info.get("reponse1").equals("") || info.get("reponse2").equals("")){
-				return editQuestionLog(id,"Vous devez entrer au moins deux réponses.");
-			}
-		}
 		//On edite le titre et le texte :
 		question.titre=titre;
 		question.texte=texte;

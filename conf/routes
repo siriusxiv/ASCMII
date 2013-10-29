@@ -83,7 +83,7 @@ POST	/prof/upload/del/:reponse_id	controllers.UploadImages.deleteImage(reponse_i
 #Upload d'image simple (utilisé pour les questions)
 POST	/prof/uploadimage				controllers.UploadImages.uploadOnly()
 #Upload d'image pour les réponses sur la page editQuestion. Enregistre le tout dans la base de donnée en même temps
-POST	/prof/uploadimageToReponseAJAX	controllers.QuestionEdit.uploadForReponses()
+POST	/prof/uploadimage/ajaxrepons	controllers.QuestionEdit.uploadForReponses()
 
 #Pour accéder aux images uploadées
 GET		/images/:filename			controllers.UploadImages.view(filename: String)

@@ -46,7 +46,7 @@
 				<td>&nbsp;</td>
 				<td>Texte des réponse :</td>
 				<td>&nbsp;</td>
-				<td>&nbsp;</td>
+				@*Cache la misère*<td>&nbsp;</td>*@
 			</tr>
 			@for(reponse <- question.reponses){
 			<tr id="reponse@reponse.position">
@@ -54,7 +54,7 @@
 				<td id="numero@reponse.position"> @reponse.position.</td>
 				<td><input type="text" id="texte@reponse.position" name="reponse@reponse.position" size="60px" value="@reponse.texte"></td>
 				<td id="img@reponse.position">@if(reponse.image!=null){<a href="/images/@reponse.image.fileName" data-lightbox="lightbox@reponse.image.id"><img class="reponseDansEditQuestion" src="/images/@reponse.image.fileName"></a>}</td>
-				<td><input type="file" id="changeImg@reponse.position"></td>
+				@*Cache la misère*<td><input type="file" id="changeImg@reponse.position"></td>*@
 			</tr>
 			}
 			</table>
@@ -159,6 +159,12 @@ function send(){
 	}
 }
 function reponseVide() {
+	@*******************************
+	Temporaire.... Cela permet de mettre des réponses
+	vides en imaginant que vous allez mettre une image.
+	J'ai fait ceci car je n'arrive pas du tout à faire
+	intégrer l'ajout d'image dans l'édition des questions
+	
 	var i;
 	var bool=false;
 	for(i=1;i<=nombreDeReponses;i++){
@@ -167,6 +173,8 @@ function reponseVide() {
 		}
 	}
 	return bool;
+	********************************@
+	return false;
 }
 
 @*******************
@@ -176,24 +184,12 @@ Pour uploader les images via Ajax (pour les questions)
 	//image in question:
 	var input = document.getElementById("questionImages"), 
 		formdata = false;
-	//images in responses:
-	var imageForms = new Array();
-	var imageInputs = new Array();
-	var i;
 	
-	for(i=1;i<=nombreDeReponses;i++){
-		imageForms.push(false);
-		imageInputs.push(document.getElementById("changeImg"+i));
-	}
 
 	if (window.FormData) {
 		//image in question:
   		formdata = new FormData();
   		document.getElementById("btn").style.display = "none";
-		//images in responses:
-		for(var i=1;i<=nombreDeReponses;i++){
-			imageForms[i-1]=new FormData();
-		}
 	}
 	
 	//image in question:
@@ -217,8 +213,20 @@ Pour uploader les images via Ajax (pour les questions)
 				}
 			});
 		}
-	}, false);
+	}, false);@*****************************************************
 	//images in responses:
+	var imageForms = new Array();
+	var imageInputs = new Array();
+	var i;
+	for(i=1;i<=nombreDeReponses;i++){
+		imageForms.push(false);
+		imageInputs.push(document.getElementById("changeImg"+i));
+	}
+	if (window.FormData) {
+		for(var i=1;i<=nombreDeReponses;i++){
+			imageForms[i-1]=new FormData();
+		}
+	}
 	for(i=1;i<=nombreDeReponses;i++){
 		imageInputs[i-1].addEventListener("change", function(evt){
 			var j = parseInt(this.id.substring(9,this.id.length));
@@ -232,7 +240,7 @@ Pour uploader les images via Ajax (pour les questions)
 				imageForms[j-1].append("position", j);
 				imageForms[j-1].append("question", @question.id);
 				$.ajax({
-					url: "/prof/uploadimageToReponseAJAX",
+					url: "/prof/uploadimage/ajaxreponse",
 					type: "POST",
 					data: imageForms[j-1],
 					processData: false,
@@ -243,7 +251,7 @@ Pour uploader les images via Ajax (pour les questions)
 				});
 			}
 		},false);
-	}
+	}*************************************************************@
 }());
 </script>
 <link href="/assets/javascripts/lightbox/lightbox.css" rel="stylesheet" />
