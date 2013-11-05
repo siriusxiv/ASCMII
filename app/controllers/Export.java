@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 
 package controllers;
 
@@ -52,7 +52,7 @@ import views.html.*;
  *
  */
 public class Export extends Controller{
-	
+
 	/**
 	 * Provoque le téléchargement de la liste exhaustive des réponses à une question.
 	 * @param question_id
@@ -69,12 +69,12 @@ public class Export extends Controller{
 			e.printStackTrace();
 		}finally{
 			if (outputStream != null) {
-                try {
+				try {
 					outputStream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-            }
+			}
 		}
 		FileInputStream fileIS = null;
 		try {
@@ -85,7 +85,7 @@ public class Export extends Controller{
 		response().setHeader("Content-Disposition", "attachment; filename="+file_name);
 		return ok(fileIS);
 	}
-	
+
 	/**
 	 * Génère la chaîne de caractère donnant toutes les réponses à une question donnée.
 	 * Cette chaine est ensuite envoyé à l'utilisateur sous forme de fichier .html
@@ -108,7 +108,7 @@ public class Export extends Controller{
 		s+="</html></table>";
 		return s;
 	}
-	
+
 	/**
 	 * Provoque le téléchargement de l'export d'une série de question
 	 * @param serie_id
@@ -127,12 +127,12 @@ public class Export extends Controller{
 			e.printStackTrace();
 		}finally{
 			if (outputStream != null) {
-                try {
+				try {
 					outputStream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-            }
+			}
 		}
 		FileInputStream fileIS = null;
 		try {
@@ -143,7 +143,7 @@ public class Export extends Controller{
 		response().setHeader("Content-Disposition", "attachment; filename="+noSpace(serie.nom)+".seriexport");
 		return ok(fileIS);
 	}
-	
+
 	/**
 	 * Génère la chaîne de caractère permettant d'exporter une série.
 	 * Structure du fichier :
@@ -173,7 +173,7 @@ public class Export extends Controller{
 		}
 		return s;
 	}
-	
+
 	/**
 	 * Supprime les espaces dans une chaîne de caractères.
 	 * Sert pour le générer le nom du fichier exporter.
@@ -183,7 +183,7 @@ public class Export extends Controller{
 	static String noSpace(String str){
 		return str.replace(' ', '_');
 	}
-	
+
 	/**
 	 * Cette fonction appelée par une route permet de charger un fichier
 	 * depuis son ordinateur.
@@ -206,7 +206,7 @@ public class Export extends Controller{
 			return ok(erreurUpload.render("filePart est null"));
 		}
 	}
-	
+
 	/**
 	 * Lit le fichier file contenant les informations concernant une série de questions
 	 * et ajoute ses informations dans la base de donnée.
@@ -278,7 +278,7 @@ public class Export extends Controller{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Ferme un BufferedReader
 	 * @param br
@@ -290,7 +290,7 @@ public class Export extends Controller{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Remplace input.startsWith() dans readFile() par cette fonction afin
 	 * de renvoyer une exception en cas de fichier mal fichu.
@@ -307,8 +307,8 @@ public class Export extends Controller{
 			throw e;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Provoque le téléchargement de l'export d'une séance
 	 * @param seance_id
@@ -327,12 +327,12 @@ public class Export extends Controller{
 			e.printStackTrace();
 		}finally{
 			if (outputStream != null) {
-                try {
+				try {
 					outputStream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-            }
+			}
 		}
 		FileInputStream fileIS = null;
 		try {
@@ -343,13 +343,14 @@ public class Export extends Controller{
 		response().setHeader("Content-Disposition", "attachment; filename="+noSpace(seance.intitule)+".seancexport");
 		return ok(fileIS);
 	}
-	
-	
+
+
 	/**
 	 * Génère la chaîne de caractère permettant d'exporter une série.
 	 * Structure du fichier :
 	 * 	SEANCE_INTITULE=intitulé de la séance
 	 *  SEANCE_MATIERE=matiere de la séance
+	 *  SEANCE_GROUPE=groupe de la séance
 	 *  SERIE=nom de la série
 	 *  QUESTION_TITRE=titre de la question
 	 *  QUESTION_TYPE=id du type
@@ -360,15 +361,17 @@ public class Export extends Controller{
 	 * @return chaîne de caractère permettant d'exporter une série
 	 */
 	static String genereSeanceExport(Seance seance){
-		String s = "SEANCE_INTITULE="+seance.intitule+"\nSEANCE_MATIERE="+seance.matiere+"\n";
+		String s = "SEANCE_INTITULE="+seance.intitule+"\nSEANCE_MATIERE="+seance.matiere+"\nSEANCE_GROUPE=";
+		if(seance.groupe==null)	s+="\n";
+		else					s+=seance.groupe+"\n";
 		Collections.sort(seance.series,new Serie());
 		for(Serie serie : seance.series){
 			s+=genereSerieExport(serie);
 		}
 		return s;
 	}
-	
-	
+
+
 	/**
 	 * Cette fonction appelée par une route permet de charger un fichier
 	 * depuis son ordinateur.
@@ -390,9 +393,9 @@ public class Export extends Controller{
 			return Login.profSeancesListe("filePart est null");
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Lit le fichier file contenant les informations concernant une série de questions
 	 * et ajoute ses informations dans la base de donnée.
@@ -413,58 +416,62 @@ public class Export extends Controller{
 				seance = new Seance(username,input.substring(16));
 				if((input = br.readLine())!=null && startsWith(input,"SEANCE_MATIERE=")){
 					seance.matiere=input.substring(15);
-					seance.save();
-					somethingInserted=true;
-					Long positionSerie = 0L;
-					while((input = br.readLine())!=null && startsWith(input,"SERIE=")){
-						Serie serie = new Serie();
-						serie.nom=input.substring(6);
-						serie.seance=seance;
-						serie.position=positionSerie;
-						positionSerie++;
-						serie.id=Serie.idNonUtilisee();
-						serie.save();
-						Long positionQuestion=0L;
-						br.mark(1000000);
-						while((input = br.readLine())!=null && input.startsWith("QUESTION_TITRE=")){
-							Question q = new Question();
-							q.titre=input.substring(15);
-							if((input = br.readLine())!=null && startsWith(input,"QUESTION_TYPE=")){
-								q.typeQ=TypeQuestion.find.ref(Long.parseLong(input.substring(14)));
-								if((input = br.readLine())!=null && startsWith(input,"QUESTION_TEXTE=")){
-									q.texte = input.substring(15);
-									q.id=Question.idNonUtilisee();
-									q.position=positionQuestion;
-									positionQuestion++;
-									q.serie=serie;
-									q.save();
-									int positionReponse = 1;
-									br.mark(1000000);
-									while((input = br.readLine())!=null && input.startsWith("REPONSE=")){
-										Reponse r = new Reponse();
-										r.position = positionReponse;
-										positionReponse++;
-										r.question=q;
-										r.texte=input.substring(8);
-										if((input = br.readLine())!=null && startsWith(input,"IMAGE=")){
-											r.image=Image.find.where().eq("fileName", input.substring(6)).findUnique();
-										}
-										r.save();
+					if((input = br.readLine())!=null && startsWith(input,"SEANCE_GROUPE=")){
+						if(input.substring(14).equals(""))	seance.groupe=null;
+						else								seance.groupe=input.substring(14);
+						seance.save();
+						somethingInserted=true;
+						Long positionSerie = 0L;
+						while((input = br.readLine())!=null && startsWith(input,"SERIE=")){
+							Serie serie = new Serie();
+							serie.nom=input.substring(6);
+							serie.seance=seance;
+							serie.position=positionSerie;
+							positionSerie++;
+							serie.id=Serie.idNonUtilisee();
+							serie.save();
+							Long positionQuestion=0L;
+							br.mark(1000000);
+							while((input = br.readLine())!=null && input.startsWith("QUESTION_TITRE=")){
+								Question q = new Question();
+								q.titre=input.substring(15);
+								if((input = br.readLine())!=null && startsWith(input,"QUESTION_TYPE=")){
+									q.typeQ=TypeQuestion.find.ref(Long.parseLong(input.substring(14)));
+									if((input = br.readLine())!=null && startsWith(input,"QUESTION_TEXTE=")){
+										q.texte = input.substring(15);
+										q.id=Question.idNonUtilisee();
+										q.position=positionQuestion;
+										positionQuestion++;
+										q.serie=serie;
+										q.save();
+										int positionReponse = 1;
 										br.mark(1000000);
+										while((input = br.readLine())!=null && input.startsWith("REPONSE=")){
+											Reponse r = new Reponse();
+											r.position = positionReponse;
+											positionReponse++;
+											r.question=q;
+											r.texte=input.substring(8);
+											if((input = br.readLine())!=null && startsWith(input,"IMAGE=")){
+												r.image=Image.find.where().eq("fileName", input.substring(6)).findUnique();
+											}
+											r.save();
+											br.mark(1000000);
+										}
 									}
 								}
+								serie.questions.add(q);
+								br.reset();
+								br.mark(1000000);
 							}
-							serie.questions.add(q);
 							br.reset();
-							br.mark(1000000);
 						}
-						br.reset();
 					}
 				}
 			}
 			close(br);
 			return true;
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -478,7 +485,7 @@ public class Export extends Controller{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Renvoie l'identifiant de la personne loguée. Si personne n'est logué, throw une exception.
 	 * @return l'identifiant de la personne loguée
@@ -491,5 +498,5 @@ public class Export extends Controller{
 			throw new IOException("Vous n'êtes pas logué, certainement car vous venez de supprimer les cookies.");
 		}
 	}
-	
+
 }
