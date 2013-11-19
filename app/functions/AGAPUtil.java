@@ -49,7 +49,7 @@ public class AGAPUtil {
 
 	public static List<Matiere> listMatieres = new ArrayList<Matiere>();
 	public static List<Groupe> listGroupes = new ArrayList<Groupe>();
-	
+
 	/**
 	 * init data
 	 */
@@ -176,7 +176,7 @@ public class AGAPUtil {
 				+ "NATURAL JOIN cycle "
 				+ "WHERE cycle_defaut=1";
 	}
-	
+
 	/**
 	 * Remplie la variable listGroupes avec la liste des groupes dans AGAP
 	 */
@@ -202,8 +202,8 @@ public class AGAPUtil {
 			System.out.println("Impossible de se connecter à AGAP...");
 		}
 	}
-	
-	
+
+
 	/**
 	 * Trouve les élèves suivant le cours ayant l'id donnée
 	 * @param libellecourt
@@ -292,12 +292,13 @@ public class AGAPUtil {
 
 
 	/**
-	 * Requête pour avoir la liste des inscrits
+	 * Requête pour avoir la liste des inscrits dans un groupe et suivant un enseignement donné.
 	 * @param ActionFormation_ID
+	 * @param groupe_nom
 	 * @return
 	 */
 	private static String listeInscritsGroupe(Integer ActionFormation_ID, String groupe_nom){
-		return "SELECT DISTINCT personne_uid FROM InscriptionAction "
+		/*return "SELECT DISTINCT personne_uid FROM InscriptionAction "
 				+ "NATURAL JOIN Inscription "
 				+ "NATURAL JOIN CursusPrepare "
 				+ "NATURAL JOIN DossierScolaire "
@@ -308,6 +309,18 @@ public class AGAPUtil {
 				+ "NATURAL JOIN GroupeStructure "
 				+ "NATURAL JOIN Structures "
 				+ "WHERE ActionFormation_ID="+ActionFormation_ID+" "
-				+ "AND groupe_nom='"+groupe_nom+"'";
+				+ "AND groupe_nom='"+groupe_nom+"'";*/
+		return "SELECT personne_uid FROM Groupe "
+		+ "NATURAL JOIN EleveDansGroupe "
+		+ "NATURAL JOIN InscriptionAction "
+		+ "NATURAL JOIN Inscription "
+		+ "NATURAL JOIN CursusPrepare "
+		+ "NATURAL JOIN DossierScolaire "
+		+ "NATURAL JOIN Eleve "
+		+ "NATURAL JOIN Personne "
+		+ "NATURAL JOIN cycle "
+		+ "WHERE cycle_defaut=1 "
+		+ "AND ActionFormation_ID="+ActionFormation_ID+" "
+		+ "AND groupe_nom='"+groupe_nom+"'";
 	}
 }
