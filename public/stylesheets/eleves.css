@@ -39,3 +39,8 @@ h2.avertissement{
 p.explications{
 	font-size:70%;
 }
+
+.image{
+	max-width:250px;
+	max-height:300px;
+}

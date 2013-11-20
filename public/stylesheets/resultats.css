@@ -116,6 +116,7 @@ img{
 	text-align:center;
     display:block;
 	max-width:500px;
+	max-height:400px;
 }
 
 /* Progress Bar */

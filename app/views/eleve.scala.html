@@ -40,14 +40,22 @@
  <ol>@for(question <- lien.serie.questions){
 	<li><p>@Html(question.texte)</p></li>
 	@if(question.typeQ.id==1){
-		@for(reponse <- question.reponses){
-			<input type="radio" name="choixReponse@question.id" value="@reponse.position"> @if(reponse.image!=null){<img src="/images/@reponse.image.fileName" height="35px">} @reponse.texte<br>
-		}
+	<table>@for(reponse <- question.reponses){
+		<tr>
+		<td><input type="radio" name="choixReponse@question.id" value="@reponse.position"></td>
+		<td>@if(reponse.image!=null){<a href="/images/@reponse.image.fileName" data-lightbox="lightbox@reponse.image.id"><img class="image" src="/images/@reponse.image.fileName"></a>}</td>
+		<td>@reponse.texte</td>
+		</tr>
+	}</table>
 	}
 	@if(question.typeQ.id==2){
-		@for(reponse <- question.reponses){
-			<input id="question@question.id" type="checkbox" name="choixReponse@question.id.@reponse.position" value="@reponse.position"> @if(reponse.image!=null){<img src="/images/@reponse.image.fileName" height="35px">} @reponse.texte<br>
-		}
+	<table>@for(reponse <- question.reponses){
+		<tr>
+		<td><input id="question@question.id" type="checkbox" name="choixReponse@question.id.@reponse.position" value="@reponse.position"></td>
+		<td>@if(reponse.image!=null){<a href="/images/@reponse.image.fileName" data-lightbox="lightbox@reponse.image.id"><img class="image" src="/images/@reponse.image.fileName"></a>}</td>
+		<td>@reponse.texte</td>
+		</tr>
+	}</table>
 	}
 	@if(question.typeQ.id==3){
 		<input type="text" name="texteRepondu@question.id" size="60px"><br>
@@ -96,4 +104,6 @@
 	}
 </script>
 }
+<link href="/assets/javascripts/lightbox/lightbox.css" rel="stylesheet" />
+<script src="/assets/javascripts/lightbox/lightbox-2.6.min.js"></script>
 </body>
