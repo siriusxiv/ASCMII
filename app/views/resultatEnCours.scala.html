@@ -41,7 +41,7 @@
 					@if(contenuDeLaQuestion!=0){<td class="img">@if(reponse.image!=null){<img class="reponses" src="/images/@reponse.image.fileName">}</td>}
 					@if(contenuDeLaQuestion!=1){<td class="reponses">@reponse.texte</td>}
 					<td class="reponsesNombre">@resultat.reponsesChoisies.get(reponse.position-1)</td>
-					<td class="reponsesPourcent">@{resultat.reponsesChoisies.get(reponse.position-1)*100/nombreDeReponsesMAX} %</td>
+					<td class="reponsesPourcent">@if(nombreDeReponses==0){0}else{@{resultat.reponsesChoisies.get(reponse.position-1)*100/nombreDeReponses}} %</td>
 				</tr>
 				}
 			}
