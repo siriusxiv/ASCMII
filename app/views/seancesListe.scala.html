@@ -157,7 +157,7 @@
 		<p>OU</p>
 		<p>Importer un séance depuis votre ordinateur :</p>
 		@helper.form(action = routes.Export.uploadSeance(), 'enctype -> "multipart/form-data"){
-		<input type="file" name="fichier">
+		<input type="file" name="fichier" accept=".seancexport">
 		<button type="submit">Valider</button>
 		}
 	</div>

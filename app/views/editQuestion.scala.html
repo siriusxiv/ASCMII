@@ -34,7 +34,7 @@
 		<p>Entrez la question : </p>
 		<table>
 		<td><textarea name="texte" id="editorQuestion" cols="50" rows="3">@Html(question.texte)</textarea></td>
-		<td>Uploadez des images pour la question :<input type="file" name="questionImages" id="questionImages">
+		<td>Uploadez des images pour la question :<input type="file" name="questionImages" id="questionImages" accept="image/*">
 			<button type="submit" id="btn">Upload Files!</button>@*Cette balise disparaît si le browser gère l'upload via Ajax*@
 			<div id="questionImagesDiv"></div>
 		</td>

@@ -35,7 +35,7 @@
 		<p>Entrez la question : </p>
 		<table>
 		<td><textarea name="texte" id="editorQuestion" cols="50" rows="3"></textarea></td>
-		<td>Uploadez des images pour la question :<input type="file" name="questionImages" id="questionImages">
+		<td>Uploadez des images pour la question :<input type="file" name="questionImages" id="questionImages" accept="image/*">
 			<button type="submit" id="btn">Upload Files!</button>@*Cette balise disparaît si le browser gère l'upload via Ajax*@
 			<div id="questionImagesDiv"></div>
 		</td>
@@ -52,13 +52,13 @@
 				<td class="suppr" title="Supprimer la réponse"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
 				<td id="numero1"> 1.</td>
 				<td><input type="text" id="texte1" name="reponse1" size="60px" value=""></td>
-				<td><input type="file" name="image1" id="image1"></td>
+				<td><input type="file" name="image1" id="image1" accept="image/*"></td>
 			</tr>
 			<tr id="reponse2">
 				<td class="suppr" title="Supprimer la réponse"><a id="suppr2" onClick="removeReponse(2)">X</a></td>
 				<td id="numero2"> 2.</td>
 				<td><input type="text" id="texte2" name="reponse2" size="60px" value=""></td>
-				<td><input type="file" name="image2" id="image2"></td>
+				<td><input type="file" name="image2" id="image2" accept="image/*"></td>
 			</tr>
 			</table>
 		}</form>@if(typeQ.id<=2){<button onClick="addReponse()">Ajouter une autre réponse</button>}
@@ -78,7 +78,7 @@
 		var chaine1 = '<tr id="'+reponseNumero+'"><td class="suppr" title="Supprimer la réponse"><a id="suppr'+(nombreDeReponses+1)+'" onClick="removeReponse('+(nombreDeReponses+1)+')">X</a></td>';
 		var chaine2 = '<td id="numero'+(nombreDeReponses+1)+'"> '+(nombreDeReponses+1)+'.</td>';
 		var chaine3 = '<td><input type="text" id="texte'+(nombreDeReponses+1)+'" name="'+reponseNumero+'" size="60px" value=""></td>';
-		var chaine4 = '<td><input type="file" name="image'+(nombreDeReponses+1)+'" id="image'+(nombreDeReponses+1)+'"></td></tr>';
+		var chaine4 = '<td><input type="file" name="image'+(nombreDeReponses+1)+'" id="image'+(nombreDeReponses+1)+'" accept="image/*"></td></tr>';
 		$('#reponse'+nombreDeReponses).after(chaine1+chaine2+chaine3+chaine4);
 		nombreDeReponses++;
 	}
@@ -94,7 +94,7 @@
 				$('#numero'+pos).replaceWith('<td id="numero'+(pos-1)+'"> '+(pos-1)+'.</td>');
 				var value = $('#texte'+pos).val();
 				$('#texte'+pos).replaceWith('<input type="text" id="texte'+(pos-1)+'" name="reponse'+(pos-1)+'" size="60px" value="'+value+'">');
-				$('#image'+pos).replaceWith('<input type="file" name="image'+(pos-1)+'" id="image'+(pos-1)+'">');
+				$('#image'+pos).replaceWith('<input type="file" name="image'+(pos-1)+'" id="image'+(pos-1)+'" accept="image/*">');
 				pos++;
 			}
 			nombreDeReponses--;

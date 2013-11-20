@@ -100,7 +100,7 @@
 								<img class="insertImage" src="/assets/images/insert-image-3.png" title="Ajouter une image à la réponse" onClick="addImage(@reponse.id)">
 								<button class="insertImage" onClick="addImage(@reponse.id)">Ajouter une image à la réponse</button>
 								<form id="r@reponse.id" action="/prof/uploadimage/@reponse.id" method="POST" enctype="multipart/form-data" style="display:none">
-									<input type="file" name="image">
+									<input type="file" name="image" accept="image/*">
 								<button type="submit">Uploader</button>
 								</form>}else{
 								<img class="insertImage" src="/assets/images/insert-image-2.png" title="Supprimer l'image" onClick="delImage(@reponse.id)">
@@ -136,7 +136,7 @@
 		<p>OU</p>
 		<p>Importez une série depuis votre ordinateur :</p>
 		@helper.form(action = routes.Export.uploadSerie(seance.id), 'enctype -> "multipart/form-data"){
-		<input type="file" name="fichier">
+		<input type="file" name="fichier" accept=".seriexport">
 		<button type="submit">Valider</button>
 		}
 	</div>
