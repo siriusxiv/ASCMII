@@ -54,10 +54,11 @@
 			<table>
 			<tr>
 				<td>Date et heure :</td>
+				@if(seance.date!=functions.ParseDate.lastDate()){
 				<td><select name="day">
 					@for(i: Int <- 1 to 31){
 					<option value="@i" @if(i==Integer.parseInt(seance.date.format("d"))){ selected="selected"}>@i</option>
-				}
+					}
 				</select>
 				</td>
 				<td><select name="month">
@@ -92,6 +93,46 @@
 						<option value="@i" @if(i==Integer.parseInt(seance.date.format("H"))){ selected="selected"}>@{i+"h"}</option>
 					}
 				</select></td>
+				}else{
+				<td><select name="day">
+					@for(i: Int <- 1 to 31){
+					<option value="@i" @if(i==Integer.parseInt(Calendar.getInstance().getTime().format("d"))){ selected="selected"}>@i</option>
+					}
+				</select>
+				</td>
+				<td><select name="month">
+				@for(i: Int <- 1 to 12){
+					<option value="@i" @if(i==Integer.parseInt(Calendar.getInstance().getTime().format("M"))){ selected="selected"}>
+					@{i match {
+						case 1 => "Janvier"
+						case 2 => "Février"
+						case 3 => "Mars"
+						case 4 => "Avril"
+						case 5 => "Mai"
+						case 6 => "Juin"
+						case 7 => "Juillet"
+						case 8 => "Août"
+						case 9 => "Septembre"
+						case 10 => "Octobre"
+						case 11 => "Novembre"
+						case 12 => "Décembre"
+					}}
+					</option>
+				}
+				</select>
+				</td>
+				<td><select name="year">
+					@for(i: Int <- 2013 to 2019){
+						<option value="@i" @if(i==Integer.parseInt(Calendar.getInstance().getTime().format("yyyy"))){ selected="selected"}>@i</option>
+					}
+				</select></td>
+				<td>à</td>
+				<td><select name="hour">
+					@for(i: Int <- 8 to 18){
+						<option value="@i">@{i+"h"}</option>
+					}
+				</select></td>
+				}
 			</tr>
 			</table>
 		<br>
