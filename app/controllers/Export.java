@@ -418,6 +418,7 @@ public class Export extends Controller{
 				seance = new Seance(username,input.substring(16));
 				if((input = br.readLine())!=null && startsWith(input,"SEANCE_MATIERE=")){
 					seance.matiere=input.substring(15);
+					seance.matiere_id=Matiere.getID(seance.matiere);
 					if((input = br.readLine())!=null && startsWith(input,"SEANCE_GROUPE=")){
 						if(input.substring(14).equals(""))	seance.groupe=null;
 						else								seance.groupe=input.substring(14);
