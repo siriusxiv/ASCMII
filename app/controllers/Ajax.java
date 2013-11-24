@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import functions.AGAPUtil;
+import functions.agap.AGAPStringUtil;
 import functions.agap.Matiere;
 import models.Lien;
 import models.Serie;
@@ -111,5 +112,10 @@ public class Ajax extends Controller{
 		}
 		Collections.sort(listeMatieres);
 		return ok(matiereListeDynamique.render(listeMatieres));
+	}
+	
+	public static Result listeEtudiants(String inputMatiere, String inputGroupe){
+		String res = AGAPStringUtil.getStudentNumber(inputGroupe, Matiere.getID(inputMatiere));
+		return ok(res);
 	}
 }

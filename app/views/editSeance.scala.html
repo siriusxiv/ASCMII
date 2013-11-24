@@ -139,13 +139,20 @@
 		<button type="submit">Valider</button>
 	</form>
 	<form action="/prof/seances"><button>Retour</button></form>
-@studentList(seance)
-<script src="/assets/javascripts/jquery-1.10.2.min.js")"></script>
+<div id="studentList"></div>
+<script src="/assets/javascripts/jquery-1.10.2.min.js"></script>
 <script src="/assets/javascripts/jquery-ui.js"></script>
 <link rel="stylesheet" href="/assets/stylesheets/jquery-ui.css">
 <script>
+document.getElementById("matiere").addEventListener("change", function (evt){
+	rafraichitListeEleves();
+});
+document.getElementById("groupe").addEventListener("change", function (evt){
+	rafraichitListeEleves();
+});
 function afficheListeMatieresInit(){
 	setInterval("afficheListeMatieres();",1000);
+	rafraichitListeEleves();
 }
 function afficheListeMatieres(){
 	var inputMatiere = $('#matiere').val();
@@ -153,13 +160,22 @@ function afficheListeMatieres(){
 		$('#matieres').load('/prof/listeMatieres/'+inputMatiere);
 	}
 }
+function rafraichitListeEleves(){
+	var inputMatiere = $('#matiere').val();
+	var inputGroupe = $('#groupe').val();
+	if($.inArray(inputMatiere, listeMatieres) && $.inArray(inputGroupe, listeGroupes)){
+		$('#studentList').load('/prof/listeEtudiants/'+inputMatiere+'/'+inputGroupe);
+	}
+}
 function replaceMatiere(string){
 	$('#matiere').val(string);
 }
-$('#matiere').autocomplete({	source : [@Html(functions.ScalaStringUtil.listMatieres())],
+var listeMatieres = [@Html(functions.ScalaStringUtil.listMatieres())];
+var listeGroupes = [@Html(functions.ScalaStringUtil.listGroupes())];
+$('#matiere').autocomplete({	source : listeMatieres,
 				minLength: 2
 			});
-$('#groupe').autocomplete({	source : [@Html(functions.ScalaStringUtil.listGroupes())],
+$('#groupe').autocomplete({	source : listeGroupes,
 				minLength: 0
 			});
 </script>

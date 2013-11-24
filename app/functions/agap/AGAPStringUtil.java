@@ -30,6 +30,7 @@ import java.util.List;
 
 import models.Eleve;
 import models.Seance;
+import functions.AGAPUtil;
 import functions.Events;
 
 /**
@@ -140,6 +141,31 @@ public class AGAPStringUtil {
 			r+="<option>"+e+"</option>";
 		}
 		r+="</select>";
+		return r;
+	}
+	
+	/**
+	 * Get the number of students who are concerned by a seance.
+	 * @param groupe
+	 * @param matiere_id
+	 * @return
+	 */
+	public static String getStudentNumber(String groupe, int matiere_id){
+		List<Eleve> eleves;
+		if(test.Mode.findAllEnabled()){
+			eleves = Eleve.find.all();
+		}else{
+			eleves = AGAPUtil.getInscrits(matiere_id);
+		}
+		String r = "";
+		if(eleves.size()<=1){
+			r+="<p>"+eleves.size()+" élève est concerné par ce cours.</p>";
+		}else{
+			r+="<p>"+eleves.size()+" élèves sont concernés par ce cours.</p>";
+		}
+		if(eleves.isEmpty()){
+			r+="<h1>Attention, aucun élève ne suit ce cours !</h1>";
+		}
 		return r;
 	}
 }
