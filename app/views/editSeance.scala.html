@@ -163,7 +163,7 @@ function afficheListeMatieres(){
 function rafraichitListeEleves(){
 	var inputMatiere = $('#matiere').val();
 	var inputGroupe = $('#groupe').val();
-	if($.inArray(inputMatiere, listeMatieres) && $.inArray(inputGroupe, listeGroupes)){
+	if(listeMatieres.indexOf(inputMatiere)>=0 && listeGroupes.indexOf(inputGroupe)>=0){
 		$('#studentList').load('/prof/listeEtudiants/'+inputMatiere+'/'+inputGroupe);
 	}
 }
