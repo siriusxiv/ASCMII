@@ -121,7 +121,6 @@ public class Ajax extends Controller{
 	 * @return
 	 */
 	public static Result listeEtudiants(String inputMatiere, String inputGroupe){
-		System.out.println("Group:"+inputGroupe+"Matière:"+inputMatiere);
 		String res;
 		if(inputGroupe.equals("")){
 			res = AGAPStringUtil.getStudentNumber(null, Matiere.getID(inputMatiere));

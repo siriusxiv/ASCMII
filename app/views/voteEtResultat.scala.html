@@ -57,9 +57,8 @@
 						<form action="/prof/voir/@serie.id" method="GET" style="display:inline">
 							<button type="submit">Résultats</button>
 						</form>
-						<form action="/prof/reset/@serie.id" method="POST" style="display:inline">
-							<button type="submit">Reset</button>
-						</form>
+						<button type="submit" onClick="reset()">Reset</button>
+						<form id="reset" action="/prof/reset/@serie.id" method="POST" style="display:inline"/>
 						@if(serie.isNotFinished()){
 							Série en cours...
 						}else{
@@ -117,6 +116,11 @@ function sendMail(){
 	if(confirm('Il semblerait que les mails aient déjà été envoyés. Êtes-vous sûr(e) de vouloir continuer ?')){
 		$('#message').html('Veuillez patientez pendant que les mails sont envoyés, cela peut prendre quelques minutes si beaucoup d\'élèves assistent à votre cours...');
 		$('#mail').submit();
+	}
+}
+function reset(){
+	if(confirm("Voulez-vous vraiment remettre à zéro cette séance ? (toutes les résultats des élèves seront supprimés)")){
+		$("#reset").submit();
 	}
 }
 </script>
