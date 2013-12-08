@@ -55,7 +55,7 @@
 						<form action="/prof/gerer/@seance.id" method="POST" style="display:inline">
 							<input type="image" src="/assets/images/view-list-text-2.png" title="Gérer" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Gérer la séance')">
 						</form>
-						@if(!seance.series.isEmpty()){
+						@if(seance.canAccessVoteResultat()){
 						<form action="/prof/vote/@seance.id" method="POST" style="display:inline">						
 							<input type="image" src="/assets/images/view-pim-tasks.png" title="Vote et résultats" onMouseOut="$('#t'+@seance.id).html('Choisir une action')" onMouseOver="$('#t'+@seance.id).html('Vote et résultats')">
 						</form>

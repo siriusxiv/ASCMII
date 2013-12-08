@@ -114,7 +114,14 @@ public class Ajax extends Controller{
 		return ok(matiereListeDynamique.render(listeMatieres));
 	}
 	
+	/**
+	 * Affiche le nombre d'étudiant assistant à un cours.
+	 * @param inputMatiere
+	 * @param inputGroupe
+	 * @return
+	 */
 	public static Result listeEtudiants(String inputMatiere, String inputGroupe){
+		System.out.println("Group:"+inputGroupe+"Matière:"+inputMatiere);
 		String res = AGAPStringUtil.getStudentNumber(inputGroupe, Matiere.getID(inputMatiere));
 		return ok(res);
 	}

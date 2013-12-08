@@ -164,6 +164,14 @@ public class Seance extends Model {
 	}
 	
 	/**
+	 * Détermine si oui ou non on peut accéder à la page vote et résultats pour une séance donnée.
+	 * @return VRAI ou FAUX
+	 */
+	public boolean canAccessVoteResultat(){
+		return !this.series.isEmpty() && !this.date.equals(functions.ParseDate.lastDate());
+	}
+	
+	/**
 	 * Vérifie s'il y a au moins une série lançable dans la séance
 	 * Utile pour le bouton "Lancer toutes les séries d'un coup".
 	 * @return VRAI ou FAUX
