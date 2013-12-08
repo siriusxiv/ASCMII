@@ -155,7 +155,11 @@ public class AGAPStringUtil {
 		if(test.Mode.findAllEnabled()){
 			eleves = Eleve.find.all();
 		}else{
-			eleves = AGAPUtil.getInscrits(matiere_id);
+			if(groupe==null){
+				eleves = AGAPUtil.getInscrits(matiere_id);
+			}else{
+				eleves = AGAPUtil.getInscritsParGroupe(matiere_id, groupe);
+			}
 		}
 		String r = "";
 		if(eleves.size()<=1){

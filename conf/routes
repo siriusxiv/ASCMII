@@ -129,6 +129,7 @@ POST	/prof/renameSerie/:serie_id/:newName	controllers.Ajax.renameSerie(serie_id:
 GET		/prof/listeMatieres/:boutDeMatiere		controllers.Ajax.listeMatieres(boutDeMatiere:String)
 #Pour afficher dynamique la liste des élèves
 GET		/prof/listeEtudiants/:inputMatiere/:inputGroupe controllers.Ajax.listeEtudiants(inputMatiere:String,inputGroupe:String)
+GET		/prof/listeEtudiants/:inputMatiere/ 			controllers.Ajax.listeEtudiants(inputMatiere:String,inputGroupe:String ?="")
 
 #Routes pour admin
 GET		/admin/clean						admin.Display.clean()
