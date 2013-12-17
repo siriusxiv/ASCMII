@@ -44,6 +44,7 @@ public class Image extends Model{
 	
 	@Required
 	public String fileName;
+	public String description;
 	
 	/**
 	 * Crée un objet de type image ayant une ID pré-choisie et un nom formaté.
@@ -51,16 +52,8 @@ public class Image extends Model{
 	 */
 	public Image(String filename){
 		id=idNonUtilisee();
-		fileName=id+"_"+noSpace(filename);
-	}
-	
-	/**
-	 * Supprime les espaces.
-	 * @param str
-	 * @return la chaîne str sans espaces
-	 */
-	private static String noSpace(String str){
-		return str.replace(' ', '_');
+		fileName=id+filename.substring(filename.lastIndexOf('.'));
+		description=filename.substring(0,filename.lastIndexOf('.'));
 	}
 	
 	public static Finder<Long,Image> find = new Finder<Long,Image>(Long.class, Image.class);

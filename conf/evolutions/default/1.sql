@@ -22,6 +22,7 @@ create table eleve (
 create table image (
   id                        bigint auto_increment not null,
   file_name                 varchar(255),
+  description               varchar(255),
   constraint pk_image primary key (id))
 ;
 

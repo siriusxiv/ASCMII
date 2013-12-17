@@ -51,13 +51,13 @@
 			<tr id="reponse1">
 				<td class="suppr" title="Supprimer la réponse"><a id="suppr1" onClick="removeReponse(1)">X</a></td>
 				<td id="numero1"> 1.</td>
-				<td><input type="text" id="texte1" name="reponse1" size="60px" value=""></td>
+				<td><input type="text" id="texte1" name="reponse1" size="60px" value="@if(typeQ.id==1){Oui}"></td>
 				<td><input type="file" name="image1" id="image1" accept="image/*"></td>
 			</tr>
 			<tr id="reponse2">
 				<td class="suppr" title="Supprimer la réponse"><a id="suppr2" onClick="removeReponse(2)">X</a></td>
 				<td id="numero2"> 2.</td>
-				<td><input type="text" id="texte2" name="reponse2" size="60px" value=""></td>
+				<td><input type="text" id="texte2" name="reponse2" size="60px" value="@if(typeQ.id==1){Non}"></td>
 				<td><input type="file" name="image2" id="image2" accept="image/*"></td>
 			</tr>
 			</table>

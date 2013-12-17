@@ -104,5 +104,8 @@ public class Matiere {
 		AGAPUtil.listMatieres.add(new Matiere("FLUID_S5",4));
 		AGAPUtil.listMatieres.add(new Matiere("FLUID_S6",5));
 		AGAPUtil.listMatieres.add(new Matiere("COES",6));
+		AGAPUtil.listMatieres.add(new Matiere("dSIBAD",7));
+		AGAPUtil.listMatieres.add(new Matiere("eSPIME",8));
+		AGAPUtil.listMatieres.add(new Matiere("MEEFI",9));
 	}
 }
