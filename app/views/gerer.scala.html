@@ -128,17 +128,18 @@
 	
 	<div id="new_serie" style="display:none">
 		<h2>Création d'une nouvelle séance :</h2>
-		<p>Entrez le nom de la nouvelle série :</p>
+		<table>
+		<td><p>Entrez le nom de la nouvelle série :</p>
 		<form action="/prof/gerer/add/@seance.id" method="POST">
 		<input type="text" name="nom" size="40">
 		<button type="submit">Valider</button>
-		</form>
-		<p>OU</p>
-		<p>Importez une série depuis votre ordinateur :</p>
+		</form></td>
+		<td><p>&nbsp;&nbsp;&nbsp;OU&nbsp;&nbsp;&nbsp;</p></td>
+		<td><p>Importez une série depuis votre ordinateur :</p>
 		@helper.form(action = routes.Export.uploadSerie(seance.id), 'enctype -> "multipart/form-data"){
 		<input type="file" name="fichier" accept=".seriexport">
 		<button type="submit">Valider</button>
-		}
+		}</td>
 	</div>
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
 <script>
