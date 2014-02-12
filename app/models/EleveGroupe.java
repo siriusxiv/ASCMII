@@ -62,4 +62,13 @@ public class EleveGroupe extends Model {
 			return 1L;
 		}
 	}
+
+	public void remove() {
+		List<EleveHasGroupe> ehgs = EleveHasGroupe.find.where().eq("groupe",this).findList();
+		for(EleveHasGroupe ehg : ehgs){
+			ehg.delete();
+		}
+		this.delete();
+		
+	}
 }

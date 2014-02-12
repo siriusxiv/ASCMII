@@ -77,6 +77,10 @@ POST	/prof/gerer/editquestion2/:id	controllers.QuestionGestion.editQuestion2(id:
 GET		/prof/manageGroups			controllers.ManageGroups.index()
 POST	/prof/addGroup				controllers.ManageGroups.add()
 POST	/prof/delGroup/:id			controllers.ManageGroups.del(id: Long)
+GET		/prof/getGroup/:id			controllers.ManageGroups.getMembers(id: Long)
+POST	/prof/addEleveInGroupe/:groupe_id/:eleve_uid	controllers.ManageGroups.addEleveInGroupe(groupe_id: Long, eleve_uid: String)
+POST	/prof/delEleveInGroupe/:groupe_id/:eleve_uid	controllers.ManageGroups.delEleveInGroupe(groupe_id: Long, eleve_uid: String)
+GET		/prof/getGroupList			controllers.ManageGroups.getGroupList()
 
 POST	/prof/export/:serie_id		controllers.Export.downloadSerie(serie_id: Long)
 

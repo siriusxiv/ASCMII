@@ -1,4 +1,4 @@
-/****************************************************************************
+@****************************************************************************
 
 	ASCMII is a web application developped for the Ecole Centrale de Nantes
 	aiming to organize quizzes during courses or lectures.
@@ -17,29 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
-package models;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import play.db.ebean.Model;
-
-@SuppressWarnings("serial")
-@Entity
-public class EleveHasGroupe extends Model  {
-	@Id
-	public Long id;
-	@ManyToOne(targetEntity = Eleve.class)
-	public Eleve eleve;
-	@ManyToOne(targetEntity = EleveGroupe.class)
-	public EleveGroupe groupe;
-	
-	public static Finder<Long,EleveHasGroupe> find = new Finder<Long,EleveHasGroupe>(Long.class, EleveHasGroupe.class);
-	
-	public EleveHasGroupe(Long groupe_id, String eleve_uid){
-		eleve=Eleve.find.byId(eleve_uid);
-		groupe=EleveGroupe.find.byId(groupe_id);
-	}
+******************************************************************************@
+@(groupes: List[EleveGroupe])
+<select name="customGroup">
+@for(groupe <- groupes){
+<option value="@groupe.id">@groupe.id. @groupe.groupe_nom</option>
 }
+</select>

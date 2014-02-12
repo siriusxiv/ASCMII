@@ -30,22 +30,32 @@
 <td>
 	<ul id="list">
 @for(groupe <- groupes){
-	<span id="groupe@groupe.id" onClick="select(@groupe.id)"><button onClick="delGroup(@groupe.id)" class="suppr">X</button>@groupe.groupe_nom<br></span>
+	<span id="groupe@groupe.id" onClick="select(@groupe.id)"><button onClick="delGroup(@groupe.id)" class="suppr">X</button>@groupe.id. @groupe.groupe_nom<br></span>
 }
 	</ul>
 </td>
-<td id="listeEleves">
+<td>
+	<ul id="listeEleves">
 	Pas de groupe sélectionné
+	</ul>
+	<span id="ajouterEleve" style="display:none"><input type="text" placeholder="Nouvel élève" default="" id="nouvelEleve"><button onClick="addEleve()">Ajouter l'élève</button></span>
 </td>
 </tr>
 </table>
 <input type="text" placeholder="Nom du groupe" default="" id="nouveauGroupe"><button onClick="addGroup()">Ajouter le nouveau groupe</button>
 <script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
+<script src="/assets/javascripts/jquery-ui.js"></script>
+<link rel="stylesheet" href="/assets/stylesheets/jquery-ui.css">
 <script>
+var selectedGroup;
 var groupeIdList = new Array();
 @for(groupe <- groupes){
 	groupeIdList.push('@groupe.id');
 }
+var listeEleves = [@Html(functions.ScalaStringUtil.listEleves())];
+$('#nouvelEleve').autocomplete({	source : listeEleves,
+				minLength: 2
+			});
 function addGroup(){
 	var formdata = new FormData();
 	var val = $('#nouveauGroupe').val();
@@ -60,7 +70,7 @@ function addGroup(){
 			$('#nouveauGroupe').val('');
 			if(val=='')
 				val="Groupe n°"+res;
-			$('#list').append('<span id="groupe'+res+'" onClick="select('+res+')"><button onClick="delGroup('+res+')" class="suppr">X</button>'+val+'<br></span>');
+			$('#list').append('<span id="groupe'+res+'" onClick="select('+res+')"><button onClick="delGroup('+res+')" class="suppr">X</button>'+res+'. '+val+'<br></span>');
 			groupeIdList.push(res);
 		}
 	});
@@ -83,6 +93,39 @@ function select(id){
 		else
 			$('#groupe'+groupeIdList[i]).css('background-color','red');
 	}
+	$.ajax({
+		type : 'GET',
+		url : '/prof/getGroup/'+id,
+		success: function (res) {
+			$('#listeEleves').html(res);
+			selectedGroup=id;
+			$('#ajouterEleve').attr('style','display:block');
+		}
+	});
+}
+function addEleve(){
+	var eleve = $('#nouvelEleve').val();
+	if(listeEleves.indexOf(eleve)>=0){
+		$.ajax({
+			type : 'POST',
+			url : '/prof/addEleveInGroupe/'+selectedGroup+'/'+eleve,
+			success: function (res) {
+				select(selectedGroup);
+				$('#nouvelEleve').val('');
+			}
+		});
+	}else{
+		alert('Cet élève n\'existe pas dans la base de données.');
+	}
+}
+function delEleve(groupe_id,eleve_uid){
+	$.ajax({
+		type : 'POST',
+		url : '/prof/delEleveInGroupe/'+groupe_id+'/'+eleve_uid,
+		success: function (res) {
+			select(selectedGroup);
+		}
+	});
 }
 </script>
 }

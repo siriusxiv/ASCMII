@@ -28,6 +28,7 @@ import java.util.List;
 import functions.ParseDate;
 import functions.agap.Groupe;
 import functions.agap.Matiere;
+import models.EleveGroupe;
 import models.Professeur;
 import models.Question;
 import models.Reponse;
@@ -132,11 +133,22 @@ public class SeancesListe extends Controller{
 			seance.matiere=info.get("matiere");
 			seance.matiere_id=Matiere.getID(seance.matiere);
 			seance.professeur=Professeur.find.ref(session("username"));
-			String groupe = info.get("groupe");
-			if(groupe=="")	seance.groupe=null;
-			else{
-				if(Groupe.exists(groupe))	seance.groupe=info.get("groupe");
-				else						return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
+			//String groupe = info.get("groupe");
+			//if(groupe==null || groupe.equals(""))	seance.groupe=null;
+			//else{
+			//	if(Groupe.exists(groupe))	seance.groupe=info.get("groupe");
+			//	else						return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
+			//}
+			if(info.get("groupetype")!=null){
+				seance.groupe=null;
+				seance.custom_group=EleveGroupe.find.byId(Long.parseLong(info.get("customGroup")));
+			}else{
+				String groupe = info.get("groupe");
+				seance.custom_group=null;
+				if(groupe.equals(""))			seance.groupe=null;
+				else if(Groupe.exists(groupe))	seance.groupe=info.get("groupe");
+				else							return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
+			
 			}
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();

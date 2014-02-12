@@ -21,6 +21,9 @@
 
 package functions;
 
+import java.util.List;
+
+import models.Eleve;
 import functions.agap.Groupe;
 import functions.agap.Matiere;
 
@@ -74,6 +77,26 @@ public class ScalaStringUtil {
 		}else{
 			for(Groupe g : AGAPUtil.listGroupes){
 				liste+="'"+g.getName()+"',";
+			}
+			return liste.substring(0, liste.length()-1);
+
+		}
+	}
+	
+	/**
+	 * Renvoie la liste des eleves sous la forme d'une string
+	 * exploitable par la fonction autocomplete de jQuery
+	 * (utilisé dans le template manageGroups).
+	 * @return une chaîne du type "'Eleve1','Eleve2'..."
+	 */
+	public static String listEleves(){
+		String liste = "";
+		List<Eleve> eleves = Eleve.find.all();
+		if(eleves.isEmpty()){
+			return liste;
+		}else{
+			for(Eleve e : eleves){
+				liste+="'"+e.uid+"',";
 			}
 			return liste.substring(0, liste.length()-1);
 
