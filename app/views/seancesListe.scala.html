@@ -46,7 +46,7 @@
 			<tr>
 				<td class="listeDate">@if(seance.date==functions.ParseDate.lastDate()){Date non définie}else{@seance.date.format("dd/MM/yyyy à H") h}</td>
 				<td class="liste">@seance.matiere</td>
-				<td class="liste">@if(seance.groupe!=null){@seance.groupe}else{Tous}</td>
+				<td class="liste">@if(seance.custom_group==null){@if(seance.groupe!=null){@seance.groupe}else{Tous}}else{@seance.custom_group.groupe_nom}</td>
 				<td class="liste">@seance.intitule</td>
 				<td class="liste right">
 						<form action="/prof/seances/edit/@seance.id" method="POST" style="display:inline">

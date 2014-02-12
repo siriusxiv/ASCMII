@@ -133,12 +133,6 @@ public class SeancesListe extends Controller{
 			seance.matiere=info.get("matiere");
 			seance.matiere_id=Matiere.getID(seance.matiere);
 			seance.professeur=Professeur.find.ref(session("username"));
-			//String groupe = info.get("groupe");
-			//if(groupe==null || groupe.equals(""))	seance.groupe=null;
-			//else{
-			//	if(Groupe.exists(groupe))	seance.groupe=info.get("groupe");
-			//	else						return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
-			//}
 			if(info.get("groupetype")!=null){
 				seance.groupe=null;
 				seance.custom_group=EleveGroupe.find.byId(Long.parseLong(info.get("customGroup")));
