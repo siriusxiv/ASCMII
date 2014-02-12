@@ -26,7 +26,6 @@ import java.util.List;
 
 import models.Eleve;
 import models.Lien;
-import models.Mail;
 import models.Seance;
 import models.Serie;
 

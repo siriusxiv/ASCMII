@@ -19,13 +19,17 @@
 
 ******************************************************************************/
 
-package models;
+package functions;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import models.Eleve;
+import models.Lien;
+import models.Seance;
+import models.Serie;
 import play.mvc.Http.RequestHeader;
 
 import com.typesafe.plugin.MailerAPI;

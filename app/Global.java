@@ -22,11 +22,9 @@
 import java.util.concurrent.TimeUnit;
 import java.lang.Throwable;
 
-import models.Mail;
-
 import functions.AGAPUtil;
 import functions.LDAP;
-
+import functions.Mail;
 import play.Application;
 import play.GlobalSettings;
 import play.libs.Akka;

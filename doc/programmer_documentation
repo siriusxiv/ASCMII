@@ -26,6 +26,8 @@ remote servers.
 Events contains things related to time. For the time being, the only thing is there
 is the methods that send mails to students (every 15 minutes, the server checks if
 mails are to be sent)
+CoupleRI is a class use to compile results (in the models.Resultat class).
+Mail class manage the sending of mails.
 
 	- functions.agap
 Contains classes to assist AGAPUtil
@@ -33,9 +35,8 @@ Contains classes to assist AGAPUtil
 	- models
 Contains entities for ebean (ebean manages the default database)
 Each class represents a table in the database.
-But the class CoupleRI, Resultat and Mail are exceptions. I wanted to move them out
-of this package but to no avail. I don't understand why, but play won't compile if I
-change their package...
+The class Resultat however is not a table in the database. It is there for convenience
+(this way you can directly use Resultat instances in templates).
 
 	- test
 Only one class with only one method.

@@ -31,6 +31,8 @@ import javax.persistence.Column;
 
 
 
+
+import functions.CoupleRI;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 

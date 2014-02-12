@@ -19,10 +19,12 @@
 
 ******************************************************************************/
 
-package models;
+package functions;
 
 import java.util.Comparator;
 import java.util.List;
+
+import models.Repond;
 
 
 
@@ -39,7 +41,7 @@ public class CoupleRI implements Comparator<CoupleRI>{
 	public Repond repond;
 	public Integer i;
 	
-	CoupleRI(Repond r, Integer i_){
+	public CoupleRI(Repond r, Integer i_){
 		repond=r;
 		i=i_;
 	}
@@ -50,7 +52,7 @@ public class CoupleRI implements Comparator<CoupleRI>{
 	 * @param list
 	 * @param nombreDeRepondants
 	 */
-	CoupleRI(List<CoupleRI> list, Integer nombreDeRepondants){
+	public CoupleRI(List<CoupleRI> list, Integer nombreDeRepondants){
 		repond = new Repond();
 		repond.texte="Autres réponses : ";
 		//i est égal à la somme des

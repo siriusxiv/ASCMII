@@ -27,9 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import alea.Alea;
-
 import functions.Numbers;
-
 import models.Choisit;
 import models.Eleve;
 import models.Lien;

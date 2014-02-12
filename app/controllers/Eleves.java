@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import functions.Numbers;
-
 import models.Choisit;
 import models.Lien;
 import models.Question;
