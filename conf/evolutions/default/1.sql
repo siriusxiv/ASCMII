@@ -19,6 +19,19 @@ create table eleve (
   constraint pk_eleve primary key (uid))
 ;
 
+create table eleve_groupe (
+  id                        bigint auto_increment not null,
+  groupe_nom                varchar(255),
+  constraint pk_eleve_groupe primary key (id))
+;
+
+create table eleve_has_groupe (
+  id                        bigint auto_increment not null,
+  eleve_uid                 varchar(255),
+  groupe_id                 bigint,
+  constraint pk_eleve_has_groupe primary key (id))
+;
+
 create table image (
   id                        bigint auto_increment not null,
   file_name                 varchar(255),
@@ -77,6 +90,7 @@ create table seance (
   matiere_id                integer,
   intitule                  varchar(255),
   groupe                    varchar(255),
+  custom_group_id           bigint,
   professeur_username       varchar(255),
   constraint pk_seance primary key (id))
 ;
@@ -101,26 +115,32 @@ alter table choisit add constraint fk_choisit_reponse_1 foreign key (reponse_id)
 create index ix_choisit_reponse_1 on choisit (reponse_id);
 alter table choisit add constraint fk_choisit_eleve_2 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
 create index ix_choisit_eleve_2 on choisit (eleve_uid);
-alter table lien add constraint fk_lien_serie_3 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
-create index ix_lien_serie_3 on lien (serie_id);
-alter table lien add constraint fk_lien_eleve_4 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
-create index ix_lien_eleve_4 on lien (eleve_uid);
-alter table question add constraint fk_question_typeQ_5 foreign key (type_q_id) references type_question (id) on delete restrict on update restrict;
-create index ix_question_typeQ_5 on question (type_q_id);
-alter table question add constraint fk_question_serie_6 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
-create index ix_question_serie_6 on question (serie_id);
-alter table repond add constraint fk_repond_question_7 foreign key (question_id) references question (id) on delete restrict on update restrict;
-create index ix_repond_question_7 on repond (question_id);
-alter table repond add constraint fk_repond_eleve_8 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
-create index ix_repond_eleve_8 on repond (eleve_uid);
-alter table reponse add constraint fk_reponse_question_9 foreign key (question_id) references question (id) on delete restrict on update restrict;
-create index ix_reponse_question_9 on reponse (question_id);
-alter table reponse add constraint fk_reponse_image_10 foreign key (image_id) references image (id) on delete restrict on update restrict;
-create index ix_reponse_image_10 on reponse (image_id);
-alter table seance add constraint fk_seance_professeur_11 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;
-create index ix_seance_professeur_11 on seance (professeur_username);
-alter table serie add constraint fk_serie_seance_12 foreign key (seance_id) references seance (id) on delete restrict on update restrict;
-create index ix_serie_seance_12 on serie (seance_id);
+alter table eleve_has_groupe add constraint fk_eleve_has_groupe_eleve_3 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
+create index ix_eleve_has_groupe_eleve_3 on eleve_has_groupe (eleve_uid);
+alter table eleve_has_groupe add constraint fk_eleve_has_groupe_groupe_4 foreign key (groupe_id) references eleve_groupe (id) on delete restrict on update restrict;
+create index ix_eleve_has_groupe_groupe_4 on eleve_has_groupe (groupe_id);
+alter table lien add constraint fk_lien_serie_5 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
+create index ix_lien_serie_5 on lien (serie_id);
+alter table lien add constraint fk_lien_eleve_6 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
+create index ix_lien_eleve_6 on lien (eleve_uid);
+alter table question add constraint fk_question_typeQ_7 foreign key (type_q_id) references type_question (id) on delete restrict on update restrict;
+create index ix_question_typeQ_7 on question (type_q_id);
+alter table question add constraint fk_question_serie_8 foreign key (serie_id) references serie (id) on delete restrict on update restrict;
+create index ix_question_serie_8 on question (serie_id);
+alter table repond add constraint fk_repond_question_9 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_repond_question_9 on repond (question_id);
+alter table repond add constraint fk_repond_eleve_10 foreign key (eleve_uid) references eleve (uid) on delete restrict on update restrict;
+create index ix_repond_eleve_10 on repond (eleve_uid);
+alter table reponse add constraint fk_reponse_question_11 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_reponse_question_11 on reponse (question_id);
+alter table reponse add constraint fk_reponse_image_12 foreign key (image_id) references image (id) on delete restrict on update restrict;
+create index ix_reponse_image_12 on reponse (image_id);
+alter table seance add constraint fk_seance_custom_group_13 foreign key (custom_group_id) references eleve_groupe (id) on delete restrict on update restrict;
+create index ix_seance_custom_group_13 on seance (custom_group_id);
+alter table seance add constraint fk_seance_professeur_14 foreign key (professeur_username) references professeur (username) on delete restrict on update restrict;
+create index ix_seance_professeur_14 on seance (professeur_username);
+alter table serie add constraint fk_serie_seance_15 foreign key (seance_id) references seance (id) on delete restrict on update restrict;
+create index ix_serie_seance_15 on serie (seance_id);
 
 
 
@@ -131,6 +151,10 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table choisit;
 
 drop table eleve;
+
+drop table eleve_groupe;
+
+drop table eleve_has_groupe;
 
 drop table image;
 

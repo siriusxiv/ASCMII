@@ -56,8 +56,10 @@ public class Seance extends Model {
 	@Required
 	public String intitule;
 	
-	//groupe ne sert à rien pour l'instant
 	public String groupe;
+	
+	@ManyToOne
+	public EleveGroupe custom_group;
 	
 	@ManyToOne
 	public Professeur professeur;
@@ -83,6 +85,7 @@ public class Seance extends Model {
 		intitule=_intitule;
 		professeur=Professeur.find.ref(username);
 		date=ParseDate.lastDate();
+		custom_group=null;
 	}
 	
 	/**
@@ -97,6 +100,7 @@ public class Seance extends Model {
 		date=ParseDate.lastDate();
 		//On choisit l'ID de la prochaine nouvelle Séance
 		id=Seance.idNonUtilisee();
+		custom_group=null;
 	}
 	/**
 	 * Teste si la séance a une série vide à l'intérieur

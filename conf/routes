@@ -73,6 +73,11 @@ POST	/prof/gerer/editquestion/:id	controllers.QuestionGestion.editQuestion(id: L
 
 POST	/prof/gerer/editquestion2/:id	controllers.QuestionGestion.editQuestion2(id: Long)
 
+#Gestion des groupes
+GET		/prof/manageGroups			controllers.ManageGroups.index()
+POST	/prof/addGroup				controllers.ManageGroups.add()
+POST	/prof/delGroup/:id			controllers.ManageGroups.del(id: Long)
+
 POST	/prof/export/:serie_id		controllers.Export.downloadSerie(serie_id: Long)
 
 POST	/prof/upload/:seance_id		controllers.Export.uploadSerie(seance_id: Long)

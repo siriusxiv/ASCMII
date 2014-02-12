@@ -53,6 +53,10 @@ p.avertissement{
 	font-size:80%;
 }
 
+.small{
+	font-size:65%;
+}
+
 form.logout{
 	padding:1px 0px 0px 400px;
 }

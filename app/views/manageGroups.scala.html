@@ -1,0 +1,88 @@
+@****************************************************************************
+
+	ASCMII is a web application developped for the Ecole Centrale de Nantes
+	aiming to organize quizzes during courses or lectures.
+    Copyright (C) 2013  Malik Olivier Boussejra
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses/.
+
+******************************************************************************@
+@(groupes: List[EleveGroupe])
+@main("ASCMII - Gérer les groupes personnalisés d'élèves"){
+<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
+<table>
+<tr>
+<th>Groupes existants:</th>
+<th>Elèves dans le groupe sélectionné:</th>
+</tr>
+<tr>
+<td>
+	<ul id="list">
+@for(groupe <- groupes){
+	<span id="groupe@groupe.id" onClick="select(@groupe.id)"><button onClick="delGroup(@groupe.id)" class="suppr">X</button>@groupe.groupe_nom<br></span>
+}
+	</ul>
+</td>
+<td id="listeEleves">
+	Pas de groupe sélectionné
+</td>
+</tr>
+</table>
+<input type="text" placeholder="Nom du groupe" default="" id="nouveauGroupe"><button onClick="addGroup()">Ajouter le nouveau groupe</button>
+<script src="@routes.Assets.at("javascripts/jquery-1.10.2.min.js")"></script>
+<script>
+var groupeIdList = new Array();
+@for(groupe <- groupes){
+	groupeIdList.push('@groupe.id');
+}
+function addGroup(){
+	var formdata = new FormData();
+	var val = $('#nouveauGroupe').val();
+	formdata.append('nouveauGroupe',val);
+	$.ajax({
+		type : 'POST',
+		url : '/prof/addGroup',
+		data: formdata,
+		processData: false,
+		contentType: false,
+		success: function (res) {
+			$('#nouveauGroupe').val('');
+			if(val=='')
+				val="Groupe n°"+res;
+			$('#list').append('<span id="groupe'+res+'" onClick="select('+res+')"><button onClick="delGroup('+res+')" class="suppr">X</button>'+val+'<br></span>');
+			groupeIdList.push(res);
+		}
+	});
+}
+function delGroup(id){
+	if(confirm('Voulez-vous vraiment supprimer le groupe ? Cela n\'est pas réversible !'))
+	$.ajax({
+		type : 'POST',
+		url : '/prof/delGroup/'+id,
+		success: function (res) {
+			$('#groupe'+id).remove();
+			groupeIdList.splice(groupeIdList.indexOf(id), 1);
+		}
+	});
+}
+function select(id){
+	for(var i = 0 ; i<groupeIdList.length ; i++){
+		if(groupeIdList[i]!=id)
+			$('#groupe'+groupeIdList[i]).css('background-color','#b0c4de');
+		else
+			$('#groupe'+groupeIdList[i]).css('background-color','red');
+	}
+}
+</script>
+}

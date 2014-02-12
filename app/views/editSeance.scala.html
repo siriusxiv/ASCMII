@@ -40,8 +40,8 @@
 				<td id="matieres">&nbsp;</td>
 			</tr>
 			<tr>
-				<td>Groupe* :</td>
-				<td><input type="text" size="20" name="groupe" value="@seance.groupe" id="groupe"></td>
+				<td>Groupe* :<input id="groupetype" type="checkbox" name="groupetype" value="custom" @if(seance.custom_group!=null){checked}></td>
+				<td><input type="text" size="20" name="groupe" value="@seance.groupe" id="groupe"><span id="custom_group"><input type="text" size="1" name="groupe" value="@seance.custom_group"><button class="small" onClick="window.open('/prof/manageGroups','width=200,height=100');return false;">Créer un groupe personnalisé</button></span></td>
 				<td class="explications">*Si votre questionnaire ne concerne pas un groupe en particulier, mais tous les élèves suivant un cours, laissez ce champ vide.</td>
 			</tr>
 			<tr>
@@ -178,6 +178,19 @@ $('#matiere').autocomplete({	source : listeMatieres,
 $('#groupe').autocomplete({	source : listeGroupes,
 				minLength: 0
 			});
+refreshGroup();
+document.getElementById("groupetype").addEventListener("change", function (evt){
+	refreshGroup();
+});
+function refreshGroup(){
+	if($('#groupetype').is(':checked')){
+		document.getElementById("groupe").style.display = "none";
+		document.getElementById("custom_group").style.display = "block";
+	}else{
+		document.getElementById("groupe").style.display = "block";
+		document.getElementById("custom_group").style.display = "none";
+	}
+}
 </script>
  </body>
 </html>
