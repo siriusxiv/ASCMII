@@ -30,7 +30,7 @@
 <td>
 	<ul id="list">
 @for(groupe <- groupes){
-	<span id="groupe@groupe.id" onClick="select(@groupe.id)"><button onClick="delGroup(@groupe.id)" class="suppr">X</button>@groupe.id. @groupe.groupe_nom<br></span>
+	<span id="groupe@groupe.id" onClick="select(@groupe.id)"><button onClick="delGroup(@groupe.id)" class="suppr">X</button>@groupe.id. <span id="groupeNom@groupe.id" onDblClick="edit(@groupe.id)">@groupe.groupe_nom</span><br></span>
 }
 	</ul>
 </td>
@@ -71,7 +71,7 @@ function addGroup(){
 			$('#nouveauGroupe').val('');
 			if(val=='')
 				val="Groupe n°"+res;
-			$('#list').append('<span id="groupe'+res+'" onClick="select('+res+')"><button onClick="delGroup('+res+')" class="suppr">X</button>'+res+'. '+val+'<br></span>');
+			$('#list').append('<span id="groupe'+res+'" onClick="select('+res+')"><button onClick="delGroup('+res+')" class="suppr">X</button>'+res+'. <span id="groupeNom'+res+'" onDblClick="edit('+res+')">'+val+'</span><br></span>');
 			groupeIdList.push(res);
 		}
 	});
@@ -84,7 +84,10 @@ function delGroup(id){
 		success: function (res) {
 			$('#groupe'+id).remove();
 			groupeIdList.splice(groupeIdList.indexOf(id), 1);
-		}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        	alert('Impossible de supprimer le groupe, veuillez d\'abord supprimer la séance qui utilise ce groupe personnalisé.');
+       	}
 	});
 }
 function select(id){
@@ -101,6 +104,29 @@ function select(id){
 			$('#listeEleves').html(res);
 			selectedGroup=id;
 			$('#ajouterEleve').attr('style','display:block');
+		}
+	});
+}
+function edit(id){
+	var nom = $('#groupeNom'+id).html();
+	$('#groupeNom'+id).replaceWith('<input id=groupeNom'+id+' value="'+nom+'" size="5">');
+	$('#groupeNom'+id).keyup(function(event){
+		if(event.keyCode == 13){
+			var formdata = new FormData();
+			var val = $('#groupeNom'+id).val();
+			if(val=='')
+				val='Groupe n°'+id;
+			formdata.append('groupeNom',val);
+			$.ajax({
+				type : 'POST',
+				url : '/prof/editGroup/'+id,
+				data: formdata,
+				processData: false,
+				contentType: false,
+				success: function (res) {
+					$('#groupeNom'+id).replaceWith('<span id="groupeNom'+id+'" onDblClick="edit('+id+')">'+val+'</span>');
+				}
+			});
 		}
 	});
 }
@@ -128,5 +154,6 @@ function delEleve(groupe_id,eleve_uid){
 		}
 	});
 }
+
 </script>
 }

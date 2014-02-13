@@ -76,6 +76,7 @@ POST	/prof/gerer/editquestion2/:id	controllers.QuestionGestion.editQuestion2(id:
 #Gestion des groupes
 GET		/prof/manageGroups			controllers.ManageGroups.index()
 POST	/prof/addGroup				controllers.ManageGroups.add()
+POST	/prof/editGroup/:id			controllers.ManageGroups.edit(id: Long)
 POST	/prof/delGroup/:id			controllers.ManageGroups.del(id: Long)
 GET		/prof/getGroup/:id			controllers.ManageGroups.getMembers(id: Long)
 POST	/prof/addEleveInGroupe/:groupe_id/:eleve_uid	controllers.ManageGroups.addEleveInGroupe(groupe_id: Long, eleve_uid: String)

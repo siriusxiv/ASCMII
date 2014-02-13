@@ -49,6 +49,17 @@ public class ManageGroups extends Controller {
 	}
 	
 	@Security.Authenticated(Secured.class)
+	public static Result edit(Long groupe_id){
+		DynamicForm form = DynamicForm.form().bindFromRequest();
+		EleveGroupe groupe = EleveGroupe.find.byId(groupe_id);
+		if(groupe!=null){
+			groupe.groupe_nom=form.get("groupeNom");
+			groupe.save();
+		}
+		return ok(groupe.toString());
+	}
+	
+	@Security.Authenticated(Secured.class)
 	public static Result del(Long groupe_id){
 		EleveGroupe.find.byId(groupe_id).remove();
 		return ok("Groupe "+groupe_id+" supprimé");
