@@ -172,7 +172,6 @@ function rafraichitListeEleves(){
 	var inputMatiere = $('#matiere').val();
 	var inputGroupe = $('#groupe').val();
 	if(listeMatieres.indexOf(inputMatiere)>=0 && listeGroupes.indexOf(inputGroupe)>=0){
-		//Ce code est à enlever ou à changer pour avoir la liste des étudiants
 		$('#studentList').load('/prof/listeEtudiantsNoCustomGroup/'+inputMatiere+'/'+inputGroupe);
 	}
 }

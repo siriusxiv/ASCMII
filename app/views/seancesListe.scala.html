@@ -87,14 +87,22 @@
 		<table>
 			<tbody>
 			<tr>
-				<td>Matière :</td>
-				<td><input type="text" size="20" name="matiere" value="" id="matiere"></td>
+				<td class="headNewSeance">Matière :</td>
+				<td class="middleNewSeance"><input type="text" size="20" name="matiere" value="" id="matiere"></td>
 				<td id="matieres">&nbsp;</td>
 			</tr>
 			<tr>
-				<td>Groupe* :</td>
-				<td><input type="text" size="20" name="groupe" value="" id="groupe"></td>
-				<td class="explications">*Si votre questionnaire ne concerne pas un groupe en particulier, mais tous les élèves suivant un cours, laissez ce champ vide.</td>
+				<td>&nbsp;</td>
+				<td>Utiliser un groupe personnalisé :</td>
+				<td><input id="groupetype" type="checkbox" name="groupetype" value="custom"></td>
+			</tr>
+			<tr>
+				<td id="groupeHeader">Groupe* :</td>
+				<td><input type="text" size="20" name="groupe" value="" id="groupe"><span id="custom_group">
+				<span id="groupeList">@selectCustomGroup(models.EleveGroupe.find.all(),new Seance())</span>
+				</span></td>
+				<td class="explications" id="explications_groupe">*Si votre questionnaire ne concerne pas un groupe en particulier, mais tous les élèves suivant un cours, laissez ce champ vide.</td>
+				<td id="mise_a_jour_custom_groupe"><button onClick="window.open('/prof/manageGroups','width=200,height=100');return false;">Gérer les groupe personnalisés</button><input type="image" src="/assets/images/view-refresh-7.png" title="Mettre à jour la liste des groupes" onClick="reloadGroupeList();return false;"></td>
 			</tr>
 			<tr>
 				<td>Intitulé de séance :</td>
@@ -199,7 +207,7 @@ function rafraichitListeEleves(){
 	var inputMatiere = $('#matiere').val();
 	var inputGroupe = $('#groupe').val();
 	if(listeMatieres.indexOf(inputMatiere)>=0 && listeGroupes.indexOf(inputGroupe)>=0){
-		$('#studentList').load('/prof/listeEtudiants/'+inputMatiere+'/'+inputGroupe);
+		$('#studentList').load('/prof/listeEtudiantsNoCustomGroup/'+inputMatiere+'/'+inputGroupe);
 	}
 }
 function replaceMatiere(string){
@@ -213,6 +221,30 @@ $('#matiere').autocomplete({	source : listeMatieres,
 $('#groupe').autocomplete({	source : listeGroupes,
 				minLength: 0
 			});
+refreshGroup();
+document.getElementById("groupetype").addEventListener("change", function (evt){
+	refreshGroup();
+});
+function refreshGroup(){
+	if($('#groupetype').is(':checked')){
+		document.getElementById("groupe").style.display = "none";
+		document.getElementById("explications_groupe").style.display = "none";
+		document.getElementById("studentList").style.display = "none";
+		document.getElementById("custom_group").style.display = "block";
+		document.getElementById("mise_a_jour_custom_groupe").style.display = "block";
+		$('#groupeHeader').replaceWith('<td id="groupeHeader">Groupe personnalisé :</td>');
+	}else{
+		document.getElementById("groupe").style.display = "block";
+		document.getElementById("explications_groupe").style.display = "block";
+		document.getElementById("studentList").style.display = "block";
+		document.getElementById("custom_group").style.display = "none";
+		document.getElementById("mise_a_jour_custom_groupe").style.display = "none";
+		$('#groupeHeader').replaceWith('<td id="groupeHeader">Groupe* :</td>');
+	}
+}
+function reloadGroupeList(){
+	$('#groupeList').load('/prof/getGroupList/0');
+}
 </script>
 </body>
 }

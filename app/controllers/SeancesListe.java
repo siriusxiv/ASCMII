@@ -70,11 +70,15 @@ public class SeancesListe extends Controller{
 			newSeance.matiere=info.get("matiere");
 			newSeance.matiere_id=Matiere.getID(newSeance.matiere);
 			newSeance.professeur=Professeur.find.ref(session("username"));
-			String groupe = info.get("groupe");
-			if(groupe=="")	newSeance.groupe=null;
-			else{
-				if(Groupe.exists(groupe))	newSeance.groupe=info.get("groupe");
-				else						return redirect(routes.Login.profSeancesListe("Ce groupe n'existe pas."));
+			if(info.get("groupetype")!=null){
+				newSeance.groupe=null;
+				newSeance.custom_group=EleveGroupe.find.byId(Long.parseLong(info.get("customGroup")));
+			}else{
+				String groupe = info.get("groupe");
+				newSeance.custom_group=null;
+				if(groupe.equals(""))			newSeance.groupe=null;
+				else if(Groupe.exists(groupe))	newSeance.groupe=info.get("groupe");
+				else							return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
 			}
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
@@ -142,7 +146,6 @@ public class SeancesListe extends Controller{
 				if(groupe.equals(""))			seance.groupe=null;
 				else if(Groupe.exists(groupe))	seance.groupe=info.get("groupe");
 				else							return redirect(routes.Login.profSeancesListe("Erreur dans l'édition de la séance, ce groupe n'existe pas."));
-			
 			}
 			Date date = ParseDate.parseFrench(year, month, day, hour);
 			Calendar now = Calendar.getInstance();
