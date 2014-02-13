@@ -150,17 +150,8 @@ public class AGAPStringUtil {
 	 * @param matiere_id
 	 * @return
 	 */
-	public static String getStudentNumber(String groupe, int matiere_id){
-		List<Eleve> eleves;
-		if(test.Mode.findAllEnabled()){
-			eleves = Eleve.find.all();
-		}else{
-			if(groupe==null){
-				eleves = AGAPUtil.getInscrits(matiere_id);
-			}else{
-				eleves = AGAPUtil.getInscritsParGroupe(matiere_id, groupe);
-			}
-		}
+	public static String getStudentNumber(Seance seance){
+		List<Eleve> eleves = Events.find(seance);
 		String r = "";
 		if(eleves.size()<=1){
 			r+="<p>"+eleves.size()+" élève est concerné par ce cours.</p>";

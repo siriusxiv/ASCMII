@@ -20,14 +20,12 @@
 ******************************************************************************/
 package controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import models.Eleve;
 import models.EleveGroupe;
 import models.EleveHasGroupe;
+import models.Seance;
 import play.data.DynamicForm;
-import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -83,7 +81,11 @@ public class ManageGroups extends Controller {
 	}
 	
 	@Security.Authenticated(Secured.class)
-	public static Result getGroupList(){
-		return ok(selectCustomGroup.render(models.EleveGroupe.find.all()));
+	public static Result getGroupList(Long seance_id){
+		Seance seance = Seance.find.byId(seance_id);
+		if(seance!=null)
+			return ok(selectCustomGroup.render(models.EleveGroupe.find.all(),seance));
+		else
+			return ok(selectCustomGroup.render(models.EleveGroupe.find.all(),new Seance()));
 	}
 }

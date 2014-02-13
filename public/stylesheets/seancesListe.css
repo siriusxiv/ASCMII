@@ -40,6 +40,13 @@ td.listeDate{
 td.right{
 	width:330px;
 }
+td.headNewSeance{
+	width:160px;
+}
+td.middleNewSeance{
+	width:240px;
+}
+
 span.message{
 	position:relative;
 	top:-5px;

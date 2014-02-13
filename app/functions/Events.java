@@ -17,14 +17,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 
 package functions;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import models.Eleve;
+import models.EleveHasGroupe;
 import models.Lien;
 import models.Seance;
 import models.Serie;
@@ -38,7 +40,7 @@ import models.Serie;
  *
  */
 public class Events {
-	
+
 	/**
 	 * Envoie les mails s'une séance donnée aux élèves concernés.
 	 * @param seance
@@ -56,7 +58,7 @@ public class Events {
 		Mail mail = new Mail(seance);
 		mail.sendMail();
 	}
-	
+
 	/**
 	 * Cette fonction trouve les élèves concernés par telle séance.
 	 * Si on est en mode de test, on renvoie tous les élèves. En effet,
@@ -66,10 +68,25 @@ public class Events {
 	 */
 	public static List<Eleve> find(Seance seance){
 		if(test.Mode.findAllEnabled())	return Eleve.find.all();
-		else						return AGAPUtil.getInscrits(seance.matiere_id);
+		else{
+			if(seance.custom_group==null){
+				if(seance.groupe==null){
+					return AGAPUtil.getInscrits(seance.matiere_id);
+				}else{
+					return AGAPUtil.getInscritsParGroupe(seance.matiere_id, seance.groupe);
+				}
+			}else{
+				List<EleveHasGroupe> ehgs = EleveHasGroupe.find.where().eq("groupe", seance.custom_group).findList();
+				List<Eleve> eleves = new ArrayList<Eleve>();
+				for(EleveHasGroupe ehg : ehgs){
+					eleves.add(ehg.eleve);
+				}
+				return eleves;
+			}
+		}
 	}
-	
-	
+
+
 	/**
 	 * Vérifie si oui ou non le mail de la séance doit être envoyé.
 	 * On envoie le mail 15 minutes avant le début de la séance.
@@ -85,8 +102,8 @@ public class Events {
 				&& now.getTime().after(seance.date)
 				;
 	}
-	
-	
+
+
 	/**
 	 * Envoie tous les mails qu'il faut envoyer.
 	 * Cette fonction s'exécute toutes les 5 minutes grâces à la fonction sendMails.
@@ -104,7 +121,7 @@ public class Events {
 		}
 		System.out.println("Finished.\n");
 	}
-	
+
 	/**
 	 * Fait s'exécuter la méthode checkAllAndSend() toutes les 6 minutes.
 	 * Cette méthode doit être lancée automatiquement au démarrage du serveur.

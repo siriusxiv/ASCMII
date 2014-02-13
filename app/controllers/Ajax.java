@@ -29,6 +29,7 @@ import functions.AGAPUtil;
 import functions.agap.AGAPStringUtil;
 import functions.agap.Matiere;
 import models.Lien;
+import models.Seance;
 import models.Serie;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -115,18 +116,27 @@ public class Ajax extends Controller{
 	}
 	
 	/**
-	 * Affiche le nombre d'étudiant assistant à un cours.
+	 * Affiche le nombre d'étudiants assistant à un cours.
+	 * @param seance_id
+	 * @return
+	 */
+	public static Result listeEtudiants(Long seance_id){
+		Seance seance = Seance.find.byId(seance_id);
+		return ok(AGAPStringUtil.getStudentNumber(seance));
+	}
+	
+	/**
+	 * Affiche le nombre d'étudiants assistant à un cours.
 	 * @param inputMatiere
 	 * @param inputGroupe
 	 * @return
 	 */
-	public static Result listeEtudiants(String inputMatiere, String inputGroupe){
-		String res;
-		if(inputGroupe.equals("")){
-			res = AGAPStringUtil.getStudentNumber(null, Matiere.getID(inputMatiere));
-		}else{
-			res = AGAPStringUtil.getStudentNumber(inputGroupe, Matiere.getID(inputMatiere));
-		}
-		return ok(res);
+	public static Result listeEtudiantsNoCustomGroup(String inputMatiere, String inputGroupe){
+		Seance seance = new Seance();
+		seance.custom_group=null;
+		seance.groupe=inputGroupe;
+		seance.matiere=inputMatiere;
+		seance.matiere_id=Matiere.getID(inputMatiere);
+		return ok(AGAPStringUtil.getStudentNumber(seance));
 	}
 }

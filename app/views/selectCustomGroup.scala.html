@@ -18,9 +18,9 @@
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ******************************************************************************@
-@(groupes: List[EleveGroupe])
+@(groupes: List[EleveGroupe], seance: Seance)
 <select name="customGroup">
 @for(groupe <- groupes){
-<option value="@groupe.id">@groupe.id. @groupe.groupe_nom</option>
+<option value="@groupe.id" @if(seance.custom_group!=null && seance.custom_group.id==groupe.id){selected}>@groupe.id. @groupe.groupe_nom</option>
 }
 </select>
