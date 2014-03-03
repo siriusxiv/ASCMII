@@ -47,7 +47,7 @@
 			<tr>
 				<td id="groupeHeader">Groupe* :</td>
 				<td><input type="text" size="20" name="groupe" value="@seance.groupe" id="groupe"><span id="custom_group">
-				<span id="groupeList">@selectCustomGroup(models.EleveGroupe.find.all(),seance)</span>
+				<span id="groupeList">@selectCustomGroup(models.EleveGroupe.findAll(),seance)</span>
 				</span></td>
 				<td class="explications" id="explications_groupe">*Si votre questionnaire ne concerne pas un groupe en particulier, mais tous les élèves suivant un cours, laissez ce champ vide.</td>
 				<td id="mise_a_jour_custom_groupe"><button onClick="window.open('/prof/manageGroups','width=200,height=100');return false;">Gérer les groupe personnalisés</button><input type="image" src="/assets/images/view-refresh-7.png" title="Mettre à jour la liste des groupes" onClick="reloadGroupeList();return false;"></td>

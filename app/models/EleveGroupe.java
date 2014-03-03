@@ -71,4 +71,8 @@ public class EleveGroupe extends Model {
 		this.delete();
 		
 	}
+	
+	public static List<EleveGroupe> findAll(){
+		return find.all();
+	}
 }
