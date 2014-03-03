@@ -102,7 +102,7 @@ public class LDAP{
 	 * @return VRAI si c'est un professeur, FAUX sinon.
 	 */
 	private boolean isProfessor(){
-		return !mail.contains("@eleves") || mail.equals("malik.boussejra@eleves.ec-nantes.fr");
+		return !mail.contains("@eleves") || uid.equals("mboussej");
 	}
 	
 	/**

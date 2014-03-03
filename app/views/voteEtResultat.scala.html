@@ -58,7 +58,7 @@
 							<button type="submit">Résultats</button>
 						</form>
 						<button type="submit" onClick="reset()">Reset</button>
-						<form id="reset" action="/prof/reset/@serie.id" method="POST" style="display:inline"/>
+						<form id="reset" action="/prof/reset/@serie.id" method="POST" style="display:inline"></form>
 						@if(serie.isNotFinished()){
 							Série en cours...
 						}else{

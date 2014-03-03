@@ -22,7 +22,7 @@
 @(resultat: Resultat)
 @main("Liste exhaustive"){
   <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/gerer.css")">
-	<p>@resultat.question.texte</p>
+	<p>@Html(resultat.question.texte)</p>
 	<table class="reponses">
 			@for(i <- 0 to (resultat.listRepond.length-1)){
 				<tr>
