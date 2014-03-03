@@ -49,7 +49,7 @@ public class Mail{
 	private static String domain_name = play.Play.application().configuration().getString("domain.url");
 	private static String admin_mail = play.Play.application().configuration().getString("admin.mail");
 	
-	private static String from = "ASCMII <"+play.Play.application().configuration().getString("smtp.user")+">";
+	private static String from = "ASCMII <"+play.Play.application().configuration().getString("smtp.from")+">";
 	
 	private String sujet;
 	private String contenu;
