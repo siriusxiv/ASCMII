@@ -144,5 +144,7 @@ GET		/prof/listeEtudiantsNoCustomGroup/:inputMatiere/:inputGroupe	controllers.Aj
 #Routes pour admin
 GET		/admin/clean						admin.Display.clean()
 GET		/admin/images						admin.Display.getImages()
+POST	/admin/reset						admin.Clean.reset()
+
 #Attrappe-tout. Redirige vers un page que l'utilisateur veut sûrement regarder ou vers la page 404
 GET		/*nameUrl							controllers.P404.p404(nameUrl: String)

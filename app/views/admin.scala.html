@@ -26,12 +26,24 @@
 	height:50px;
 }
 </style>
+<button onClick="reset()">Remise à zéro de l'application</button>
 <button onClick="clean()">Clean the server</button>
 
 <button onClick="displayImages()">See all images on the server</button>
 <div id="images"></div>
 <script src="/assets/javascripts/jquery-1.10.2.min.js"></script>
 <script>
+function reset(){
+	if(confirm("ASCMII sera remis entièrement à ZERO. Cela va supprimer toutes les questions et recharger les listes d'élèves et de professeurs. Vous devez faire ceci à chaque début d'année, lorsque la liste des étudiants a été faite. Cela va prendre un peu de temps. Veuillez patienter...")){
+		$.ajax({
+			type: 'POST',
+			url: '/admin/reset',
+	        success: function(data, textStatus, jqXHR) {
+				alert('Remise à zéro terminée');
+			}
+		});
+	}
+}
 function clean(){
 	$.ajax({
 		url: '/admin/clean',

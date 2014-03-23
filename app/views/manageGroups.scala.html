@@ -84,6 +84,7 @@ function delGroup(id){
 		success: function (res) {
 			$('#groupe'+id).remove();
 			groupeIdList.splice(groupeIdList.indexOf(id), 1);
+			select(groupeIdList[0]);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) { 
         	alert('Impossible de supprimer le groupe, veuillez d\'abord supprimer la séance qui utilise ce groupe personnalisé.');

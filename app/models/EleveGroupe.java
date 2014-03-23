@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 package models;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class EleveGroupe extends Model {
 	public Long id;
 
 	public String groupe_nom;
-	
+
 	public static Finder<Long,EleveGroupe> find = new Finder<Long,EleveGroupe>(Long.class, EleveGroupe.class);
 
 	/**
@@ -53,7 +53,7 @@ public class EleveGroupe extends Model {
 	public String toString(){
 		return id.toString();
 	}
-	
+
 	public static Long idNonUtilisee(){
 		List<EleveGroupe> gTemp = EleveGroupe.find.orderBy("id desc").findList();
 		if(!gTemp.isEmpty()){
@@ -63,15 +63,22 @@ public class EleveGroupe extends Model {
 		}
 	}
 
-	public void remove() {
-		List<EleveHasGroupe> ehgs = EleveHasGroupe.find.where().eq("groupe",this).findList();
-		for(EleveHasGroupe ehg : ehgs){
-			ehg.delete();
-		}
-		this.delete();
-		
+	/**
+	 * Supprime le groupe d'élèves si celui-ci n'est pas utilisé dans une séance.
+	 * @return Vrai en cas de succès de la suppression, Faux sinon.
+	 */
+	public boolean remove() {
+		if(Seance.find.where().eq("custom_group",this).findList().isEmpty()){
+			List<EleveHasGroupe> ehgs = EleveHasGroupe.find.where().eq("groupe",this).findList();
+			for(EleveHasGroupe ehg : ehgs){
+				ehg.delete();
+			}
+			this.delete();
+			return true;
+		}else
+			return false;
 	}
-	
+
 	public static List<EleveGroupe> findAll(){
 		return find.all();
 	}

@@ -22,12 +22,17 @@ package admin;
 
 import java.io.File;
 
+import functions.LDAP;
+import models.*;
+import play.mvc.Controller;
+import play.mvc.Result;
+
 /**
  * Contain methods to clean the server
  * @author malik
  *
  */
-public class Clean{
+public class Clean extends Controller{
 	/**
 	 * Delete temp files the user can download
 	 * @return
@@ -49,5 +54,40 @@ public class Clean{
 			}
 		}
 		return counter;
+	}
+	
+	/**
+	 * Remet à zéro la base de données et recharge tous les élèves
+	 * et professeurs.
+	 * @return
+	 */
+	public static Result reset(){
+		for(Choisit l : Choisit.find.all())
+			l.delete();
+		for(Repond l : Repond.find.all())
+			l.delete();
+		for(Lien l : Lien.find.all())
+			l.delete();
+		for(EleveHasGroupe l : EleveHasGroupe.find.all())
+			l.delete();
+		for(Reponse l : Reponse.find.all())
+			l.delete();
+		for(Question l : Question.find.all())
+			l.delete();
+		for(Serie l : Serie.find.all())
+			l.delete();
+		for(Seance l : Seance.find.all())
+			l.delete();
+		for(EleveGroupe l : EleveGroupe.find.all())
+			l.delete();
+		for(Eleve l : Eleve.find.all())
+			l.delete();
+		for(Professeur l : Professeur.find.all())
+			l.delete();
+		for(Image l : Image.find.all())
+			l.delete();
+		
+		new LDAP().aspireElevesEtProfesseurs();
+		return ok("La suppression s'est déroulée avec succès.");
 	}
 }

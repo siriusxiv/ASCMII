@@ -61,8 +61,10 @@ public class ManageGroups extends Controller {
 	
 	@Security.Authenticated(Secured.class)
 	public static Result del(Long groupe_id){
-		EleveGroupe.find.byId(groupe_id).remove();
-		return ok("Groupe "+groupe_id+" supprimé");
+		if(EleveGroupe.find.byId(groupe_id).remove())
+			return ok("Groupe "+groupe_id+" supprimé");
+		else
+			return internalServerError("Impossible de supprimer ce groupe.");
 	}
 	
 	@Security.Authenticated(Secured.class)
