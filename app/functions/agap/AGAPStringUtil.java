@@ -30,7 +30,6 @@ import java.util.List;
 
 import models.Eleve;
 import models.Seance;
-import functions.AGAPUtil;
 import functions.Events;
 
 /**

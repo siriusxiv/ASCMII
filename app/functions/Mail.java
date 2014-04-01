@@ -24,6 +24,7 @@ package functions;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import models.Eleve;
@@ -70,6 +71,7 @@ public class Mail{
 		contenu="<html>Bonjour,<br>"+eleve.prenom+" "+eleve.nom+", vous trouverez ci-dessous les séries de questions concernant le cours de "+
 				seance.matiere+" le "+df.format(seance.date)+" :<br><br>";
 		int i=1;
+		Collections.sort(seance.series, new Serie());
 		for(Serie s : seance.series){
 			Lien lien = Lien.find.where().eq("serie", s).eq("eleve",eleve).findUnique();
 			contenu+="Série "+i+" : "+domain_name+"/eleve/"+lien.chemin+"<br>";
