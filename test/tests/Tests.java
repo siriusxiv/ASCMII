@@ -28,13 +28,13 @@ import java.util.List;
 
 import alea.Alea;
 import functions.Numbers;
+import functions.Resultat;
 import models.Choisit;
 import models.Eleve;
 import models.Lien;
 import models.Question;
 import models.Repond;
 import models.Reponse;
-import models.Resultat;
 import models.Serie;
 
 public class Tests {

@@ -35,7 +35,8 @@ import java.util.List;
 
 
 
-import models.Resultat;
+
+import functions.Resultat;
 import models.Seance;
 import models.Serie;
 import play.mvc.Controller;

@@ -24,12 +24,12 @@ package controllers;
 import java.util.Calendar;
 import java.util.List;
 
+import functions.Resultat;
 import models.Choisit;
 import models.Lien;
 import models.Question;
 import models.Repond;
 import models.Reponse;
-import models.Resultat;
 import models.Seance;
 import models.Serie;
 import play.mvc.Controller;

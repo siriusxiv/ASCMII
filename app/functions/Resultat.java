@@ -19,14 +19,20 @@
 
 ******************************************************************************/
 
-package models;
+package functions;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import functions.CoupleRI;
+import models.Choisit;
+import models.Eleve;
+import models.Lien;
+import models.Question;
+import models.Repond;
+import models.Reponse;
+import models.Serie;
 
 
 
@@ -129,30 +135,9 @@ public class Resultat implements Comparator<Resultat>{
 				resultat.nombreDeRepondants=nombreTotalDeRepondants;
 				resultat.reponsesChoisies=rChoisies;
 			}else if(q.typeQ.id==3 || q.typeQ.id==4){
-				//On doit trouver toutes les réponses avec leur nombre respectif dans rChoisies
-				List<Repond> listRepond = Repond.find.where().eq("question", q).findList();
-				List<CoupleRI> listFinale = new ArrayList<CoupleRI>();
-				for(Repond r : listRepond){
-					int i;
-					if( (i = r.isIn(listFinale)) >= 0){//Cette réponse à déjà été vue
-						//On incrémente le i-ème élément de listFinale
-						listFinale.set(i, new CoupleRI(r,listFinale.get(i).i+1));
-					}else{//On voit cette réponse pour la première fois
-						//On l'ajoute dans listFinale (avec une seule occurance pour l'instant)
-						listFinale.add(new CoupleRI(r,1));
-					}
-				}
-				//On trie la list par ordre de réponse du plus grand au plus petit
-				Collections.sort(listFinale,new CoupleRI(new Repond(),0));
-				resultat.nombreDeRepondants=listRepond.size();
-				//Il faut maintenant ne garder que les 10 premiers et ajouter une case 11 contenant les autres.
-				if(listFinale.size()>10){
-					while(listFinale.size()>10){
-						listFinale.remove(0);
-					}
-					listFinale.add(0,new CoupleRI(listFinale,resultat.nombreDeRepondants));
-				}
-				resultat.distribue(listFinale);
+				resultat = Resultat.exhaustive(q.id);
+				resultat.reponsesChoisies=resultat.reponsesChoisies.subList(0, 10);
+				resultat.listRepond=resultat.listRepond.subList(0, 10);
 			}
 			resultats.add(resultat);
 		}
@@ -184,23 +169,7 @@ public class Resultat implements Comparator<Resultat>{
 				resultat.nombreDeRepondants=nombreTotalDeRepondants;
 				resultat.reponsesChoisies=rChoisies;
 			}else if(q.typeQ.id==3 || q.typeQ.id==4){
-				//On doit trouver toutes les réponses avec leur nombre respectif dans rChoisies
-				List<Repond> listRepond = Repond.find.where().eq("question", q).findList();
-				List<CoupleRI> listFinale = new ArrayList<CoupleRI>();
-				for(Repond r : listRepond){
-					int i;
-					if( (i = r.isIn(listFinale)) >= 0){//Cette réponse à déjà été vue
-						//On incrémente le i-ème élément de listFinale
-						listFinale.set(i, new CoupleRI(r,listFinale.get(i).i+1));
-					}else{//On voit cette réponse pour la première fois
-						//On l'ajoute dans listFinale (avec une seule occurance pour l'instant)
-						listFinale.add(new CoupleRI(r,1));
-					}
-				}
-				//On trie la liste par ordre de réponse du plus grand au plus petit
-				Collections.sort(listFinale,new CoupleRI(new Repond(),0));
-				resultat.nombreDeRepondants=listRepond.size();
-				resultat.distribue(listFinale);
+				resultat = Resultat.exhaustive(q.id);
 			}
 			resultats.add(resultat);
 		}
@@ -209,20 +178,6 @@ public class Resultat implements Comparator<Resultat>{
 		return resultats;
 	}
 	
-	
-	/**
-	 * Prend les réponses et le nombre de réponse dans une liste de couples RI et
-	 * les redistribue dans un objet de classe "Resultat".
-	 * @param listCRI
-	 */
-	public void distribue(List<CoupleRI> listCRI){
-		listRepond=new ArrayList<Repond>();
-		reponsesChoisies=new ArrayList<Integer>();
-		for(int i = 0; i<listCRI.size(); i++){
-			listRepond.add(0,listCRI.get(i).repond);
-			reponsesChoisies.add(0,listCRI.get(i).i);
-		}
-	}
 	
 	/**
 	 * Renvoie la liste exhaustive des réponses à une question de type 3 ou 4, sur le modèle
@@ -250,6 +205,20 @@ public class Resultat implements Comparator<Resultat>{
 		resultat.nombreDeRepondants=listRepond.size();
 		resultat.distribue(listFinale);
 		return resultat;
+	}
+	
+	/**
+	 * Prend les réponses et le nombre de réponse dans une liste de couples RI et
+	 * les redistribue dans un objet de classe "Resultat".
+	 * @param listCRI
+	 */
+	public void distribue(List<CoupleRI> listCRI){
+		listRepond=new ArrayList<Repond>();
+		reponsesChoisies=new ArrayList<Integer>();
+		for(int i = 0; i<listCRI.size(); i++){
+			listRepond.add(0,listCRI.get(i).repond);
+			reponsesChoisies.add(0,listCRI.get(i).i);
+		}
 	}
 }
 

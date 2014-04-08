@@ -30,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 
+import functions.Resultat;
 import functions.agap.Matiere;
 
 
@@ -38,7 +39,6 @@ import models.Image;
 import models.Lien;
 import models.Question;
 import models.Reponse;
-import models.Resultat;
 import models.Seance;
 import models.Serie;
 import models.TypeQuestion;

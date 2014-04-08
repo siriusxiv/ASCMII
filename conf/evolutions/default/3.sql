@@ -6,7 +6,25 @@
 INSERT INTO eleve(uid,mail,prenom,nom) VALUES
 ('mboussej','malik.boussejra@eleves.ec-nantes.fr','User','1'),
 ('aboussej','malik.boussejra@eleves.ec-nantes.fr','User','2'),
-('dboussej','malik.boussejra@eleves.ec-nantes.fr','User','3');
+('dbousej','malik.boussejra@eleves.ec-nantes.fr','User','3'),
+('dbssej','malik.boussejra@eleves.ec-nantes.fr','User','4'),
+('dbsse','malik.boussejra@eleves.ec-nantes.fr','User','5'),
+('dssej','malik.boussejra@eleves.ec-nantes.fr','User','6'),
+('sej','malik.boussejra@eleves.ec-nantes.fr','User','7'),
+('boussej','malik.boussejra@eleves.ec-nantes.fr','User','8'),
+('dbousej','malik.boussejra@eleves.ec-nantes.fr','User','9'),
+('dbousse','malik.boussejra@eleves.ec-nantes.fr','User','A'),
+('dbouedrtej','malik.boussejra@eleves.ec-nantes.fr','User','B'),
+('dbodej','malik.boussejra@eleves.ec-nantes.fr','User','C'),
+('dbmsej','malik.boussejra@eleves.ec-nantes.fr','User','D'),
+('dbzessej','malik.boussejra@eleves.ec-nantes.fr','User','E'),
+('dbottssej','malik.boussejra@eleves.ec-nantes.fr','User','F'),
+('dbousrj','malik.boussejra@eleves.ec-nantes.fr','User','10'),
+('wboussej','malik.boussejra@eleves.ec-nantes.fr','User','11'),
+('eussej','malik.boussejra@eleves.ec-nantes.fr','User','12'),
+('dbasej','malik.boussejra@eleves.ec-nantes.fr','User','13'),
+('dpoudej','malik.boussejra@eleves.ec-nantes.fr','User','14'),
+('vvfboussej','malik.boussejra@eleves.ec-nantes.fr','User','15');
 
 INSERT INTO seance(id,date,matiere,matiere_id,intitule,professeur_username) VALUES
 (1,'2014/01/31 08:00:00','ASCMII',0,'Test ASCMII','mprofess'),

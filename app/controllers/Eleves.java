@@ -26,12 +26,12 @@ import java.util.Collections;
 import java.util.List;
 
 import functions.Numbers;
+import functions.Resultat;
 import models.Choisit;
 import models.Lien;
 import models.Question;
 import models.Repond;
 import models.Reponse;
-import models.Resultat;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
