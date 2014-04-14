@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see http://www.gnu.org/licenses/.
 
-******************************************************************************/
+ ******************************************************************************/
 
 package functions;
 
@@ -52,19 +52,19 @@ public class Resultat implements Comparator<Resultat>{
 	public List<Integer> reponsesChoisies;
 	public List<Repond> listRepond;
 	public Integer nombreDeRepondants;
-	
+
 	Resultat(Question q){
 		question=q;
 	}
-	
+
 	/**
 	 * Définit une relation d'ordre dépendant de la position des questions.
 	 */
 	@Override
 	public int compare(Resultat r1,Resultat r2){
-			return (r1.question.position<r2.question.position ? -1 : (r1.question.position==r2.question.position ? 0 : 1));
+		return (r1.question.position<r2.question.position ? -1 : (r1.question.position==r2.question.position ? 0 : 1));
 	}
-	
+
 	/**
 	 * Cette fonction permet de générer la page "eleveRepondu.scala.html". C'est la page où on voit les résultats
 	 * de l'élève quand il a déjà répondu.
@@ -103,7 +103,7 @@ public class Resultat implements Comparator<Resultat>{
 		}
 		return resultats;
 	}
-	
+
 	/**
 	 * Cette fonction permet de générer les pages "resultatFin.scala.html" et "resultatEnCours.scala.html".
 	 * À partir d'une série, on fait la liste de toutes ses questions, pour chaque question :
@@ -136,8 +136,20 @@ public class Resultat implements Comparator<Resultat>{
 				resultat.reponsesChoisies=rChoisies;
 			}else if(q.typeQ.id==3 || q.typeQ.id==4){
 				resultat = Resultat.exhaustive(q.id);
-				resultat.reponsesChoisies=resultat.reponsesChoisies.subList(0, 10);
-				resultat.listRepond=resultat.listRepond.subList(0, 10);
+				if(resultat.reponsesChoisies.size()>10){
+					//On coupe le fin des résultats
+					resultat.reponsesChoisies=resultat.reponsesChoisies.subList(0, 10);
+					resultat.listRepond=resultat.listRepond.subList(0, 10);
+					//On calcule la dernière ligne ni nécessaire
+					int nombreDeReponsesRestantes = resultat.nombreDeRepondants;
+					for(int i = 0; i<resultat.reponsesChoisies.size() ; i++){
+						nombreDeReponsesRestantes-=resultat.reponsesChoisies.get(i);
+					}
+					Repond repondFinal = new Repond();
+					repondFinal.texte="Autres réponses : ";
+					resultat.reponsesChoisies.add(nombreDeReponsesRestantes);
+					resultat.listRepond.add(repondFinal);
+				}
 			}
 			resultats.add(resultat);
 		}
@@ -145,7 +157,7 @@ public class Resultat implements Comparator<Resultat>{
 		Collections.sort(resultats,new Resultat(new Question()));
 		return resultats;
 	}
-	
+
 	/**
 	 * Comme la fonction ci-dessus mais renvoie un résultat exhaustif pour les questions de type 3 ou 4
 	 * @param serie
@@ -177,8 +189,8 @@ public class Resultat implements Comparator<Resultat>{
 		Collections.sort(resultats,new Resultat(new Question()));
 		return resultats;
 	}
-	
-	
+
+
 	/**
 	 * Renvoie la liste exhaustive des réponses à une question de type 3 ou 4, sur le modèle
 	 * de listeResultat(Serie serie), mais sans tronquer la liste au-delà de 10 réponses.
@@ -206,7 +218,7 @@ public class Resultat implements Comparator<Resultat>{
 		resultat.distribue(listFinale);
 		return resultat;
 	}
-	
+
 	/**
 	 * Prend les réponses et le nombre de réponse dans une liste de couples RI et
 	 * les redistribue dans un objet de classe "Resultat".

@@ -22,10 +22,8 @@
 package functions;
 
 import java.util.Comparator;
-import java.util.List;
 
 import models.Repond;
-
 
 
 
@@ -46,21 +44,6 @@ public class CoupleRI implements Comparator<CoupleRI>{
 		i=i_;
 	}
 	
-	/**
-	 * Cette fonction est là pour générer la dernière ligne "autre" des résultats.
-	 * Elle est utilisée dans Resultat.listeResultat(Serie serie).
-	 * @param list
-	 * @param nombreDeRepondants
-	 */
-	public CoupleRI(List<CoupleRI> list, Integer nombreDeRepondants){
-		repond = new Repond();
-		repond.texte="Autres réponses : ";
-		//i est égal à la somme des
-		i=nombreDeRepondants;
-		for(int j = 0; j<list.size();j++){
-			i-=list.get(j).i;
-		}
-	}
 	/**
 	 * Permet de trier le nombre de réponse par ordre décroissant
 	 */
